@@ -52,3 +52,7 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Custom additions
+.BONUS_DEPEND
+minishell
