@@ -6,7 +6,7 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/03/25 15:32:06 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/03/26 13:50:09 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,8 +36,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INCLD) | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJ) $(LIBFT) | $(OBJ_DIR)
-	$(CC) $(OBJ) $(LIBFT) -o $@
-	make delete_obj_dir
+	$(CC) $(OBJ) $(LIBFT) -lreadline -o $@
 
 $(LIBFT):
 	make -C $(LIBFT_DIR) all

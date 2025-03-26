@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/03/25 15:31:00 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/03/26 13:49:02 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,9 @@
 # define MINISHELL_H
 
 # include "libft.h"
+
+# include <stdio.h>
+
+char *readline (const char *prompt);
 
 #endif
