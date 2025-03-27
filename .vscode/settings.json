@@ -1,9 +1,0 @@
-{
-	"makefile.launchConfigurations": [
-		{
-			"cwd": "/home/alfokin/minishell",
-			"binaryPath": "/home/alfokin/minishell/minishell",
-			"binaryArgs": [],
-		}
-	]
-}
