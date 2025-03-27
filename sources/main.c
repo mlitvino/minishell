@@ -6,18 +6,14 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:20:23 by mlitvino, test    #+#    #+#             */
-/*   Updated: 2025/03/26 13:53:25 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/03/27 23:43:57 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(void)
+int	main(int argc, char *argv[], char *env[])
 {
-	char *res = readline("minishell$ ");
-
-	printf("%s\n", res);
-
-	free(res);
+	read_input(argc, argv, env);
 	return (0);
 }
