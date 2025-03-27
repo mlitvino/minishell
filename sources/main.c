@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/25 15:20:23 by mlitvino, test    #+#    #+#             */
-/*   Updated: 2025/03/26 13:53:25 by mlitvino         ###   ########.fr       */
+/*   Created: 2025/03/25 15:20:23 by mlitvino, t       #+#    #+#             */
+/*   Updated: 2025/03/27 15:44:52 by alfokin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@ int	main(void)
 {
 	char *res = readline("minishell$ ");
 
-	printf("%s\n", res);
-
+	is_executable(res);
 	free(res);
 	return (0);
 }

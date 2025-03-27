@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
+#    By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/03/26 13:50:09 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/03/27 13:19:50 by alfokin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,9 +21,9 @@ OBJ_DIR = ./objects
 LIBFT_DIR = ./libft
 INCLD_DIR = ./includes
 
-SRC = main.c
-OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:%.c=%.o))
 INCLD = $(INCLD_DIR)/minishell.h
+SRC = main.c executable_handler.c
+OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:%.c=%.o))
 
 .SECONDARY: $(OBJ)
 
