@@ -6,12 +6,13 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/03/26 13:50:09 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/03/27 22:55:47 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I$(LIBFT_DIR)/$(INCLD_DIR) -I$(INCLD_DIR)
+CFLAGS = -I$(LIBFT_DIR)/$(INCLD_DIR) -I$(INCLD_DIR)
+# -Wall -Wextra -Werror
 
 NAME = minishell
 LIBFT = $(LIBFT_DIR)/libft.a
@@ -21,7 +22,10 @@ OBJ_DIR = ./objects
 LIBFT_DIR = ./libft
 INCLD_DIR = ./includes
 
-SRC = main.c
+SRC = main.c \
+	readline.c \
+	exit.c \
+
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:%.c=%.o))
 INCLD = $(INCLD_DIR)/minishell.h
 
