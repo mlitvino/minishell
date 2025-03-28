@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/03/28 13:10:04 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/03/28 21:57:39 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,6 @@ char	*readline(const char *prompt);
 void	cmd_exit(void);
 
 // pipe.c
-void	pipex(char *argv[]);
+void	pipex(char *read_line);
 
 #endif
