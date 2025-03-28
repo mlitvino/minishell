@@ -1,35 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/03/28 13:10:04 by mlitvino         ###   ########.fr       */
+/*   Created: 2025/03/28 12:03:21 by mlitvino          #+#    #+#             */
+/*   Updated: 2025/03/28 14:12:45 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "minishell.h"
 
-# include "libft.h"
+void	pipex(char *argv[])
+{
+	// Check whether we have permissions and printf accord error
+	access("test", F_OK | R_OK | W_OK | X_OK);
+	perror("access");
 
-# include <stdio.h>
-# include <readline/history.h>
-# include <readline/readline.h>
+	// Get file fd, stdin fd
+	int file = open("te", O_RDWR);
+	int tempin = dup(1);
 
-# include <fcntl.h>
-# include <errno.h>
+	// Redirect stdin > file, write phare, recover stdin
+	dup2(file, 1);
+	write(1, "nomer\n", 6);
+	dup2(tempin, 1);
 
-// readline.c
-void	read_input(int argc, char *argv[], char *env[]);
-char	*readline(const char *prompt);
-
-// cmd_exit.c
-void	cmd_exit(void);
-
-// pipe.c
-void	pipex(char *argv[]);
-
-#endif
+	close(file);
+	close(tempin);
+}
