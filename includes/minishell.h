@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/03/28 21:57:39 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/03/29 00:04:40 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 
 # include <fcntl.h>
 # include <errno.h>
+
+# include <sys/wait.h>
 
 // readline.c
 void	read_input(int argc, char *argv[], char *env[]);
