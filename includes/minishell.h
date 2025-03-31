@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/03/29 00:04:40 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/03/31 16:04:59 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 # define MINISHELL_H
 
 # include "libft.h"
-
 # include <stdio.h>
+
 # include <readline/history.h>
 # include <readline/readline.h>
 
@@ -32,6 +32,6 @@ char	*readline(const char *prompt);
 void	cmd_exit(void);
 
 // pipe.c
-void	pipex(char *read_line);
+void	pipex(char *read_line, char *env[]);
 
 #endif

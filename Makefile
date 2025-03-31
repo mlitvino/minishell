@@ -6,11 +6,11 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/03/28 13:51:08 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/03/31 16:57:50 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = cc -ggdb
+CC = cc
 CFLAGS = -I$(LIBFT_DIR)/$(INCLD_DIR) -I$(INCLD_DIR)
 # -Wall -Wextra -Werror
 
@@ -35,7 +35,7 @@ INCLD = $(INCLD_DIR)/minishell.h
 all: $(LIBFT) $(NAME) delete_obj_dir
 
 $(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJ_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INCLD) | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -58,7 +58,7 @@ fclean: clean
 
 delete_obj_dir:
 	@if [ -z "$$(ls -A $(OBJ_DIR))" ]; then \
-		@rm -rf $(OBJ_DIR); \
+		rm -rf $(OBJ_DIR); \
 	fi
 
 re: fclean all

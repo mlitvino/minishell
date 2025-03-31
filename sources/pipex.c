@@ -6,65 +6,81 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:03:21 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/03/29 00:21:49 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/03/31 17:01:29 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	pipex(char *read_line)
+void	pipex(char *read_line, char *env[])
 {
-	char	**tab;
-	int		cmd_count;
 	int		pipefd[2];
 	pid_t	child_pid;
 	int		outfile;
 	int		infile;
 	char	*line;
 
-	outfile = open("te", O_RDWR);
-	infile = open("test", O_RDWR);
-	tab = ft_split(read_line, '|');
-	cmd_count = 0;
-	while (tab[cmd_count])
-		cmd_count++;
-	pipe(pipefd);
 	child_pid = fork();
 	if (child_pid == 0)
 	{
-		close(pipefd[1]);
-		line = get_next_line(pipefd[0]);
-		while (line)
-		{
-			ft_putstr_fd(line, outfile);
-			free(line);
-			line = get_next_line(pipefd[0]);
-		}
-		close(pipefd[0]);
-		close(outfile);
-		close(infile);
-		exit(0);
-	}
-	else
-	{
-		close(pipefd[0]);
-
-
+		outfile = open("te.txt", O_RDWR | O_TRUNC);
+		infile = open("test.txt", O_RDWR);
+		int	tempin = dup(0);
+		int	tempout = dup(1);
+		pipe(pipefd);
 		child_pid = fork();
 		if (child_pid == 0)
 		{
-			line = get_next_line(infile);
-			char	*argv[2] = {"", line, NULL};
-			
+			close(pipefd[0]);
+			dup2(infile, 0);
+			dup2(pipefd[1], 1);
+
+
+		close(tempin);
+		close(tempout);
+		close(outfile);
+		close(infile);
+		close(pipefd[0]);
+		close(pipefd[1]);
+
+			char *argv[] = {"grep", "test", NULL};
+			execve("/bin/grep", argv, env);
+			perror("execve:");
+			exit(1);
 		}
 		else
 		{
-			wait(child_pid);
+			close(pipefd[1]);
+			dup2(outfile, 1);
+			dup2(pipefd[0], 0);
+
+
+
+		close(tempin);
+		close(tempout);
+		close(outfile);
+		close(infile);
+		close(pipefd[0]);
+		close(pipefd[1]);
+
+			char *argv2[] = {"grep", "test", NULL};
+			execve("/bin/grep", argv2, env);
+			perror("eeexecve");
+			exit(1);
 		}
 
 
+		close(tempin);
+		close(tempout);
+		close(outfile);
+		close(infile);
+		close(pipefd[0]);
 		close(pipefd[1]);
+
+		cmd_exit();
 	}
-	close(outfile);
-	close(infile);
+	else
+	{
+		waitpid(child_pid, 0, 0);
+	}
 }

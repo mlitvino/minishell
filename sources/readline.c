@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/03/28 22:29:14 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/03/31 16:04:44 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	read_input(int argc, char *argv[], char *env[])
 			cmd_exit();
 
 		if (read_line)
-			pipex(read_line);
+			pipex(read_line, env);
 
 		free(read_line);
 	}
