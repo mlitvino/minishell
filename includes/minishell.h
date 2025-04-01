@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/03/31 16:04:59 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/01 18:22:30 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,46 @@
 
 # include <sys/wait.h>
 
+# define STDIN 0
+# define STDOUT 1
+#define STDERR 2 // do we need it?
+
+typedef struct s_pipe
+{
+	long	pipe[2];
+}	t_pipe;
+
+typedef struct s_file
+{
+	char	*path_name;
+	int		fd;
+	int		mod;
+}	t_file;
+
+typedef struct s_cmd
+{
+	char	*cmd_path;
+	char	*cmd_name;
+	char	*optns;
+	int		wildcard;
+	char	**arg_list; // cmd_name + optns + args
+	t_file	*infile;
+	t_file	*outfile;
+}	t_cmd;
+
+typedef struct s_cmd_tab
+{
+	t_cmd	*cmds;
+	int		cmd_count;
+	int		exit_code;
+	t_pipe	*pipes;
+}	t_cmd_tab;
+
+typedef struct s_data
+{
+	t_cmd_tab	*cmd_flows;
+}	t_data;
+
 // readline.c
 void	read_input(int argc, char *argv[], char *env[]);
 char	*readline(const char *prompt);
@@ -32,6 +72,6 @@ char	*readline(const char *prompt);
 void	cmd_exit(void);
 
 // pipe.c
-void	pipex(char *read_line, char *env[]);
+// void	pipex(char *read_line, char *env[]);
 
 #endif
