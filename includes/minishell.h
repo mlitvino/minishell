@@ -6,7 +6,7 @@
 /*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/02 12:10:29 by alfokin          ###   ########.fr       */
+/*   Updated: 2025/04/02 16:50:19 by alfokin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,35 @@
 # include <readline/history.h>
 # include "libft.h"
 
+/*--------------------------INCLUDES FROM EXECUTER----------------------------*/
+# include <stdlib.h>
+# include <string.h>
+# include <unistd.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <errno.h>
+# include <limits.h>
+/*--------------------------INCLUDES FROM EXECUTER----------------------------*/
+
+# define CD_STR "cd"
+# define ECHO_STR "echo"
+# define ENV_STR "env"
+# define EXIT_STR "exit"
+# define EXPORT_STR "export"
+# define PWD_STR "pwd"
+# define UNSET_STR "unset"
+
 # define STDIN 0
 # define STDOUT 1
-#define STDERR 2 // do we need it?
+# define STDERR 2 // do we need it?
+
+void	cmd_exit(void);
+
+typedef struct s_cmd_list
+{
+	int		key;
+	char	*value;
+}	t_cmd_list;
 
 typedef struct s_pipe
 {
@@ -38,12 +64,42 @@ typedef struct s_cmd
 {
 	char	*cmd_path;
 	char	*cmd_name;
+	int		cmd_num;
 	char	*optns;
 	int		wildcard;
+	int		is_builtin;
 	char	**arg_list; // cmd_name + optns + args
 	t_file	*infile;
 	t_file	*outfile;
 }	t_cmd;
+
+enum builtin_cmd_list {
+	CD,
+	ECHO,
+	ENV,
+	EXIT,
+	EXPORT,
+	PWD,
+	UNSET,
+	EXEPTION
+};
+
+// (if (str == CD_STR))
+// {
+// 	is_builtin = 1;
+// }
+
+// if (is_builtin == 1)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (i < EXEPTION)
+// 	{
+// 		if (i == )
+// 		{}
+// 	}
+// }
 
 typedef struct s_cmd_tab
 {
@@ -52,6 +108,12 @@ typedef struct s_cmd_tab
 	int		exit_code;
 	t_pipe	*pipes;
 }	t_cmd_tab;
+
+typedef struct s_cmd_builtin
+{
+	char	*name;
+	void	(*func)(int argc, char **argv);
+}	t_cmd_builtin;
 
 typedef struct s_data
 {
@@ -65,6 +127,7 @@ char	*readline(const char *prompt);
 // cmd_exit.c
 void	cmd_exit(void);
 
-void	is_executable(const char *name);
+/*------------------------------EXECUTE HANDLER-------------------------------*/
+void	is_executable(const char *name, char *env[]);
 
 #endif

@@ -6,29 +6,34 @@
 /*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 13:12:48 by alfokin           #+#    #+#             */
-/*   Updated: 2025/03/27 16:20:17 by alfokin          ###   ########.fr       */
+/*   Updated: 2025/04/02 16:57:07 by alfokin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <errno.h>
-#include <limits.h>
 
 /* !!! Figure out how to get rid of this. And why can't I allocate mem in run !!! */
 #ifndef PATH_MAX
 # define PATH_MAX 4096
 #endif
 
-/* !!! No clue 'bout this. Thanks to stackoverflow. What should I do with this? !!! */
-extern char **environ;
+
+#define CD_STR "cd"
+typedef struct s_cmd_list
+{
+	int		key;
+	char	*value;
+}	t_cmd_list;
+
+
+enum {
+	CD,
+	PWD,
+	LS,
+};
 
 /* !!! Make it clean. Separate to different functions. Rid of and change forbidden functions !!! */
-void	is_executable(const char *name)
+void	is_executable(const char *name, char *env[])
 {
 	char	*cmd_path;
 	char	*path_env;
@@ -36,9 +41,22 @@ void	is_executable(const char *name)
 	char	*token;
 	char	full_path[PATH_MAX];
 	char	*argv[2];
+	static t_cmd_builtin	builtin_list[7];
 	int		status;
 	pid_t	pid;
 
+
+	fill_builtin(builtin_list);
+
+	builtin_list[0].name = "cd";
+	builtin_list[0].func = NULL;
+	builtin_list[1].name = "pwd";
+	builtin_list[1].func = NULL;
+
+
+	t_cmd_builtin	test[2] = { {"cd", NULL}, {"pwd", NULL}};
+	t_cmd_list *ex;
+	ex->value = CD_STR;
 	cmd_path = NULL;
 	if (ft_strchr(name, '/'))
 		cmd_path = ft_strdup(name);
@@ -81,7 +99,7 @@ void	is_executable(const char *name)
 	{
 		argv[0] = (char *)name;
 		argv[1] = NULL;
-		execve(cmd_path, argv, environ);
+		execve(cmd_path, argv, env);
 		perror("execve");
 		exit(EXIT_FAILURE);
 	}

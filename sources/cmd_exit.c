@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_exit.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 12:29:45 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/03/31 12:29:57 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/02 15:23:25 by alfokin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
+
 void	cmd_exit(void)
 {
-	exit(0);
+	exit(EXIT_SUCCESS);
 }
