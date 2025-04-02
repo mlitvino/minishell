@@ -1,19 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   cmd_exit.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/25 15:20:23 by mlitvino, t       #+#    #+#             */
-/*   Updated: 2025/04/02 12:11:06 by alfokin          ###   ########.fr       */
+/*   Created: 2025/03/31 12:29:45 by mlitvino          #+#    #+#             */
+/*   Updated: 2025/03/31 12:29:57 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-int	main(int argc, char *argv[], char *env[])
+void	cmd_exit(void)
 {
-	read_input(argc, argv, env);
-	return (0);
+	exit(0);
 }

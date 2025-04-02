@@ -6,12 +6,13 @@
 #    By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/03/27 13:19:50 by alfokin          ###   ########.fr        #
+#    Updated: 2025/04/02 12:07:30 by alfokin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I$(LIBFT_DIR)/$(INCLD_DIR) -I$(INCLD_DIR)
+CFLAGS = -I$(LIBFT_DIR)/$(INCLD_DIR) -I$(INCLD_DIR)
+# -Wall -Wextra -Werror
 
 NAME = minishell
 LIBFT = $(LIBFT_DIR)/libft.a
@@ -22,7 +23,7 @@ LIBFT_DIR = ./libft
 INCLD_DIR = ./includes
 
 INCLD = $(INCLD_DIR)/minishell.h
-SRC = main.c executable_handler.c
+SRC = main.c readline.c	cmd_exit.c executable_handler.c
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:%.c=%.o))
 
 .SECONDARY: $(OBJ)
