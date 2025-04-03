@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/01 18:19:13 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/03 13:24:53 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int	pipex(t_cmd_tab *cmd_flow)
 {
 	int		i;
 	pid_t	chld_pid;
+	int		status;
 
 	cmd_flow->cmd_count = 3; //test
 
@@ -89,7 +90,8 @@ int	pipex(t_cmd_tab *cmd_flow)
 		}
 		i++;
 	}
-	waitpid(chld_pid, 0, 0); // check exit status child
+	while (waitpid(0, &status, 0) != -1)
+		{ }; // check exit status child
 	return (cmd_flow->exit_code);
 }
 
