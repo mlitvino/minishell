@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/01 18:25:39 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/03 13:59:52 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,10 @@ typedef struct s_data
 // readline.c
 void	read_input(int argc, char *argv[], char *env[]);
 char	*readline(const char *prompt);
+
+//cmd_echo.c
+int		is_new_line(char *option);
+void	cmd_echo(char **argv);
 
 // cmd_exit.c
 void	cmd_exit(void);
