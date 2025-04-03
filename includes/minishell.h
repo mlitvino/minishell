@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/03 15:35:00 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/03 16:45:49 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,9 @@ char	*readline(const char *prompt);
 //cmd_echo.c
 int		is_new_line(char *option);
 void	cmd_echo(char **argv);
+
+//cmd_env.c
+void	cmd_env(char *env[]);
 
 // cmd_exit.c
 void	cmd_exit(void);
