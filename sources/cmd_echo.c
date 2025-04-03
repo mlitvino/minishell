@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:35:42 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/03 14:00:56 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/03 16:34:24 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,45 @@
 
 int	is_new_line(char *option)
 {
+	if (!option)
+		return (1);
 	if (ft_strncmp(option, "-n", 2) != 0)
-		return (0);
+		return (1);
 	option += 2;
 	while (*option)
 	{
 		if (*option != 'n')
-			return (0);
+			return (1);
 		option++;
 	}
-	return (1);
+	return (0);
 }
 
 void	cmd_echo(char **argv)
 {
 	// NUL argv check?
-	(*argv)++;
-	if (is_new_line(argv[1]) == 1)
+
+	if (is_new_line(*(argv + 1)) == 1)
 	{
-		while (++(*argv))
+		argv++;
+		while (*argv)
+		{
 			printf("%s", *argv);
+			if (*(argv + 1))
+				printf(" ");
+			argv++;
+		}
+		printf("\n");
 	}
 	else
 	{
+		argv += 2;
 		while (*argv)
-			ft_putstr_fd((*argv)++, STDOUT);
+		{
+			printf("%s", *argv);
+			if (*(argv + 1))
+				printf(" ");
+			argv++;
+		}
 	}
 }
