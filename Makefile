@@ -6,11 +6,11 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/04/03 16:45:43 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/04/05 00:18:49 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = cc
+CC = cc -ggdb
 CFLAGS = -I$(LIBFT_DIR)/$(INCLD_DIR) -I$(INCLD_DIR)
 # -Wall -Wextra -Werror
 
@@ -27,6 +27,8 @@ SRC = main.c \
 	cmd_exit.c \
 	cmd_echo.c \
 	cmd_env.c \
+	cmd_export.c \
+	cmd_unset.c \
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:%.c=%.o))
 INCLD = $(INCLD_DIR)/minishell.h
