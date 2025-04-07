@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/07 14:46:31 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/07 17:29:08 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	read_input(int argc, char *argv[], char *env[])
 	char	*read_line;
 	t_data	data;
 
+	init_sigs(&data);
 	cpy_env(env, &data);
 	while (1)
 	{

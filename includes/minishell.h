@@ -6,18 +6,22 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/07 14:08:04 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/07 16:54:33 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# define _POSIX_C_SOURCE 200000L
 # include "libft.h"
 
 # include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+
+# include <signal.h>
+# include <sys/types.h>
 
 # define STDIN 0
 # define STDOUT 1
@@ -88,5 +92,8 @@ void	cmd_unset(t_data *data, char *arg);
 
 // cmd_exit.c
 void	cmd_exit(void);
+
+//signals.c
+void	init_sigs(t_data *data);
 
 #endif

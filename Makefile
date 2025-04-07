@@ -6,7 +6,7 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/04/07 15:15:44 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/04/07 16:54:45 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ SRC = main.c \
 	cmd_export.c \
 	cmd_pwd.c \
 	cmd_unset.c \
+	signals.c \
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:%.c=%.o))
 INCLD = $(INCLD_DIR)/minishell.h
