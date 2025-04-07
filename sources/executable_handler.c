@@ -26,11 +26,11 @@ typedef struct s_cmd_list
 }	t_cmd_list;
 
 
-enum {
-	CD,
-	PWD,
-	LS,
-};
+// enum {
+// 	CD,
+// 	PWD,
+// 	LS,
+// };
 
 /* !!! Make it clean. Separate to different functions. Rid of and change forbidden functions !!! */
 void	is_executable(const char *name, char *env[])
@@ -41,17 +41,17 @@ void	is_executable(const char *name, char *env[])
 	char	*token;
 	char	full_path[PATH_MAX];
 	char	*argv[2];
-	static t_cmd_builtin	builtin_list[7];
+	//static t_cmd_builtin	builtin_list[7];
 	int		status;
 	pid_t	pid;
 
 
-	fill_builtin(builtin_list);
+	//fill_builtin(builtin_list);
 
-	builtin_list[0].name = "cd";
-	builtin_list[0].func = NULL;
-	builtin_list[1].name = "pwd";
-	builtin_list[1].func = NULL;
+	// builtin_list[0].name = "cd";
+	// builtin_list[0].func = NULL;
+	// builtin_list[1].name = "pwd";
+	// builtin_list[1].func = NULL;
 
 
 	t_cmd_builtin	test[2] = { {"cd", NULL}, {"pwd", NULL}};

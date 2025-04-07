@@ -42,11 +42,11 @@
 
 void	cmd_exit(void);
 
-typedef struct s_cmd_list
-{
-	int		key;
-	char	*value;
-}	t_cmd_list;
+// typedef struct s_cmd_list
+// {
+// 	int		key;
+// 	char	*value;
+// }	t_cmd_list;
 
 typedef struct s_pipe
 {

@@ -25,7 +25,7 @@ INCLD_DIR = ./includes
 INCLD = $(INCLD_DIR)/minishell.h
 SRC =	main.c readline.c executable_handler.c \
 		cmd_cd.c cmd_echo.c cmd_env.c cmd_exit.c \
-		cmd_export.c cmd_pwd.c cmd_unset.c \
+		cmd_export.c cmd_pwd.c cmd_unset.c
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:%.c=%.o))
 
 .SECONDARY: $(OBJ)
