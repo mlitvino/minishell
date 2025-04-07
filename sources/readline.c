@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/05 01:14:23 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/07 14:46:31 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,17 @@ void	is_builtin(t_data *data, char *read_line)
 	{
 		char *export_arg = ft_substr(read_line, 7, ft_strlen(read_line));
 		cmd_export(data, export_arg);
+	}
+
+	if (ft_strncmp(read_line, "pwd", 3) == 0)
+	{
+		cmd_pwd(data);
+	}
+
+	if (ft_strncmp(read_line, "cd", 2) == 0)
+	{
+		char	**tab = ft_split(read_line, ' ');
+		cmd_cd(data, tab[1]);
 	}
 }
 

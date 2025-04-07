@@ -6,7 +6,7 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/04/05 00:18:49 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/04/07 13:15:54 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,10 +24,12 @@ INCLD_DIR = ./includes
 
 SRC = main.c \
 	readline.c \
-	cmd_exit.c \
+	cmd_cd.c \
 	cmd_echo.c \
 	cmd_env.c \
+	cmd_exit.c \
 	cmd_export.c \
+	cmd_pwd.c \
 	cmd_unset.c \
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:%.c=%.o))

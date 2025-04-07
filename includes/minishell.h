@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/04 22:51:35 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/07 14:08:04 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,9 @@ typedef struct s_data
 void	read_input(int argc, char *argv[], char *env[]);
 char	*readline(const char *prompt);
 
+//cmd_cd.c
+void	cmd_cd(t_data *data, char *path);
+
 //cmd_echo.c
 int		is_new_line(char *option);
 void	cmd_echo(char **argv);
@@ -76,6 +79,9 @@ void	cmd_env(t_list *env);
 //cmd_export.c
 void	add_replce_var(t_list **linked_list, char *arg);
 void	cmd_export(t_data *data, char *arg);
+
+//cmd_pwd.c
+void	cmd_pwd(t_data *data);
 
 //cmd_unset.c
 void	cmd_unset(t_data *data, char *arg);
