@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/07 17:29:08 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/07 18:28:18 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,12 @@ void	read_input(int argc, char *argv[], char *env[])
 	while (1)
 	{
 		read_line = readline("minishell$ ");
+		if (!read_line)
+		{
+			printf("exit\n");
+			cmd_exit();
+		}
+
 		add_history(read_line);
 
 		is_builtin(&data, read_line);
