@@ -118,11 +118,34 @@ typedef struct s_cmd_builtin
 typedef struct s_data
 {
 	t_cmd_tab	*cmd_flows;
+	t_list		*env;
+	t_list		*local_vars;
 }	t_data;
 
 // readline.c
 void	read_input(int argc, char *argv[], char *env[]);
 char	*readline(const char *prompt);
+
+//cmd_cd.c
+void	cmd_cd(t_data *data, char *path);
+
+//cmd_echo.c
+int		is_new_line(char *option);
+void	cmd_echo(char **argv);
+
+//cmd_env.c
+void	cpy_env(char *sys_env[], t_data *data);
+void	cmd_env(t_list *env);
+
+//cmd_export.c
+void	add_replce_var(t_list **linked_list, char *arg);
+void	cmd_export(t_data *data, char *arg);
+
+//cmd_pwd.c
+void	cmd_pwd(t_data *data);
+
+//cmd_unset.c
+void	cmd_unset(t_data *data, char *arg);
 
 // cmd_exit.c
 void	cmd_exit(void);

@@ -6,11 +6,11 @@
 #    By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/04/02 12:07:30 by alfokin          ###   ########.fr        #
+#    Updated: 2025/04/07 15:15:44 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = cc
+CC = cc -ggdb
 CFLAGS = -I$(LIBFT_DIR)/$(INCLD_DIR) -I$(INCLD_DIR)
 # -Wall -Wextra -Werror
 
@@ -23,7 +23,9 @@ LIBFT_DIR = ./libft
 INCLD_DIR = ./includes
 
 INCLD = $(INCLD_DIR)/minishell.h
-SRC = main.c readline.c	cmd_exit.c executable_handler.c
+SRC =	main.c readline.c executable_handler.c \
+		cmd_cd.c cmd_echo.c cmd_env.c cmd_exit.c \
+		cmd_export.c cmd_pwd.c cmd_unset.c \
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:%.c=%.o))
 
 .SECONDARY: $(OBJ)
