@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 16:38:12 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/08 16:48:05 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:37:34 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@ void	sig_handler(int	sig, siginfo_t *info, void	*context)
 {
 	if (sig == SIGINT)
 	{
-		printf("\nminishell$ ");
+		printf("\n");
 		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
 		g_signal_received = 1;
 	}
 }
