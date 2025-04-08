@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/07 16:54:33 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:53:08 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 # define STDIN 0
 # define STDOUT 1
 #define STDERR 2 // do we need it?
+
+extern volatile sig_atomic_t g_signal_received;
 
 typedef struct s_pipe
 {
