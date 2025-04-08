@@ -6,7 +6,7 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/04/07 16:54:45 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/04/08 19:09:02 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,6 @@ LIBFT_DIR = ./libft
 INCLD_DIR = ./includes
 
 SRC = main.c \
-	readline.c \
 	cmd_cd.c \
 	cmd_echo.c \
 	cmd_env.c \
@@ -31,6 +30,8 @@ SRC = main.c \
 	cmd_export.c \
 	cmd_pwd.c \
 	cmd_unset.c \
+	heredoc.c \
+	readline.c \
 	signals.c \
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:%.c=%.o))

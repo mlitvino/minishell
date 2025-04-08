@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/08 16:53:08 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/08 21:11:57 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 
 # include <signal.h>
 # include <sys/types.h>
+
+# include <sys/wait.h>
 
 # define STDIN 0
 # define STDOUT 1
@@ -67,10 +69,6 @@ typedef struct s_data
 	t_list		*local_vars;
 }	t_data;
 
-// readline.c
-void	read_input(int argc, char *argv[], char *env[]);
-char	*readline(const char *prompt);
-
 //cmd_cd.c
 void	cmd_cd(t_data *data, char *path);
 
@@ -94,6 +92,16 @@ void	cmd_unset(t_data *data, char *arg);
 
 // cmd_exit.c
 void	cmd_exit(void);
+
+//heredoc.c
+void	heredoc(t_data *data, char **argv);
+
+//main.c
+int	main(int argc, char *argv[], char *env[]);
+
+// readline.c
+void	read_input(int argc, char *argv[], char *env[]);
+char	*readline(const char *prompt);
 
 //signals.c
 void	init_sigs(t_data *data);

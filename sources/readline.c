@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/07 18:28:18 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/08 21:19:57 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,21 @@ void	is_builtin(t_data *data, char *read_line)
 	{
 		char	**tab = ft_split(read_line, ' ');
 		cmd_cd(data, tab[1]);
+	}
+
+	if (ft_strncmp(read_line, "heredoc", 7) == 0)
+	{
+		if (fork() == 0)
+		{
+			printf("HERE\n");
+			char	**tab = ft_split(read_line, ' ');
+			heredoc(data, tab);
+			exit(0);
+		}
+		else
+		{
+			waitpid(0, 0, 0);
+		}
 	}
 }
 
