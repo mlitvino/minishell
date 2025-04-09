@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/08 21:11:57 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/09 19:04:18 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@
 
 # include <sys/wait.h>
 
+#include <sys/types.h>
+#include <dirent.h>
+
+#include <fcntl.h>
+
 # define STDIN 0
 # define STDOUT 1
 #define STDERR 2 // do we need it?
@@ -41,6 +46,7 @@ typedef struct s_file
 	char	*path_name;
 	int		fd;
 	int		mod;
+	int		heredoc;
 }	t_file;
 
 typedef struct s_cmd
@@ -56,7 +62,7 @@ typedef struct s_cmd
 
 typedef struct s_cmd_tab
 {
-	t_cmd	*cmds;
+	t_cmd	**cmds;
 	int		cmd_count;
 	int		exit_code;
 	t_pipe	*pipes;
@@ -64,7 +70,7 @@ typedef struct s_cmd_tab
 
 typedef struct s_data
 {
-	t_cmd_tab	*cmd_flows;
+	t_cmd_tab	**cmd_flows;
 	t_list		*env;
 	t_list		*local_vars;
 }	t_data;
@@ -97,13 +103,14 @@ void	cmd_exit(void);
 void	heredoc(t_data *data, char **argv);
 
 //main.c
-int	main(int argc, char *argv[], char *env[]);
+int		main(int argc, char *argv[], char *env[]);
 
 // readline.c
 void	read_input(int argc, char *argv[], char *env[]);
 char	*readline(const char *prompt);
 
 //signals.c
+void	sig_handler(int	sig, siginfo_t *info, void	*context);
 void	init_sigs(t_data *data);
 
 #endif
