@@ -6,19 +6,17 @@
 /*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/02 16:50:19 by alfokin          ###   ########.fr       */
+/*   Updated: 2025/04/10 17:46:58 by alfokin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+/*----------------------------LIST OF INCLUDES--------------------------------*/
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "libft.h"
-
-/*--------------------------INCLUDES FROM EXECUTER----------------------------*/
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
@@ -26,8 +24,9 @@
 # include <sys/wait.h>
 # include <errno.h>
 # include <limits.h>
-/*--------------------------INCLUDES FROM EXECUTER----------------------------*/
+# include "libft.h"
 
+/*----------------------------BUILTIN STRING KEY------------------------------*/
 # define CD_STR "cd"
 # define ECHO_STR "echo"
 # define ENV_STR "env"
@@ -36,17 +35,18 @@
 # define PWD_STR "pwd"
 # define UNSET_STR "unset"
 
+/*------------------------DEFAULT STREAMS DEFFINIITON-------------------------*/
 # define STDIN 0
 # define STDOUT 1
 # define STDERR 2 // do we need it?
 
 void	cmd_exit(void);
 
-// typedef struct s_cmd_list
-// {
-// 	int		key;
-// 	char	*value;
-// }	t_cmd_list;
+typedef struct s_cmd_list
+{
+	int		key;
+	char	*value;
+}	t_cmd_list;
 
 typedef struct s_pipe
 {
@@ -84,23 +84,6 @@ enum builtin_cmd_list {
 	EXEPTION
 };
 
-// (if (str == CD_STR))
-// {
-// 	is_builtin = 1;
-// }
-
-// if (is_builtin == 1)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (i < EXEPTION)
-// 	{
-// 		if (i == )
-// 		{}
-// 	}
-// }
-
 typedef struct s_cmd_tab
 {
 	t_cmd	*cmds;
@@ -124,7 +107,6 @@ typedef struct s_data
 
 // readline.c
 void	read_input(int argc, char *argv[], char *env[]);
-char	*readline(const char *prompt);
 
 //cmd_cd.c
 void	cmd_cd(t_data *data, char *path);
