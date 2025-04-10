@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 19:06:58 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/09 15:23:59 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/10 15:51:54 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,33 @@ void	hd_sig_hanlder(int sig)
 		exit(1);
 }
 
-void	create_temp_hd(t_data *data)
+void	create_temp_hd(t_data *data, t_file *infile)
 {
-	int	i;
+	int		i;
+	char	*file_id;
+	char	*file_name;
+	int		hd_fd;
 
-	i = 0;
+	i = 1;
+	chdir("/tmp/");
+	// err check
+	while (1)
+	{
+		file_id = ft_itoa(i);
+		// NUL check
+		file_name = ft_strjoin("temp-hd-", file_id);
+		// NUL check
+		hd_fd = open(file_name, O_RDWR | O_CREAT | O_EXCL, 0644);
+		// err check
+		if (hd_fd == -1, errno == EEXIST)
+			i++;
+		else
+			break ;
+	}
+	infile->path_name = file_name;
 }
 
-void	heredoc(t_data *data, char **argv)
+void	heredoc(t_data *data, char **argv, t_file *infile)
 {
 	char	*delim;
 	char	*input;
@@ -40,6 +59,8 @@ void	heredoc(t_data *data, char **argv)
 		input = readline("> ");
 		if (!input)
 			return ;
-
+		infile->fd = open(infile->path_name, O_WRONLY);
+		ft_putstr_fd(input, infile->fd);
+		close(infile->fd);
 	}
 }

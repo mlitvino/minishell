@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/09 19:04:14 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/10 15:51:30 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,12 @@ void	is_builtin(t_data *data, char *read_line)
 
 	if (ft_strncmp(read_line, "hd", 2) == 0)
 	{
+		t_cmd	test;
+		char	**tab = ft_split(read_line, ' ');
+		create_temp_hd(data, &test.infile);
 		if (fork() == 0)
 		{
-			char	**tab = ft_split(read_line, ' ');
-			heredoc(data, tab);
+			heredoc(data, tab, &test.infile);
 			exit(0);
 		}
 		else
@@ -61,6 +63,7 @@ void	is_builtin(t_data *data, char *read_line)
 			while (waitpid(0, 0, 0) != -1)
 				{ }
 			init_sigs(data);
+			unlink(&test.infile->path_name);
 		}
 	}
 }

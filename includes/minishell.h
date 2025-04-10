@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/09 19:04:18 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/10 15:52:06 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 #include <dirent.h>
 
 #include <fcntl.h>
+
+#include <errno.h>
 
 # define STDIN 0
 # define STDOUT 1
@@ -100,7 +102,8 @@ void	cmd_unset(t_data *data, char *arg);
 void	cmd_exit(void);
 
 //heredoc.c
-void	heredoc(t_data *data, char **argv);
+void	create_temp_hd(t_data *data, t_file *infile);
+void	heredoc(t_data *data, char **argv, t_file *infile);
 
 //main.c
 int		main(int argc, char *argv[], char *env[]);
