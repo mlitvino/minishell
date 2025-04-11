@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:36:35 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/11 14:09:06 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/11 14:38:29 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ t_list	*find_var(t_list **list, char *var, t_list **prev)
 		{
 			return (list_var);
 		}
-		*prev = list_var;
+		if (prev)
+			*prev = list_var;
 		list_var = list_var->next;
 	}
 	return (NULL);

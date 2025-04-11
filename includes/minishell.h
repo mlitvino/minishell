@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/11 13:48:34 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/11 14:37:20 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void	cpy_env(char *sys_env[], t_data *data);
 void	cmd_env(t_list *env);
 
 //cmd_export.c
+t_list	*find_var(t_list **list, char *var, t_list **prev);
 void	add_replce_var(t_list **linked_list, char *arg);
 void	cmd_export(t_data *data, char *arg);
 
@@ -103,6 +104,7 @@ void	cmd_unset(t_data *data, char *arg);
 void	cmd_exit(t_data *data);
 
 //heredoc.c
+void	hd_sig_hanlder(int sig);
 void	create_temp_hd(t_data *data, t_file *infile);
 void	heredoc(t_data *data, char **argv, t_file *infile);
 
@@ -116,5 +118,8 @@ char	*readline(const char *prompt);
 //signals.c
 void	sig_handler(int	sig, siginfo_t *info, void	*context);
 void	init_sigs(t_data *data);
+
+//utils.c
+char	*expand_var(t_data *data, char *var);
 
 #endif
