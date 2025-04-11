@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 19:06:58 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/10 15:51:54 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/11 15:00:03 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	create_temp_hd(t_data *data, t_file *infile)
 		// NUL check
 		hd_fd = open(file_name, O_RDWR | O_CREAT | O_EXCL, 0644);
 		// err check
-		if (hd_fd == -1, errno == EEXIST)
+		if (hd_fd == -1 && errno == EEXIST)
 			i++;
 		else
 			break ;
@@ -58,6 +58,8 @@ void	heredoc(t_data *data, char **argv, t_file *infile)
 	{
 		input = readline("> ");
 		if (!input)
+			return ;
+		if (ft_strcmp(input, delim) == 0)
 			return ;
 		infile->fd = open(infile->path_name, O_WRONLY);
 		ft_putstr_fd(input, infile->fd);

@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/11 14:21:59 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/11 15:09:02 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ void	is_builtin(t_data *data, char *read_line)
 		char	**tab = ft_split(read_line, ' ');
 		cmd_echo(tab);
 
-		while (tab && *tab)
-			free((*tab)++);
+		for (int i = 0; tab[i]; i++)
+			free(tab[i]);
 		free(tab);
 	}
 
@@ -52,19 +52,21 @@ void	is_builtin(t_data *data, char *read_line)
 		char	**tab = ft_split(read_line, ' ');
 		cmd_cd(data, tab[1]);
 
-		while (tab && *tab)
-			free((*tab)++);
+		for (int i = 0; tab[i]; i++)
+			free(tab[i]);
 		free(tab);
 	}
 
 	if (ft_strncmp(read_line, "hd", 2) == 0)
 	{
-		t_cmd	test;
+		t_file *infile = malloc(sizeof(t_file));
 		char	**tab = ft_split(read_line, ' ');
-		create_temp_hd(data, test.infile);
+
+		create_temp_hd(data, infile);
+		printf("HERE\n"); // DEL
 		if (fork() == 0)
 		{
-			heredoc(data, tab, test.infile);
+			heredoc(data, tab, infile);
 			exit(0);
 		}
 		else
@@ -73,8 +75,13 @@ void	is_builtin(t_data *data, char *read_line)
 			while (waitpid(0, 0, 0) != -1)
 				{ }
 			init_sigs(data);
-			unlink(test.infile->path_name);
+			unlink(infile->path_name);
 		}
+
+		for (int i = 0; tab[i]; i++)
+			free(tab[i]);
+		free(tab);
+		free(infile);
 	}
 }
 
