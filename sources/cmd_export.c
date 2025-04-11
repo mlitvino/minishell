@@ -6,39 +6,53 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:36:35 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/05 01:17:50 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/11 14:09:06 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	add_replce_var(t_list **list, char *var)
+t_list	*find_var(t_list **list, char *var, t_list **prev)
 {
-	t_list	*temp;
-	t_list	*prev;
+	t_list	*list_var;
 	char	*equals_sign;
 	int		equals_i;
 
-	temp = *list;
-	while(temp)
+	list_var = *list;
+	while(list_var)
 	{
-		equals_sign = ft_strchr(temp->content, '=');
-		equals_i = equals_sign - (char *)temp->content;
-		if (ft_strncmp(temp->content, var, equals_i + 1) == 0)
+		equals_sign = ft_strchr(list_var->content, '=');
+		equals_i = equals_sign - (char *)list_var->content;
+		if (ft_strncmp(list_var->content, var, equals_i + 1) == 0)
 		{
-			if (temp == *list)
-				*list = temp->next;
-			else
-				prev->next = temp->next;
-			ft_lstdelone(temp, free);
-			break ;
+			return (list_var);
 		}
-		prev = temp;
-		temp = temp->next;
+		*prev = list_var;
+		list_var = list_var->next;
 	}
-	temp = ft_lstnew(var);
+	return (NULL);
+}
+
+void	add_replce_var(t_list **list, char *new_var)
+{
+	t_list	*list_var;
+	t_list	*prev;
+	t_list	*temp;
+
+	temp = ft_lstnew(new_var);
 	// NUL check
-	ft_lstadd_back(list, temp);
+	list_var = find_var(list, new_var, &prev);
+	if (!list_var)
+		ft_lstadd_back(list, temp);
+	else
+	{
+		temp->next = list_var->next;
+		if (list_var == *list)
+			*list = temp;
+		else
+			prev->next = temp;
+		ft_lstdelone(list_var, free);
+	}
 }
 
 void	cmd_export(t_data *data, char *var)

@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/10 15:52:06 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/11 13:48:34 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ typedef struct s_data
 	t_cmd_tab	**cmd_flows;
 	t_list		*env;
 	t_list		*local_vars;
+	char		*read_line;
 }	t_data;
 
 //cmd_cd.c
@@ -99,7 +100,7 @@ void	cmd_pwd(t_data *data);
 void	cmd_unset(t_data *data, char *arg);
 
 // cmd_exit.c
-void	cmd_exit(void);
+void	cmd_exit(t_data *data);
 
 //heredoc.c
 void	create_temp_hd(t_data *data, t_file *infile);
