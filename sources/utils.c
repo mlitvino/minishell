@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:30:49 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/11 14:41:22 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/11 14:52:45 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ char	*expand_var(t_data *data, char *var)
 	char	*value_var;
 	t_list	*temp;
 
-	key_var = strjoin(var, "=");
+	key_var = ft_strjoin(var, "=");
 	// NULL check
-	temp = find_var(data->local_vars, key_var, NULL);
+	temp = find_var(&data->local_vars, key_var, NULL);
 	if (!temp)
-		temp = find_var(data->env, key_var, NULL);
+		temp = find_var(&data->env, key_var, NULL);
 	if (temp)
 	{
 		value_var = strchr(temp->content, '=') + 1;
