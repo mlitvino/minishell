@@ -6,7 +6,7 @@
 #    By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/04/07 15:15:44 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/04/14 00:20:23 by alfokin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,15 +17,21 @@ CFLAGS = -I$(LIBFT_DIR)/$(INCLD_DIR) -I$(INCLD_DIR)
 NAME = minishell
 LIBFT = $(LIBFT_DIR)/libft.a
 
-SRC_DIR = ./sources
-OBJ_DIR = ./objects
-LIBFT_DIR = ./libft
-INCLD_DIR = ./includes
+SRC_DIR		= ./sources
+PARS_DIR 	= parser
+OBJ_DIR		= ./objects
+LIBFT_DIR	= ./libft
+INCLD_DIR	= ./includes
 
 INCLD = $(INCLD_DIR)/minishell.h
+PARS_FILES	=	parser.c cont_token_checker.c create_asteriks.c \
+				create_nodes.c destroy_nodes.c syntax_checker.c \
+				token_checker.c word_checker.c
 SRC =	main.c readline.c executable_handler.c \
 		cmd_cd.c cmd_echo.c cmd_env.c cmd_exit.c \
-		cmd_export.c cmd_pwd.c cmd_unset.c
+		cmd_export.c cmd_pwd.c cmd_unset.c \
+		$(PARS_DIR)/$(PARS_FILES)
+
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:%.c=%.o))
 
 .SECONDARY: $(OBJ)
