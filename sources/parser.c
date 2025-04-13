@@ -3,22 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:18:03 by codespace         #+#    #+#             */
-/*   Updated: 2025/04/10 17:47:23 by alfokin          ###   ########.fr       */
+/*   Updated: 2025/04/11 06:16:42 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /* List of delimetres:
-        ' - single quote, should be handled if one
-        " - double quote
-        /
-        -
-        &
-        |
+        ' - single quote, should be handled if one {not interpret unclosed quote}
+        " - double quote, should be habdled if one {not interpret unclosed quote}
+        / - idnk
+        - - attribute specificator for commands
+        | - fot PIPES
+        $ - for envitonmental variables
+        && and || - for priorities
+        * - 
 */
 
 char    *ft_strtok(char *str)
