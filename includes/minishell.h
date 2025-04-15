@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/15 18:41:41 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/15 18:52:24 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,9 @@ void		cmd_unset(t_data *data, char *arg);
 void		cmd_exit(void);
 
 // executer.c
+void	redirect_close_fd(t_cmd *cmd, t_cmd_tab *cmd_flow, int cmd_i);
+void	run_cmd(t_cmd *cmd, t_cmd_tab *cmd_flow, int cmd_i);
+int		executer(t_cmd_tab *cmd_flow);
 
 // heredoc.c
 void	hd_sig_hanlder(int sig);
