@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_nodes.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 23:49:54 by alfokin           #+#    #+#             */
-/*   Updated: 2025/04/15 02:08:05 by alfokin          ###   ########.fr       */
+/*   Updated: 2025/04/15 18:13:57 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_simple_cmd	*ft_insert_command_and_arguments(t_simple_cmd **cmd,
 
 	tmp = NULL;
 	if ((*cmd)->command == NULL)
-		(*cmd)->command = strdup(token->value);
+		(*cmd)->command = ft_strdup(token->value);
 	else
 	{
 		if ((*cmd)->args == NULL)

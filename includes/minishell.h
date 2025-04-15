@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/15 16:44:43 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/15 18:13:20 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,18 @@
 # define MINISHELL_H
 
 /*----------------------------LIST OF INCLUDES--------------------------------*/
+# define _POSIX_C_SOURCE 200000L
+# include "libft.h"
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <stdlib.h>
 # include <string.h>
-# include <unistd.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <errno.h>
-# include <limits.h>
-# include "libft.h"
+# include <signal.h>
+# include <dirent.h>
+# include <fcntl.h>
 
 # include <termios.h>
 # include <term.h>
@@ -121,6 +122,9 @@ typedef struct s_cmd_list
 }				t_cmd_list;
 
 /*!!!!!!!!!!!!!!!!!!!!!!!---------------------------------MAIN PART-------------------------------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+
+extern volatile sig_atomic_t g_signal_received;
+
 typedef struct s_pipe
 {
 	long	pipe[2];
@@ -183,6 +187,7 @@ void		cpy_env(char *sys_env[], t_data *data);
 void		cmd_env(t_list *env);
 
 //cmd_export.c
+t_list		*find_var(t_list **list, char *var, t_list **prev);
 void		add_replce_var(t_list **linked_list, char *arg);
 void		cmd_export(t_data *data, char *arg);
 
@@ -194,6 +199,9 @@ void		cmd_unset(t_data *data, char *arg);
 
 // cmd_exit.c
 void		cmd_exit(void);
+
+// utils.c
+char	*expand_var(t_data *data, char *var);
 
 /*------------------------------EXECUTE HANDLER-------------------------------*/
 void		is_executable(const char *name, char *env[]);
