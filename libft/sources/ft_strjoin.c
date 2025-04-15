@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 15:54:30 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/15 15:22:42 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/15 16:23:16 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		s3[i] = s1[i];
 		i++;
 	}
-	while (i < s3_size && s1 && s2[j])
+	while (i < s3_size && s2 && s2[j])
 	{
 		s3[i] = s2[j];
 		i++;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_get_tokens.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 01:51:02 by alfokin           #+#    #+#             */
-/*   Updated: 2025/04/15 01:52:06 by alfokin          ###   ########.fr       */
+/*   Updated: 2025/04/15 16:46:41 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 static int	check_the_beginning_of_word(int c)
 {
-	if (c == 92)
+	if (c == '\\')
 		return (1);
-	else if (c == 39)
+	else if (c == '\'')
 		return (2);
-	else if (c == 34)
+	else if (c == '\"')
 		return (3);
 	else
 		return (0);
@@ -38,7 +38,6 @@ void	ft_get_word(t_token *tokens_list, char *line, int *table)
 	char	*word;
 	int		j;
 
-	j = 0;
 	quoting = -1;
 	word = NULL;
 	j = table[1];

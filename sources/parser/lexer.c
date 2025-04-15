@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 01:50:24 by alfokin           #+#    #+#             */
-/*   Updated: 2025/04/15 15:50:38 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/15 15:58:37 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	ft_destoy_token_list(t_token *tokens_list)
 		tokens_list->value = NULL;
 		free(tokens_list);
 		tokens_list = NULL;
-		write(1, CYAN, ft_strlen(CYAN));
+		//write(1, CYAN, ft_strlen(CYAN));
 	}
 }
 

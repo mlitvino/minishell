@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/15 15:40:17 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/15 16:44:43 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,7 @@
 /*------------------------DEFAULT STREAMS DEFFINIITON-------------------------*/
 # define STDIN 0
 # define STDOUT 1
-# define STDERR 2 // do we need it?
-
-void	cmd_exit(void);
+# define STDERR 2
 
 /*---------------------------------TOKENS-------------------------------------*/
 typedef enum e_token_type{
