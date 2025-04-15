@@ -6,11 +6,11 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/04/15 18:28:28 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/04/15 18:36:26 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = cc -ggdb
+CC = cc
 CFLAGS = -I$(LIBFT_DIR)/$(INCLD_DIR) -I$(INCLD_DIR)
 # -Wall -Wextra -Werror
 
@@ -41,7 +41,7 @@ OBJ = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC:.c=.o)))
 all: $(LIBFT) $(NAME) delete_obj_dir
 
 $(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJ_DIR)
 
 # Automatically generate rules for each source file
 define make_obj_rule
@@ -69,7 +69,7 @@ fclean: clean
 
 delete_obj_dir:
 	@if [ -z "$$(ls -A $(OBJ_DIR))" ]; then \
-		@rm -rf $(OBJ_DIR); \
+		rm -rf $(OBJ_DIR); \
 	fi
 
 re: fclean all
