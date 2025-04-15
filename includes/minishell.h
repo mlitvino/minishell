@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/15 18:36:15 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/15 18:41:41 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,30 +175,41 @@ typedef struct s_data
 void		read_input(int argc, char *argv[], char *env[]);
 void		is_builtin(t_data *data, char *read_line);
 
-//cmd_cd.c
+// cmd_cd.c
 void		cmd_cd(t_data *data, char *path);
 
-//cmd_echo.c
+// cmd_echo.c
 int			is_new_line(char *option);
 void		cmd_echo(char **argv);
 
-//cmd_env.c
+// cmd_env.c
 void		cpy_env(char *sys_env[], t_data *data);
 void		cmd_env(t_list *env);
 
-//cmd_export.c
+// cmd_export.c
 t_list		*find_var(t_list **list, char *var, t_list **prev);
 void		add_replce_var(t_list **linked_list, char *arg);
 void		cmd_export(t_data *data, char *arg);
 
-//cmd_pwd.c
+// cmd_pwd.c
 void		cmd_pwd(t_data *data);
 
-//cmd_unset.c
+// cmd_unset.c
 void		cmd_unset(t_data *data, char *arg);
 
 // cmd_exit.c
 void		cmd_exit(void);
+
+// executer.c
+
+// heredoc.c
+void	hd_sig_hanlder(int sig);
+void	create_temp_hd(t_data *data, t_file *infile);
+void	heredoc(t_data *data, char **argv, t_file *infile);
+
+// signals.c
+void	sig_handler(int	sig, siginfo_t *info, void	*context);
+void	init_sigs(t_data *data);
 
 // utils.c
 char	*expand_var(t_data *data, char *var);
