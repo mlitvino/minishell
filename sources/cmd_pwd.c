@@ -1,23 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   cmd_pwd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 11:33:35 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/15 14:48:55 by mlitvino         ###   ########.fr       */
+/*   Created: 2025/04/07 12:52:40 by mlitvino          #+#    #+#             */
+/*   Updated: 2025/04/07 13:00:13 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-size_t	ft_strlen(const char *s)
+void	cmd_pwd(t_data *data)
 {
-	size_t	l;
+	t_list	*temp;
 
-	l = 0;
-	while (s && s[l])
-		l++;
-	return (l);
+	temp = data->env;
+	while (temp)
+	{
+		if (ft_strncmp(temp->content, "PWD=", 4) == 0)
+		{
+			printf("%s\n", ft_strchr(temp->content, '=') + 1);
+			break ;
+		}
+		temp = temp->next;
+	}
 }

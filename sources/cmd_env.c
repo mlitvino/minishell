@@ -1,41 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   cmd_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 15:54:30 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/15 16:23:16 by mlitvino         ###   ########.fr       */
+/*   Created: 2025/04/03 16:43:02 by mlitvino          #+#    #+#             */
+/*   Updated: 2025/04/04 22:57:54 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+void	cpy_env(char *sys_env[], t_data *data)
 {
-	unsigned int	i;
-	unsigned int	j;
-	char			*s3;
-	size_t			s3_size;
+	int			i;
+	t_list		*new_env;
+	t_list		*new_node;
+	char		*content;
 
 	i = 0;
-	j = 0;
-	s3_size = ft_strlen(s1) + ft_strlen(s2) + 1;
-	s3 = malloc(sizeof(char) * s3_size);
-	if (!s3 || (!s1 && !s2))
-		return (free(s3), NULL);
-	while (i < s3_size && s1 && s1[i])
+	new_env = NULL;
+	while (sys_env[i])
 	{
-		s3[i] = s1[i];
+		content = ft_strdup(sys_env[i]);
+		// NUL check
+		new_node = ft_lstnew(content);
+		// NUL check
+		ft_lstadd_back(&new_env, new_node);
 		i++;
 	}
-	while (i < s3_size && s2 && s2[j])
+	data->env = new_env;
+}
+
+void	cmd_env(t_list *env)
+{
+	while (env)
 	{
-		s3[i] = s2[j];
-		i++;
-		j++;
+		printf("%s\n", (char *)env->content);
+		env = env->next;
 	}
-	s3[i] = '\0';
-	return (s3);
 }

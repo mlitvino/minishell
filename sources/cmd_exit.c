@@ -1,23 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   cmd_exit.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 11:33:35 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/15 14:48:55 by mlitvino         ###   ########.fr       */
+/*   Created: 2025/03/31 12:29:45 by mlitvino          #+#    #+#             */
+/*   Updated: 2025/04/07 15:09:05 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-size_t	ft_strlen(const char *s)
+void	cmd_exit(void)
 {
-	size_t	l;
-
-	l = 0;
-	while (s && s[l])
-		l++;
-	return (l);
+	exit(EXIT_SUCCESS);
 }
