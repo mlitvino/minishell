@@ -6,7 +6,7 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/04/15 11:32:02 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/04/15 15:08:12 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,8 @@ SRC = $(SRC_DIR)/main.c $(SRC_DIR)/readline.c $(SRC_DIR)/executable_handler.c \
       $(SRC_DIR)/parser/parser.c $(SRC_DIR)/parser/create_asteriks.c $(SRC_DIR)/parser/create_nodes.c \
       $(SRC_DIR)/parser/destroy_nodes.c $(SRC_DIR)/parser/syntax_checker.c $(SRC_DIR)/parser/token_checker.c \
       $(SRC_DIR)/parser/word_checker.c $(SRC_DIR)/parser/lexer.c $(SRC_DIR)/parser/lexer_get_tokens.c \
-      $(SRC_DIR)/parser/lexer_get_tokens_op.c $(SRC_DIR)/parser/lexer_get_tokens_word.c
+      $(SRC_DIR)/parser/lexer_get_tokens_op.c $(SRC_DIR)/parser/lexer_get_tokens_word.c \
+	  $(SRC_DIR)/test.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC:.c=.o)))
 

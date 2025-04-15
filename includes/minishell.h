@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/15 01:54:53 by alfokin          ###   ########.fr       */
+/*   Updated: 2025/04/15 15:40:17 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,5 +272,12 @@ void			add_token(t_token *token_list, t_token_type type,
 					char *content, int index);
 char			*ft_get_words(char *line, int *j, char *word, int *quoting);
 
+// test.c
+#    define TEST "Delete"
+void	show_token(t_token *token);
+void	show_arg(t_args *args);
+void	show_redir(t_redir *redir);
+void	show_cmd(t_simple_cmd *cmd);
+void	show_cmd_list(t_cmd_list *list);
 
 #endif

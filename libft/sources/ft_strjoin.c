@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 15:54:30 by mlitvino          #+#    #+#             */
-/*   Updated: 2024/10/31 17:28:27 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/15 15:22:42 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	j = 0;
 	s3_size = ft_strlen(s1) + ft_strlen(s2) + 1;
 	s3 = malloc(sizeof(char) * s3_size);
-	if (s3 == NULL)
-		return (NULL);
-	while (i < s3_size && s1[i])
+	if (!s3 || (!s1 && !s2))
+		return (free(s3), NULL);
+	while (i < s3_size && s1 && s1[i])
 	{
 		s3[i] = s1[i];
 		i++;
 	}
-	while (i < s3_size && s2[j])
+	while (i < s3_size && s1 && s2[j])
 	{
 		s3[i] = s2[j];
 		i++;
