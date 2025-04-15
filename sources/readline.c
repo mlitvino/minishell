@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/11 15:09:02 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/15 01:40:34 by alfokin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,97 +14,94 @@
 
 void	is_builtin(t_data *data, char *read_line)
 {
-	if (ft_strcmp(read_line, "exit") == 0)
+	char **args;
+	int i;
+
+	if (!read_line || *read_line == '\0')
+		return ;
+	args = ft_split(read_line, ' ');
+	if (args == NULL)
+		return ;
+	if (args[0] == NULL) // пустая строка после split
 	{
-		cmd_exit(data);
+		free(args);
+		return ;
 	}
-
-	if (ft_strncmp(read_line, "echo", 4) == 0)
+	if (ft_strcmp(args[0], EXIT_STR) == 0)
 	{
-		char	**tab = ft_split(read_line, ' ');
-		cmd_echo(tab);
-
-		for (int i = 0; tab[i]; i++)
-			free(tab[i]);
-		free(tab);
+		i = 0;
+		while (args[i])
+			free(args[i++]);
+		free(args);
+		cmd_exit();
+		return ;
 	}
-
-	if (ft_strncmp(read_line, "env", 3) == 0)
-	{
+	else if (ft_strcmp(args[0], ECHO_STR) == 0)
+		cmd_echo(args);
+	else if (ft_strcmp(args[0], ENV_STR) == 0)
 		cmd_env(data->env);
-	}
-
-	if (ft_strncmp(read_line, "export", 6) == 0)
+	else if (ft_strcmp(args[0], EXPORT_STR) == 0)
 	{
-		char *export_arg = ft_substr(read_line, 7, ft_strlen(read_line));
-		cmd_export(data, export_arg);
-
-		free(export_arg);
+		if (args[1] == NULL)
+			cmd_env(data->env);
+		else
+		{
+			i = 0;
+			while (args[++i])
+				cmd_export(data, args[i]);
+		}
 	}
-
-	if (ft_strncmp(read_line, "pwd", 3) == 0)
+	else if (ft_strcmp(args[0], PWD_STR) == 0)
 	{
 		cmd_pwd(data);
 	}
-
-	if (ft_strncmp(read_line, "cd", 2) == 0)
+	else if (ft_strcmp(args[0], CD_STR) == 0)
 	{
-		char	**tab = ft_split(read_line, ' ');
-		cmd_cd(data, tab[1]);
-
-		for (int i = 0; tab[i]; i++)
-			free(tab[i]);
-		free(tab);
-	}
-
-	if (ft_strncmp(read_line, "hd", 2) == 0)
-	{
-		t_file *infile = malloc(sizeof(t_file));
-		char	**tab = ft_split(read_line, ' ');
-
-		create_temp_hd(data, infile);
-		printf("HERE\n"); // DEL
-		if (fork() == 0)
+		if (args[1] == NULL)
 		{
-			heredoc(data, tab, infile);
-			exit(0);
+			char *home = getenv("HOME");
+			if (home)
+				cmd_cd(data, home);
+			else
+				fprintf(stderr, "minishell: cd: HOME not set\n");
+		}
+		else if (args[2] != NULL)
+		{
+			fprintf(stderr, "minishell: cd: too many arguments\n");
 		}
 		else
 		{
-			signal(SIGINT, SIG_IGN);
-			while (waitpid(0, 0, 0) != -1)
-				{ }
-			init_sigs(data);
-			unlink(infile->path_name);
+			cmd_cd(data, args[1]);
 		}
-
-		for (int i = 0; tab[i]; i++)
-			free(tab[i]);
-		free(tab);
-		free(infile);
 	}
+	else if (ft_strcmp(args[0], UNSET_STR) == 0)
+	{
+		i = 1;
+		while (args[i])
+		{
+			cmd_unset(data, args[i]);
+			i++;
+		}
+	}
+	else
+		printf("Command not found: %s\n", args[0]);
+	i = 0;
+	while (args[i])
+		free(args[i++]);
+	free(args);
 }
 
 void	read_input(int argc, char *argv[], char *env[])
 {
-	t_data	data;
+	char *read_line;
+	t_data data;
 
-	data.local_vars = NULL;
-	init_sigs(&data);
 	cpy_env(env, &data);
 	while (1)
 	{
-		data.read_line = readline("minishell$ ");
-		if (!data.read_line)
-		{
-			printf("exit\n");
-			cmd_exit(&data);
-		}
-
-		add_history(data.read_line);
-
-		is_builtin(&data, data.read_line);
-
-		free(data.read_line);
+		read_line = readline("minishell$ ");
+		add_history(read_line);
+		is_builtin(&data, read_line);
+		free(read_line);
 	}
 }
