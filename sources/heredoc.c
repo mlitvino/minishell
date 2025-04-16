@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 19:06:58 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/11 15:00:03 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:46:34 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,40 @@ void	hd_sig_hanlder(int sig)
 		rl_replace_line("", 0);
 		rl_redisplay();
 		rl_on_new_line();
-		exit(1);
+		printf("UHU");
+		g_signal_received = 1;
 }
 
-void	create_temp_hd(t_data *data, t_file *infile)
+void	fill_heredoc(t_redir *heredoc)
+{
+	char	*delim;
+	char	*input;
+
+	delim = heredoc->delim;
+	signal(SIGINT, hd_sig_hanlder);
+	while (1)
+	{
+		input = readline("> ");
+		// handling Crtl+C
+		if (g_signal_received == 1)
+		{
+			// clean?
+			g_signal_received = 0;
+		}
+		if (!input || ft_strcmp(input, delim) == 0)
+		{
+			if (!input)
+				printf("bash: warning: here-document delimited \
+					by end-of-file (wanted `%s')", heredoc->delim);
+			return ;
+		}
+		heredoc->fd = open(heredoc->file_name, O_WRONLY);
+		ft_putstr_fd(input, heredoc->fd);
+		close(heredoc->fd);
+	}
+}
+
+void	create_heredoc(t_redir *heredoc)
 {
 	int		i;
 	char	*file_id;
@@ -44,25 +74,60 @@ void	create_temp_hd(t_data *data, t_file *infile)
 		else
 			break ;
 	}
-	infile->path_name = file_name;
+	free(file_id);
+	close(hd_fd);
+	heredoc->file_name = file_name;
 }
 
-void	heredoc(t_data *data, char **argv, t_file *infile)
+void	check_create_heredoc(t_pipe_line *pipeline)
 {
-	char	*delim;
-	char	*input;
+	t_simple_cmd	*cmd;
+	t_redir			*redir;
 
-	delim = argv[2];
-	signal(SIGINT, hd_sig_hanlder);
-	while (1)
+	while (pipeline)
 	{
-		input = readline("> ");
-		if (!input)
-			return ;
-		if (ft_strcmp(input, delim) == 0)
-			return ;
-		infile->fd = open(infile->path_name, O_WRONLY);
-		ft_putstr_fd(input, infile->fd);
-		close(infile->fd);
+		cmd = pipeline->child;
+		while(cmd)
+		{
+			redir = cmd->redirections;
+			while (redir)
+			{
+				if (redir->type == RE_DOUBLE_LESS)
+				{
+					signal(SIGINT, SIG_IGN);
+					create_heredoc(redir);
+					fill_heredoc(redir);
+					init_sigs(NULL);
+				}
+				redir = redir->next;
+			}
+			cmd = cmd->next;
+		}
+		pipeline = pipeline->next;
+	}
+}
+
+void	unlink_heredoc(t_pipe_line *pipeline)
+{
+	t_simple_cmd	*cmd;
+	t_redir			*redir;
+
+	while (pipeline)
+	{
+		cmd = pipeline->child;
+		while(cmd)
+		{
+			redir = cmd->redirections;
+			while (redir)
+			{
+				if (redir->type == RE_DOUBLE_LESS)
+				{
+					unlink(redir->file_name);
+				}
+				redir = redir->next;
+			}
+			cmd = cmd->next;
+		}
+		pipeline = pipeline->next;
 	}
 }

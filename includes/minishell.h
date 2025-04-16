@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/15 18:52:24 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:40:31 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,9 @@ typedef enum e_token_type{
 	WORD,
 	SEMI,
 	GREAT,
-	LESS,
 	DOUBLE_GREAT,
+	LESS,
+	DOUBLE_LESS,
 	PIPE,
 }			t_token_type;
 
@@ -81,6 +82,7 @@ typedef enum e_redir_type
 	RE_GREAT,
 	RE_DOUBLE_GREAT,
 	RE_LESS,
+	RE_DOUBLE_LESS,
 }			t_redir_type;
 
 typedef struct s_redir
@@ -90,6 +92,9 @@ typedef struct s_redir
 	int				inside_quotes;
 	char			*file_name;
 	struct s_redir	*next;
+
+	int				fd;
+	char			*delim;
 }				t_redir;
 
 typedef struct s_args
@@ -106,6 +111,9 @@ typedef struct s_simple_cmd
 	t_args				*args;
 	t_redir		*redirections;
 	struct s_simple_cmd	*next;
+
+	int			*pipes;
+	int			cmd_i;
 }				t_simple_cmd;
 
 typedef struct s_pipe_line
@@ -113,6 +121,9 @@ typedef struct s_pipe_line
 	int					simple_cmd_count;
 	struct s_pipe_line	*next;
 	t_simple_cmd		*child;
+
+	int					*exit_status;
+	pid_t				*pid_last_cmd;
 }				t_pipe_line;
 
 typedef struct s_cmd_list
@@ -175,40 +186,12 @@ typedef struct s_data
 void		read_input(int argc, char *argv[], char *env[]);
 void		is_builtin(t_data *data, char *read_line);
 
-// cmd_cd.c
-void		cmd_cd(t_data *data, char *path);
-
-// cmd_echo.c
-int			is_new_line(char *option);
-void		cmd_echo(char **argv);
-
-// cmd_env.c
-void		cpy_env(char *sys_env[], t_data *data);
-void		cmd_env(t_list *env);
-
-// cmd_export.c
-t_list		*find_var(t_list **list, char *var, t_list **prev);
-void		add_replce_var(t_list **linked_list, char *arg);
-void		cmd_export(t_data *data, char *arg);
-
-// cmd_pwd.c
-void		cmd_pwd(t_data *data);
-
-// cmd_unset.c
-void		cmd_unset(t_data *data, char *arg);
-
-// cmd_exit.c
-void		cmd_exit(void);
-
-// executer.c
-void	redirect_close_fd(t_cmd *cmd, t_cmd_tab *cmd_flow, int cmd_i);
-void	run_cmd(t_cmd *cmd, t_cmd_tab *cmd_flow, int cmd_i);
-int		executer(t_cmd_tab *cmd_flow);
-
 // heredoc.c
 void	hd_sig_hanlder(int sig);
-void	create_temp_hd(t_data *data, t_file *infile);
-void	heredoc(t_data *data, char **argv, t_file *infile);
+void	fill_heredoc(t_redir *heredoc);
+void	create_heredoc(t_redir *heredoc);
+void	check_create_heredoc(t_pipe_line *pipeline);
+void	unlink_heredoc(t_pipe_line *pipeline);
 
 // signals.c
 void	sig_handler(int	sig, siginfo_t *info, void	*context);
@@ -217,8 +200,33 @@ void	init_sigs(t_data *data);
 // utils.c
 char	*expand_var(t_data *data, char *var);
 
-/*------------------------------EXECUTE HANDLER-------------------------------*/
-void		is_executable(const char *name, char *env[]);
+/*------------------------------EXECUTER--------------------------------------*/
+char	*is_executable(const char *name, char *env[]);
+
+// executer.c
+void	redirect_close_fd(t_cmd *cmd, t_cmd_tab *cmd_flow, int cmd_i);
+void	run_cmd(t_cmd *cmd, t_cmd_tab *cmd_flow, int cmd_i);
+int		executer(t_cmd_list *cmd_list);
+
+/*------------------------------BUILTINS--------------------------------------*/
+// cmd_cd.c
+void		cmd_cd(t_data *data, char *path);
+// cmd_echo.c
+int			is_new_line(char *option);
+void		cmd_echo(char **argv);
+// cmd_env.c
+void		cpy_env(char *sys_env[], t_data *data);
+void		cmd_env(t_list *env);
+// cmd_export.c
+t_list		*find_var(t_list **list, char *var, t_list **prev);
+void		add_replce_var(t_list **linked_list, char *arg);
+void		cmd_export(t_data *data, char *arg);
+// cmd_pwd.c
+void		cmd_pwd(t_data *data);
+// cmd_unset.c
+void		cmd_unset(t_data *data, char *arg);
+// cmd_exit.c
+void		cmd_exit(void);
 
 /*----------------------------------PARSER------------------------------------*/
 t_cmd_list	*ft_parser(t_token *tokens_list, int *status);

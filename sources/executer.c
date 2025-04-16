@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:03:21 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/15 18:51:50 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:35:33 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,43 +55,57 @@ void	run_cmd(t_cmd *cmd, t_cmd_tab *cmd_flow, int cmd_i)
 	exit(1);
 }
 
-int	executer(t_cmd_tab *cmd_flow)
+void	exec_simpl_cmd(t_simple_cmd *cmd)
 {
-	int		i;
 	pid_t	chld_pid;
-	int		status;
 
-	cmd_flow->cmd_count = 3; //test
-
-	//pipes init
-	cmd_flow->pipes = malloc(sizeof(t_pipe) * cmd_flow->cmd_count - 1);
-	int i = 0;
-	while (i < cmd_flow->cmd_count - 1)
+	// opens files
+	// check existing cmd
+	// execve builtin
+	chld_pid = fork();
+	if (chld_pid == -1)
 	{
-		pipe(cmd_flow->pipes[i].pipe);
-		i++;
+		//err check
 	}
+	if (chld_pid == 0)
+	{
+		run_command();
+	}
+	else
+	{
+	}
+}
 
+void	exec_pipeline(t_pipe_line *pipeline)
+{
+	t_simple_cmd	*curr_cmd;
+	int				*pipes;
+	int				i;
+
+	// pipes = pipes_init
+	curr_cmd = pipeline->child;
 	i = 0;
-	while (i < cmd_flow->cmd_count)
+	while (i < pipeline->simple_cmd_count)
 	{
-		chld_pid = fork();
-		if (chld_pid == -1)
-		{
-			//err check
-		}
-		if (chld_pid == 0)
-		{
-			run_cmd(&cmd_flow->cmds[i], cmd_flow, i);
-		}
-		else
-		{
-
-		}
+		curr_cmd->cmd_i = i;
+		curr_cmd->pipes = pipes;
+		exec_simpl_cmd(curr_cmd);
 		i++;
 	}
-	waitpid(chld_pid, 0, 0); // check exit status child
-	while (waitpid(0, &status, 0) != -1)
-		{ }; // check exit status child
-	return (cmd_flow->exit_code);
+	// wait
+	// close pipes
+}
+
+int	executer(t_cmd_list *cmd_list)
+{
+	t_pipe_line	*pipeline;
+
+	pipeline = cmd_list->childs;
+	check_create_heredoc(pipeline);
+	while (pipeline)
+	{
+		exec_pipeline(pipeline);
+		pipeline = pipeline->next;
+	}
+	unlink_heredoc(pipeline);
 }
