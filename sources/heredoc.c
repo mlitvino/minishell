@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 19:06:58 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/16 16:46:34 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/16 18:37:17 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	hd_sig_hanlder(int sig)
 		rl_replace_line("", 0);
 		rl_redisplay();
 		rl_on_new_line();
-		printf("UHU");
+		printf("UWU"); // del
 		g_signal_received = 1;
 }
 

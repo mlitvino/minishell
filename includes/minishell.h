@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/16 16:40:31 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/16 17:06:37 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,11 +109,12 @@ typedef struct s_simple_cmd
 	int					inside_quotes;
 	char				*command;
 	t_args				*args;
-	t_redir		*redirections;
+	t_redir				*redirections;
 	struct s_simple_cmd	*next;
 
-	int			*pipes;
-	int			cmd_i;
+	int					*pipes;
+	int					cmd_i;
+	int					cmd_count;
 }				t_simple_cmd;
 
 typedef struct s_pipe_line
@@ -128,8 +129,8 @@ typedef struct s_pipe_line
 
 typedef struct s_cmd_list
 {
-	int			pipe_line_count;
-	t_pipe_line	*childs;
+	int					pipe_line_count;
+	t_pipe_line			*childs;
 }				t_cmd_list;
 
 /*!!!!!!!!!!!!!!!!!!!!!!!---------------------------------MAIN PART-------------------------------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -139,6 +140,7 @@ extern volatile sig_atomic_t g_signal_received;
 typedef struct s_pipe
 {
 	long	pipe[2];
+	int		count;
 }	t_pipe;
 
 typedef struct s_file
