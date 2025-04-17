@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executable_handler.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 13:12:48 by alfokin           #+#    #+#             */
-/*   Updated: 2025/04/15 00:25:09 by alfokin          ###   ########.fr       */
+/*   Updated: 2025/04/17 18:26:03 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,20 @@
 # define PATH_MAX 4096
 #endif
 
-void	is_executable(const char *name, char *env[])
+void	is_executable(const char *name, t_data *data)
 {
 	char	*cmd_path;
 	char	*path_env;
 	char	*full_path;
-	char	*argv[2];
 	char	**paths_array;
 	int		i;
-	int		status;
-	pid_t	pid;
 
 	cmd_path = NULL;
 	if (ft_strchr(name, '/'))
 		cmd_path = ft_strdup(name);
 	else
 	{
-		path_env = getenv("PATH");
+		path_env = expand_var(data, "PATH");
 		if (path_env)
 		{
 			paths_array = ft_split(path_env, ':');
@@ -63,25 +60,8 @@ void	is_executable(const char *name, char *env[])
 	}
 	if (!cmd_path)
 	{
-		printf("Command not found: %s\n", name);
+		ft_putstr_fd(name, 2);
+		ft_putstr_fd(": command not found\n", 2);
 		return ;
 	}
-	pid = fork();
-	if (pid < 0)
-	{
-		perror("fork");
-		free(cmd_path);
-		return ;
-	}
-	else if (pid == 0)
-	{
-		argv[0] = (char *)name;
-		argv[1] = NULL;
-		execve(cmd_path, argv, env);
-		perror("execve");
-		exit(EXIT_FAILURE);
-	}
-	else
-		waitpid(pid, &status, 0);
-	free(cmd_path);
 }

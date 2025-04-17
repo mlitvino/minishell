@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/16 17:06:37 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/17 19:23:26 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ typedef struct s_simple_cmd
 	t_redir				*redirections;
 	struct s_simple_cmd	*next;
 
-	int					*pipes;
+	t_pipe				*pipes;
 	int					cmd_i;
 	int					cmd_count;
 }				t_simple_cmd;
@@ -203,11 +203,9 @@ void	init_sigs(t_data *data);
 char	*expand_var(t_data *data, char *var);
 
 /*------------------------------EXECUTER--------------------------------------*/
-char	*is_executable(const char *name, char *env[]);
+void	is_executable(const char *name, char *env[]);
 
 // executer.c
-void	redirect_close_fd(t_cmd *cmd, t_cmd_tab *cmd_flow, int cmd_i);
-void	run_cmd(t_cmd *cmd, t_cmd_tab *cmd_flow, int cmd_i);
 int		executer(t_cmd_list *cmd_list);
 
 /*------------------------------BUILTINS--------------------------------------*/

@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 12:29:45 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/15 18:36:32 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/17 18:04:56 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,6 @@
 
 void	cmd_exit(void)
 {
+	ft_putstr_fd("exit", 2);
 	exit(EXIT_SUCCESS);
 }

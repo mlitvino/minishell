@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:03:21 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/16 18:10:59 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/17 19:01:26 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,61 +48,122 @@ void	close_pipes(t_pipe *pipes, int pipes_count)
 	free(pipes);
 }
 
-void	redirect_close_fd(t_cmd *cmd, t_cmd_tab *cmd_flow, int cmd_i)
+void	redirect(t_simple_cmd *cmd, t_redir *redirs)
 {
-	if (cmd->infile)
+	if (cmd->cmd_i != 0)
 	{
-		cmd->infile->fd = open(cmd->infile->path_name, O_RDONLY);
-		dup2(cmd->infile->fd, STDIN);
-		close(cmd->infile->fd);
+		dup2(cmd->pipes[cmd->cmd_i - 1].pipe[STDIN], STDIN);
 	}
-	else if (cmd_i != 0)
+	if (cmd->cmd_count != 1)
 	{
-		dup2(cmd_flow->pipes[cmd_i - 1].pipe[STDIN], STDIN);
+		dup2(cmd->pipes[cmd->cmd_i].pipe[STDOUT], STDOUT);
 	}
+	while (redirs)
+	{
+		if (redirs->type == RE_DOUBLE_LESS)
+		{
+			redirs->fd = open(redirs->file_name, O_RDONLY);
+		}
+		if (redirs->type == RE_LESS)
+		{
+			redirs->fd = open(redirs->file_name, O_RDONLY);
+		}
+		if (redirs->type == RE_GREAT)
+		{
+			redirs->fd = open(redirs->file_name, O_WRONLY);
+		}
+		if (redirs->type == RE_DOUBLE_GREAT)
+		{
+			redirs->fd = open(redirs->file_name, O_WRONLY | O_APPEND);
+		}
+		if (redirs->fd == -1)
+		{
+			// err check
+		}
 
 
-	if (cmd->outfile)
-	{
-		cmd->outfile->fd = open(cmd->outfile->path_name, O_WRONLY);
-		dup2(cmd->outfile->fd, STDOUT);
-		close(cmd->outfile->fd);
+		if (redirs->type == RE_LESS || redirs->type == RE_DOUBLE_LESS)
+		{
+			dup2(redirs->fd, STDIN);
+		}
+		else if (redirs->type == RE_GREAT|| redirs->type == RE_DOUBLE_GREAT)
+		{
+			dup2(redirs->fd, STDOUT);
+		}
+		fclose(redirs->fd);
+		redirs->next;
 	}
-	else if (cmd_flow->cmd_count != 1)
-	{
-		dup2(cmd_flow->pipes[cmd_i - 1].pipe[STDOUT], STDOUT);
-	}
-
-	int i = 0;
-	while (i < cmd_flow->cmd_count - 1)
-	{
-		close(cmd_flow->pipes[i].pipe[STDIN]);
-		close(cmd_flow->pipes[i].pipe[STDOUT]);
-	}
+	close_pipes(cmd->pipes, cmd->cmd_count - 1);
 }
 
-void	run_cmd(t_cmd *cmd, t_cmd_tab *cmd_flow, int cmd_i)
+int	is_built(char *cmd_name) // change
 {
-	char	*env[0]; // test
+	if (ft_strcmp(cmd_name, "cd") == 0)
+		return (1);
+	if (ft_strcmp(cmd_name, "echo") == 0)
+		return (1);
+	if (ft_strcmp(cmd_name, "env") == 0)
+		return (1);
+	if (ft_strcmp(cmd_name, "exit") == 0)
+		return (1);
+	if (ft_strcmp(cmd_name, "export") == 0)
+		return (1);
+	if (ft_strcmp(cmd_name, "pwd") == 0)
+		return (1);
+	if (ft_strcmp(cmd_name, "unset") == 0)
+		return (1);
+	return (0);
+}
 
-	redirect_close_fd(cmd, cmd_flow, cmd_i);
-	execve(cmd->cmd_path, cmd->arg_list, env);
+void	run_builtin(t_simple_cmd *cmd)
+{
+
+}
+
+char	**convrt_lst_to_argv(t_list *lst)
+{
+	t_list	*temp;
+	char	**argv;
+	int		size;
+	int		i;
+
+	size = ft_lstsize(lst);
+	temp = lst;
+	argv = malloc(sizeof(char *) * (size + 1));
+	// nul check
+	i = 0;
+	while (i < size)
+	{
+		argv[i] = ft_strdup(temp->content);
+		if (!argv[i])
+			//clean
+		temp = temp->next;
+		i++;
+	}
+	return (argv);
+}
+
+void	run_cmd(t_simple_cmd *cmd)
+{
+	char	**argv;
+	char	**env;
+
+	//argv = convrt_lst_to_argv();
+	// err check
+	env = convrt_lst_to_argv(env);
+	// err check
+	execve(cmd->command, argv, env);
 	//err check
 	exit(1);
 }
 
-void	check_open_files()
-{
-
-}
-
-
-void	exec_simpl_cmd(t_simple_cmd *cmd)
+void	exec_simpl_cmd(t_simple_cmd *cmd, pid_t *pid_last_cmd)
 {
 	pid_t	chld_pid;
 
-	// check existing cmd
-	// execve builtin
+	redirect(cmd, cmd->redirections);
+	if (is_built(cmd->command) == 1)
+		run_builtin(cmd);
 	chld_pid = fork();
 	if (chld_pid == -1)
 	{
@@ -110,11 +171,16 @@ void	exec_simpl_cmd(t_simple_cmd *cmd)
 	}
 	if (chld_pid == 0)
 	{
-		run_command();
+		close_pipes(cmd->pipes, cmd->cmd_count - 1);
+		// check existing cmd
+		run_cmd(cmd);
 	}
 	else
 	{
+		*pid_last_cmd = chld_pid;
 	}
+	close_pipes(cmd->pipes, cmd->cmd_count - 1);
+	restrat_fd();
 }
 
 void	exec_pipeline(t_pipe_line *pipeline, int cmd_count)
@@ -125,8 +191,6 @@ void	exec_pipeline(t_pipe_line *pipeline, int cmd_count)
 
 	if (cmd_count > 1)
 		pipes = init_pipes(cmd_count - 1);
-	// err check
-	// opens files
 	curr_cmd = pipeline->child;
 	i = 0;
 	while (i < pipeline->simple_cmd_count)
@@ -134,10 +198,12 @@ void	exec_pipeline(t_pipe_line *pipeline, int cmd_count)
 		curr_cmd->cmd_count = cmd_count;
 		curr_cmd->cmd_i = i;
 		curr_cmd->pipes = pipes;
-		exec_simpl_cmd(curr_cmd);
+		exec_simpl_cmd(curr_cmd, &pipeline->pid_last_cmd);
 		i++;
 	}
-	// wait
+	waitpid(pipeline->pid_last_cmd, pipeline->exit_status, 0);
+	while (waitpid(0, 0, 0) != -1)
+		{ }
 	if (cmd_count > 1)
 		close_pipes(pipes, cmd_count - 1);
 }
