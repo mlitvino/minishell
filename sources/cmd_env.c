@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 16:43:02 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/04 22:57:54 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:49:26 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,11 @@ void	cpy_env(char *sys_env[], t_data *data)
 	data->env = new_env;
 }
 
-void	cmd_env(t_list *env)
+void	cmd_env(t_data *data, t_args *args)
 {
+	t_list	*env;
+
+	env = data->env;
 	while (env)
 	{
 		printf("%s\n", (char *)env->content);

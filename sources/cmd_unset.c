@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:49:00 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/04 23:18:08 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:49:03 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,12 @@ void	delete_var(t_list **list, char *var)
 	}
 }
 
-void	cmd_unset(t_data *data, char *var)
+void	cmd_unset(t_data *data, t_args *args)
 {
-	delete_var(&data->local_vars, var);
-	delete_var(&data->env, var);
+	while (args)
+	{
+		delete_var(&data->local_vars, args->value);
+		delete_var(&data->env, args->value);
+		args = args->next;
+	}
 }

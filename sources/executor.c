@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executer.c                                         :+:      :+:    :+:   */
+/*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:03:21 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/17 19:01:26 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:18:37 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,14 @@ void	close_pipes(t_pipe *pipes, int pipes_count)
 	int	i;
 
 	i = 0;
-	while (i < pipes_count)
+	while (pipes && i < pipes_count)
 	{
 		close(pipes[i].pipe[STDIN]);
 		close(pipes[i].pipe[STDOUT]);
 		i++;
 	}
 	free(pipes);
+	pipes = NULL;
 }
 
 void	redirect(t_simple_cmd *cmd, t_redir *redirs)
@@ -93,31 +94,6 @@ void	redirect(t_simple_cmd *cmd, t_redir *redirs)
 		fclose(redirs->fd);
 		redirs->next;
 	}
-	close_pipes(cmd->pipes, cmd->cmd_count - 1);
-}
-
-int	is_built(char *cmd_name) // change
-{
-	if (ft_strcmp(cmd_name, "cd") == 0)
-		return (1);
-	if (ft_strcmp(cmd_name, "echo") == 0)
-		return (1);
-	if (ft_strcmp(cmd_name, "env") == 0)
-		return (1);
-	if (ft_strcmp(cmd_name, "exit") == 0)
-		return (1);
-	if (ft_strcmp(cmd_name, "export") == 0)
-		return (1);
-	if (ft_strcmp(cmd_name, "pwd") == 0)
-		return (1);
-	if (ft_strcmp(cmd_name, "unset") == 0)
-		return (1);
-	return (0);
-}
-
-void	run_builtin(t_simple_cmd *cmd)
-{
-
 }
 
 char	**convrt_lst_to_argv(t_list *lst)
@@ -179,7 +155,6 @@ void	exec_simpl_cmd(t_simple_cmd *cmd, pid_t *pid_last_cmd)
 	{
 		*pid_last_cmd = chld_pid;
 	}
-	close_pipes(cmd->pipes, cmd->cmd_count - 1);
 	restrat_fd();
 }
 

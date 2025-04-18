@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/17 19:23:26 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:14:18 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,12 @@ typedef enum e_redir_type
 	RE_DOUBLE_LESS,
 }			t_redir_type;
 
+typedef struct s_pipe
+{
+	long	pipe[2];
+	int		count;
+}	t_pipe;
+
 typedef struct s_redir
 {
 	int				index;
@@ -103,6 +109,12 @@ typedef struct s_args
 	char			*value;
 	struct s_args	*next;
 }				t_args;
+
+typedef struct s_builtin
+{
+	char	*name;
+	void	(*func)(t_data *data, t_args *args);
+}	t_builtin;
 
 typedef struct s_simple_cmd
 {
@@ -133,15 +145,20 @@ typedef struct s_cmd_list
 	t_pipe_line			*childs;
 }				t_cmd_list;
 
+typedef struct s_data
+{
+	t_cmd_list	*cmd_list;
+	t_builtin	*builtin_arr;
+
+	t_list		*env;
+	t_list		*local_vars;
+
+	char		*read_line;
+}	t_data;
+
 /*!!!!!!!!!!!!!!!!!!!!!!!---------------------------------MAIN PART-------------------------------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
 extern volatile sig_atomic_t g_signal_received;
-
-typedef struct s_pipe
-{
-	long	pipe[2];
-	int		count;
-}	t_pipe;
 
 typedef struct s_file
 {
@@ -171,22 +188,12 @@ typedef struct s_cmd_tab
 	t_pipe	*pipes;
 }	t_cmd_tab;
 
-typedef struct s_cmd_builtin
-{
-	char	*name;
-	void	(*func)(int argc, char **argv);
-}	t_cmd_builtin;
 
-typedef struct s_data
-{
-	t_cmd_tab	*cmd_flows;
-	t_list		*env;
-	t_list		*local_vars;
-}	t_data;
 
 // readline.c
+int			is_builtin(t_builtin *arr, char	*cmd_name);
+t_builtin	*set_builtins(t_data *data);
 void		read_input(int argc, char *argv[], char *env[]);
-void		is_builtin(t_data *data, char *read_line);
 
 // heredoc.c
 void	hd_sig_hanlder(int sig);
@@ -200,33 +207,34 @@ void	sig_handler(int	sig, siginfo_t *info, void	*context);
 void	init_sigs(t_data *data);
 
 // utils.c
+void	clean_all(t_data *data);
 char	*expand_var(t_data *data, char *var);
 
-/*------------------------------EXECUTER--------------------------------------*/
-void	is_executable(const char *name, char *env[]);
+/*------------------------------EXECUTOR--------------------------------------*/
+void	is_executable(const char *name, t_data *data);
 
 // executer.c
-int		executer(t_cmd_list *cmd_list);
+int		executor(t_cmd_list *cmd_list);
 
 /*------------------------------BUILTINS--------------------------------------*/
 // cmd_cd.c
-void		cmd_cd(t_data *data, char *path);
+void		cmd_cd(t_data *data, t_args *args);
 // cmd_echo.c
 int			is_new_line(char *option);
-void		cmd_echo(char **argv);
+void		cmd_echo(t_data *data, t_args *args);
 // cmd_env.c
 void		cpy_env(char *sys_env[], t_data *data);
-void		cmd_env(t_list *env);
+void		cmd_env(t_data *data, t_args *args);
 // cmd_export.c
 t_list		*find_var(t_list **list, char *var, t_list **prev);
 void		add_replce_var(t_list **linked_list, char *arg);
-void		cmd_export(t_data *data, char *arg);
+void		cmd_export(t_data *data, t_args *args);
 // cmd_pwd.c
-void		cmd_pwd(t_data *data);
+void		cmd_pwd(t_data *data, t_args *args);
 // cmd_unset.c
-void		cmd_unset(t_data *data, char *arg);
+void		cmd_unset(t_data *data, t_args *args);
 // cmd_exit.c
-void		cmd_exit(void);
+void		cmd_exit(t_data *data, t_args *args);
 
 /*----------------------------------PARSER------------------------------------*/
 t_cmd_list	*ft_parser(t_token *tokens_list, int *status);

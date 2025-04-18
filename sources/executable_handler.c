@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 13:12:48 by alfokin           #+#    #+#             */
-/*   Updated: 2025/04/17 18:26:03 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/18 12:47:17 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	is_executable(const char *name, t_data *data)
 	}
 	if (!cmd_path)
 	{
-		ft_putstr_fd(name, 2);
+		ft_putstr_fd((char *)name, 2);
 		ft_putstr_fd(": command not found\n", 2);
 		return ;
 	}

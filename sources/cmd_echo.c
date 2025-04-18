@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:35:42 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/04 12:17:15 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:10:43 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,31 +28,29 @@ int	is_new_line(char *option)
 	return (0);
 }
 
-void	cmd_echo(char **argv)
+void	cmd_echo(t_data *data, t_args *args)
 {
-	// NUL argv check?
-
-	if (is_new_line(*(argv + 1)) == 1)
+	if (is_new_line(args->value) == 1)
 	{
-		argv++;
-		while (*argv)
+		args = args->next;
+		while (args)
 		{
-			printf("%s", *argv);
-			if (*(argv + 1))
+			printf("%s", args->value);
+			if (args->next)
 				printf(" ");
-			argv++;
+			args = args->next;
 		}
 		printf("\n");
 	}
 	else
 	{
-		argv += 2;
-		while (*argv)
+		args = args->next->next;
+		while (args)
 		{
-			printf("%s", *argv);
-			if (*(argv + 1))
+			printf("%s", args->value);
+			if (args->next)
 				printf(" ");
-			argv++;
+			args = args->next;
 		}
 	}
 }

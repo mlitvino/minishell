@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:14:50 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/07 15:01:18 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:50:50 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,9 @@ void	update_pwd(t_data *data)
 	char	*new_pwd;
 	char	*temp;
 
-	printf("I CHANGE\n"); // del
 	temp = getcwd(NULL, 0);
 	// NUL check
 	new_pwd = ft_strjoin("PWD=", temp);
-	printf("new_pwd: %s\n", new_pwd); // del
 	// NUL check
 	free(temp);
 	add_replce_var(&data->env, new_pwd);
@@ -49,10 +47,12 @@ void	update_oldpwd(t_data *data)
 	// NUL check
 }
 
-void	cmd_cd(t_data *data, char	*path)
+void	cmd_cd(t_data *data, t_args *args)
 {
 	t_list	*temp;
+	char	*path;
 
+	path = args->value;
 	if (!path)
 	{
 		temp = data->env;

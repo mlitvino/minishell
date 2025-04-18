@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:36:35 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/11 14:38:29 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/18 14:48:59 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,19 @@ void	add_replce_var(t_list **list, char *new_var)
 	}
 }
 
-void	cmd_export(t_data *data, char *var)
+void	cmd_export(t_data *data, t_args *args)
 {
 	char	*cpy_var1;
 	char	*cpy_var2;
 
-	cpy_var1 = ft_strdup(var);
-	// NUL check
-	cpy_var2 = ft_strdup(var);
-	// NUL check
-	add_replce_var(&data->local_vars, cpy_var1);
-	add_replce_var(&data->env, cpy_var2);
+	while (args)
+	{
+		cpy_var1 = ft_strdup(args->value);
+		// NUL check
+		cpy_var2 = ft_strdup(args->value);
+		// NUL check
+		add_replce_var(&data->local_vars, cpy_var1);
+		add_replce_var(&data->env, cpy_var2);
+		args = args->next;
+	}
 }
