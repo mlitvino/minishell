@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/18 15:53:09 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:00:49 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,7 +232,7 @@ void	redirect(t_simple_cmd *cmd, t_redir *redirs);
 void	run_cmd(t_simple_cmd *cmd);
 void	exec_simpl_cmd(t_data *data, t_simple_cmd *cmd, pid_t *pid_last_cmd);
 void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count);
-int		executor(t_cmd_list *cmd_list);
+int		executor(t_data *data, t_cmd_list *cmd_list);
 
 /*------------------------------BUILTINS--------------------------------------*/
 // cmd_cd.c

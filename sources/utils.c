@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:30:49 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/18 15:26:14 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:21:18 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,11 @@ void	clean_all(t_data *data)
 			redir = cmd->redirections;
 			while (redir)
 			{
+				if (redir->type == RE_DOUBLE_LESS)
+				{
+					unlink(redir->file_name);
+				}
+
 				free(redir->file_name);
 				redir->file_name = NULL;
 

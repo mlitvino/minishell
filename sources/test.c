@@ -13,39 +13,39 @@ void	show_token(t_token *token)
 			printf("------------NEXT_TOKEN--------------\n");
 		token = token->next;
 	}
-	printf("------------END_TOKENS-----------------\n");
+	printf("------------END_TOKENS-----------------\n\n\n");
 }
 
 void	show_arg(t_args *args)
 {
-	printf("------------ARGS-----------------\n");
+	printf("	------------ARGS-----------------\n");
 	for (int i = 0; args; i++)
 	{
-		printf("i: %d\n", i);
-		printf("inside_quotes: %d\n", args->inside_quotes);
-		printf("value: (%s)\n", args->value);
+		printf("	i: %d\n", i);
+		printf("	inside_quotes: %d\n", args->inside_quotes);
+		printf("	value: (%s)\n", args->value);
 		if (args->next)
-			printf("----------NEXT_ARG------------\n");
+			printf("	----------NEXT_ARG------------\n");
 		args = args->next;
 	}
-	printf("-----------END_ARGS------------\n");
+	printf("	-----------END_ARGS------------\n");
 }
 
 void	show_redir(t_redir *redir)
 {
-	printf("------------REDIRS-----------------\n");
+	printf("	------------REDIRS-----------------\n");
 	for (int i = 0; redir; i++)
 	{
-		printf("i: %d\n", i);
-		printf("index: %d\n", redir->index);
-		printf("type: %d\n", redir->type);
-		printf("inside_quotes: %d\n", redir->inside_quotes);
-		printf("file_name: (%s)\n", redir->file_name);
+		printf("	i: %d\n", i);
+		printf("	index: %d\n", redir->index);
+		printf("	type: %d\n", redir->type);
+		printf("	inside_quotes: %d\n", redir->inside_quotes);
+		printf("	file_name: (%s)\n", redir->file_name);
 		if (redir->next)
-			printf("----------NEXT_REDIR------------\n");
+			printf("	----------NEXT_REDIR------------\n");
 		redir = redir->next;
 	}
-	printf("-----------END_REDIRS------------\n");
+	printf("	-----------END_REDIRS------------\n");
 }
 
 void	show_cmd(t_simple_cmd *cmd)

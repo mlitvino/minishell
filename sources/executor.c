@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:03:21 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/18 15:54:00 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:14:42 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,13 +82,12 @@ void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count)
 		exec_simpl_cmd(data, curr_cmd, pipeline->pid_last_cmd);
 		i++;
 	}
-	waitpid(*pipeline->pid_last_cmd, pipeline->exit_status, 0);
 	while (waitpid(0, 0, 0) != -1)
 		{ }
 	close_pipes(pipes, cmd_count - 1);
 }
 
-int	executer(t_data *data, t_cmd_list *cmd_list)
+int	executor(t_data *data, t_cmd_list *cmd_list)
 {
 	t_pipe_line	*pipeline;
 

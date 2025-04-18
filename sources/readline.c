@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/18 15:37:53 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:29:05 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,9 @@ void	read_input(int argc, char *argv[], char *env[])
 		data.cmd_list = ft_parser(token, &status);
 		show_cmd_list(data.cmd_list);
 
+		printf("\nEXECUTOR:\n"); // del
 
-		//executer();
+		executor(&data, data.cmd_list);
 
 		//free(read_line);
 	}

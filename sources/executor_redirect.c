@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:57:15 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/18 15:52:09 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:35:17 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,9 @@ void	restart_fd(t_simple_cmd *cmd)
 
 void	redirect(t_simple_cmd *cmd, t_redir *redirs)
 {
+	cmd->std_fd[STDIN] = dup(STDIN);
+	cmd->std_fd[STDOUT] = dup(STDOUT);
+
 	if (cmd->cmd_i != 0)
 	{
 		dup2(cmd->pipes[cmd->cmd_i - 1].pipe[STDIN], STDIN);
@@ -78,11 +81,11 @@ void	redirect(t_simple_cmd *cmd, t_redir *redirs)
 		}
 		if (redirs->type == RE_GREAT)
 		{
-			redirs->fd = open(redirs->file_name, O_WRONLY);
+			redirs->fd = open(redirs->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		}
 		if (redirs->type == RE_DOUBLE_GREAT)
 		{
-			redirs->fd = open(redirs->file_name, O_WRONLY | O_APPEND);
+			redirs->fd = open(redirs->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		}
 		if (redirs->fd == -1)
 		{

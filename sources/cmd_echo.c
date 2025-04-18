@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:35:42 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/18 14:10:43 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:13:43 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,8 @@ int	is_new_line(char *option)
 
 void	cmd_echo(t_data *data, t_args *args)
 {
-	if (is_new_line(args->value) == 1)
+	if (!args || is_new_line(args->value) == 1)
 	{
-		args = args->next;
 		while (args)
 		{
 			printf("%s", args->value);
@@ -44,7 +43,7 @@ void	cmd_echo(t_data *data, t_args *args)
 	}
 	else
 	{
-		args = args->next->next;
+		args = args->next;
 		while (args)
 		{
 			printf("%s", args->value);
