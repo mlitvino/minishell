@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/18 14:14:18 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/18 15:12:29 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,9 @@ typedef struct s_token
 }				t_token;
 
 /*---------------------------------PARSER-------------------------------------*/
+
+typedef struct s_data t_data;
+
 typedef enum e_redir_type
 {
 	RE_GREAT,
@@ -87,7 +90,7 @@ typedef enum e_redir_type
 
 typedef struct s_pipe
 {
-	long	pipe[2];
+	int		pipe[2];
 	int		count;
 }	t_pipe;
 
@@ -110,11 +113,6 @@ typedef struct s_args
 	struct s_args	*next;
 }				t_args;
 
-typedef struct s_builtin
-{
-	char	*name;
-	void	(*func)(t_data *data, t_args *args);
-}	t_builtin;
 
 typedef struct s_simple_cmd
 {
@@ -145,6 +143,12 @@ typedef struct s_cmd_list
 	t_pipe_line			*childs;
 }				t_cmd_list;
 
+typedef struct s_builtin
+{
+	char	*name;
+	void	(*func)(t_data *data, t_args *args);
+}	t_builtin;
+
 typedef struct s_data
 {
 	t_cmd_list	*cmd_list;
@@ -156,39 +160,39 @@ typedef struct s_data
 	char		*read_line;
 }	t_data;
 
+
+
 /*!!!!!!!!!!!!!!!!!!!!!!!---------------------------------MAIN PART-------------------------------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
 extern volatile sig_atomic_t g_signal_received;
 
-typedef struct s_file
-{
-	char	*path_name;
-	int		fd;
-	int		mod;
-}	t_file;
+// typedef struct s_file
+// {
+// 	char	*path_name;
+// 	int		fd;
+// 	int		mod;
+// }	t_file;
 
-typedef struct s_cmd
-{
-	char	*cmd_path;
-	char	*cmd_name;
-	int		cmd_num;
-	char	*optns;
-	int		wildcard;
-	int		is_builtin;
-	char	**arg_list; // cmd_name + optns + args
-	t_file	*infile;
-	t_file	*outfile;
-}	t_cmd;
+// typedef struct s_cmd
+// {
+// 	char	*cmd_path;
+// 	char	*cmd_name;
+// 	int		cmd_num;
+// 	char	*optns;
+// 	int		wildcard;
+// 	int		is_builtin;
+// 	char	**arg_list; // cmd_name + optns + args
+// 	t_file	*infile;
+// 	t_file	*outfile;
+// }	t_cmd;
 
-typedef struct s_cmd_tab
-{
-	t_cmd	*cmds;
-	int		cmd_count;
-	int		exit_code;
-	t_pipe	*pipes;
-}	t_cmd_tab;
-
-
+// typedef struct s_cmd_tab
+// {
+// 	t_cmd	*cmds;
+// 	int		cmd_count;
+// 	int		exit_code;
+// 	t_pipe	*pipes;
+// }	t_cmd_tab;
 
 // readline.c
 int			is_builtin(t_builtin *arr, char	*cmd_name);
@@ -208,16 +212,27 @@ void	init_sigs(t_data *data);
 
 // utils.c
 void	clean_all(t_data *data);
+char	**convrt_lst_to_argv(t_list *lst);
 char	*expand_var(t_data *data, char *var);
 
 /*------------------------------EXECUTOR--------------------------------------*/
 void	is_executable(const char *name, t_data *data);
 
-// executer.c
+// executor_redirect.c
+t_pipe	*init_pipes(int	cmd_count);
+void	close_pipes(t_pipe *pipes, int pipes_count);
+void	redirect(t_simple_cmd *cmd, t_redir *redirs);
+
+// executor.c
+void	run_cmd(t_simple_cmd *cmd);
+void	exec_simpl_cmd(t_simple_cmd *cmd, pid_t *pid_last_cmd);
+void	exec_pipeline(t_pipe_line *pipeline, int cmd_count);
 int		executor(t_cmd_list *cmd_list);
 
 /*------------------------------BUILTINS--------------------------------------*/
 // cmd_cd.c
+int			is_new_line(char *option);
+void		update_oldpwd(t_data *data);
 void		cmd_cd(t_data *data, t_args *args);
 // cmd_echo.c
 int			is_new_line(char *option);
@@ -225,6 +240,8 @@ void		cmd_echo(t_data *data, t_args *args);
 // cmd_env.c
 void		cpy_env(char *sys_env[], t_data *data);
 void		cmd_env(t_data *data, t_args *args);
+// cmd_exit.c
+void		cmd_exit(t_data *data, t_args *args);
 // cmd_export.c
 t_list		*find_var(t_list **list, char *var, t_list **prev);
 void		add_replce_var(t_list **linked_list, char *arg);
@@ -232,9 +249,8 @@ void		cmd_export(t_data *data, t_args *args);
 // cmd_pwd.c
 void		cmd_pwd(t_data *data, t_args *args);
 // cmd_unset.c
+void		delete_var(t_list **list, char *var);
 void		cmd_unset(t_data *data, t_args *args);
-// cmd_exit.c
-void		cmd_exit(t_data *data, t_args *args);
 
 /*----------------------------------PARSER------------------------------------*/
 t_cmd_list	*ft_parser(t_token *tokens_list, int *status);
