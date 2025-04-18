@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:30:49 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/18 15:02:50 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/18 15:26:14 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,34 @@ void	clean_all(t_data *data)
 	}
 
 	//exit(exit_status);
+}
+
+char	**convrt_args_to_argv(t_args *args)
+{
+	t_args	*temp;
+	char	**argv;
+	int		size;
+	int		i;
+
+	size = 0;
+	temp = args;
+	while (temp)
+	{
+		size++;
+		temp = temp->next;
+	}
+	argv = malloc(sizeof(char *) * (size + 1));
+	// nul check
+	i = 0;
+	while (i < size)
+	{
+		argv[i] = ft_strdup(temp->value);
+		if (!argv[i])
+			//clean
+		temp = temp->next;
+		i++;
+	}
+	return (argv);
 }
 
 char	**convrt_lst_to_argv(t_list *lst)

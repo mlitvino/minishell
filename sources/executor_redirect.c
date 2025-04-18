@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:57:15 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/18 15:14:34 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/18 15:52:09 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,12 @@ void	close_pipes(t_pipe *pipes, int pipes_count)
 	}
 	free(pipes);
 	pipes = NULL;
+}
+
+void	restart_fd(t_simple_cmd *cmd)
+{
+	dup2(cmd->std_fd[STDIN], STDIN);
+	dup2(cmd->std_fd[STDOUT], STDOUT);
 }
 
 void	redirect(t_simple_cmd *cmd, t_redir *redirs)

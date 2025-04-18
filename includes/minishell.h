@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/18 15:12:29 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/18 15:53:09 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,11 @@ typedef struct s_args
 	struct s_args	*next;
 }				t_args;
 
+typedef struct s_builtin
+{
+	char	*name;
+	void	(*func)(t_data *data, t_args *args);
+}	t_builtin;
 
 typedef struct s_simple_cmd
 {
@@ -125,6 +130,10 @@ typedef struct s_simple_cmd
 	t_pipe				*pipes;
 	int					cmd_i;
 	int					cmd_count;
+	t_list		*env;
+	t_list		*local_vars;
+	t_builtin	*builtin_arr;
+	int					std_fd[2];
 }				t_simple_cmd;
 
 typedef struct s_pipe_line
@@ -142,12 +151,6 @@ typedef struct s_cmd_list
 	int					pipe_line_count;
 	t_pipe_line			*childs;
 }				t_cmd_list;
-
-typedef struct s_builtin
-{
-	char	*name;
-	void	(*func)(t_data *data, t_args *args);
-}	t_builtin;
 
 typedef struct s_data
 {
@@ -212,6 +215,7 @@ void	init_sigs(t_data *data);
 
 // utils.c
 void	clean_all(t_data *data);
+char	**convrt_args_to_argv(t_args *args);
 char	**convrt_lst_to_argv(t_list *lst);
 char	*expand_var(t_data *data, char *var);
 
@@ -221,12 +225,13 @@ void	is_executable(const char *name, t_data *data);
 // executor_redirect.c
 t_pipe	*init_pipes(int	cmd_count);
 void	close_pipes(t_pipe *pipes, int pipes_count);
+void	restart_fd(t_simple_cmd *cmd);
 void	redirect(t_simple_cmd *cmd, t_redir *redirs);
 
 // executor.c
 void	run_cmd(t_simple_cmd *cmd);
-void	exec_simpl_cmd(t_simple_cmd *cmd, pid_t *pid_last_cmd);
-void	exec_pipeline(t_pipe_line *pipeline, int cmd_count);
+void	exec_simpl_cmd(t_data *data, t_simple_cmd *cmd, pid_t *pid_last_cmd);
+void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count);
 int		executor(t_cmd_list *cmd_list);
 
 /*------------------------------BUILTINS--------------------------------------*/

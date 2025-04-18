@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/18 15:08:25 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/18 15:37:53 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,16 @@
 
 int	is_builtin(t_builtin *arr, char	*cmd_name)
 {
-	while (arr && arr->name)
+	int	i;
+
+	i = 0;
+	while (arr && arr[i].name)
 	{
-		if (ft_strcmp(arr->name, cmd_name) == 0)
-			return (1);
-		arr++;
+		if (ft_strcmp(arr[i].name, cmd_name) == 0)
+			return (i);
+		i++;
 	}
-	return (0);
+	return (-1);
 }
 
 t_builtin	*set_builtins(t_data *data)
