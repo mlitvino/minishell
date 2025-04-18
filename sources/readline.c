@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/18 16:29:05 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:59:47 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,12 @@ void	read_input(int argc, char *argv[], char *env[])
 	while (1)
 	{
 		data.read_line = readline("minishell$ ");
+		if (!data.read_line)
+		{
+			printf("EOF\n");
+			exit(0);
+		}
+
 		add_history(data.read_line);
 
 		t_token *token = ft_lexer(data.read_line);
@@ -75,6 +81,6 @@ void	read_input(int argc, char *argv[], char *env[])
 
 		executor(&data, data.cmd_list);
 
-		//free(read_line);
+		free(data.read_line);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/18 16:00:49 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/18 18:11:33 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,7 +225,7 @@ void	is_executable(const char *name, t_data *data);
 // executor_redirect.c
 t_pipe	*init_pipes(int	cmd_count);
 void	close_pipes(t_pipe *pipes, int pipes_count);
-void	restart_fd(t_simple_cmd *cmd);
+void	restart_fd(t_simple_cmd *cmd, int *std_fd);
 void	redirect(t_simple_cmd *cmd, t_redir *redirs);
 
 // executor.c
