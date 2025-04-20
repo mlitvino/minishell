@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/18 16:59:47 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/20 23:14:09 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,10 @@ void	read_input(int argc, char *argv[], char *env[])
 {
 	t_data data;
 
+	data.local_vars = NULL;
 	data.builtin_arr = set_builtins(&data);
 	cpy_env(env, &data);
+	init_sigs(&data);
 	while (1)
 	{
 		data.read_line = readline("minishell$ ");

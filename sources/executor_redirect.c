@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:57:15 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/18 18:47:03 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/20 23:05:48 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,24 +50,51 @@ void	close_pipes(t_pipe *pipes, int pipes_count)
 	pipes = NULL;
 }
 
-void	restart_fd(t_simple_cmd *cmd, int *std_fd)
+void	restart_fd(t_simple_cmd *cmd)
 {
-	dup2(std_fd[STDIN], STDIN);
-	dup2(std_fd[STDOUT], STDOUT);
+	//printf("RESTART START\n"); // ddel
+
+	dup2(cmd->std_fd[STDIN], STDIN);
+	dup2(cmd->std_fd[STDOUT], STDOUT);
+
+
+	close(cmd->std_fd[STDIN]);
+	close(cmd->std_fd[STDOUT]);
+
+	// perror("close");
+
+	// close(cmd->std_fd[STDIN]);
+	// perror("close");
+
+	// close(cmd->std_fd[STDOUT]);
+	// perror("close");
+
+	//printf("RESTART END\n"); // ddel
 }
 
 void	redirect(t_simple_cmd *cmd, t_redir *redirs)
 {
+	cmd->std_fd[STDIN] = dup(STDIN);
+	cmd->std_fd[STDOUT] = dup(STDOUT);
+
+	printf("AFTER DUP\n");
+	//system("ls -l /proc/self/fd");
+
+	// int temp = dup
+
+	// printf("std in: (%d)\n", cmd->std_fd[STDIN]); // ddel
+
+	// close(cmd->std_fd[STDIN]);
+	// close(cmd->std_fd[STDOUT]);
+	// exit (1);
+
 	if (cmd->cmd_i != 0)
 	{
 		dup2(cmd->pipes[cmd->cmd_i - 1].pipe[STDIN], STDIN);
 	}
 	if (cmd->cmd_i != cmd->cmd_count - 1)
 	{
-		ft_putstr_fd("t1\n", STDOUT);
 		dup2(cmd->pipes[cmd->cmd_i].pipe[STDOUT], STDOUT);
-		ft_putstr_fd("t2\n", STDOUT);
-		exit (0);
 	}
 	while (redirs)
 	{

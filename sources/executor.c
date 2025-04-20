@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:03:21 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/18 18:46:52 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/20 23:10:57 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,14 +66,8 @@ void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count)
 
 	pipes = NULL;
 	if (cmd_count > 1)
-		pipes = init_pipes(cmd_count - 1);
+		pipes = init_pipes(cmd_count);
 	curr_cmd = pipeline->child;
-
-	int	std_fd[2];
-
-	std_fd[STDIN] = dup(STDIN);
-	std_fd[STDOUT] = dup(STDOUT);
-
 	i = 0;
 	while (i < pipeline->simple_cmd_count)
 	{
@@ -82,16 +76,23 @@ void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count)
 		curr_cmd->local_vars = data->local_vars;
 		curr_cmd->builtin_arr = data->builtin_arr;
 
-		// curr_cmd->std_fd[STDIN] = tempin;
-		// curr_cmd->std_fd[STDOUT] = tempout;
-
 		curr_cmd->cmd_count = cmd_count;
 		curr_cmd->cmd_i = i;
 		curr_cmd->pipes = pipes;
 
+		curr_cmd->std_fd[STDIN] = 2;
+		curr_cmd->std_fd[STDOUT] = 3;
+
+		printf("BEFORE\n");
+		//system("ls -l /proc/self/fd");
+
 		redirect(curr_cmd, curr_cmd->redirections);
 		exec_simpl_cmd(data, curr_cmd, pipeline->pid_last_cmd);
-		restart_fd(curr_cmd, std_fd);
+
+		restart_fd(curr_cmd);
+
+		//system("ls -l /proc/self/fd");
+		printf("i %d FINISH\n", i); // del
 
 		curr_cmd = curr_cmd->next;
 		i++;
