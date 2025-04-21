@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:30:49 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/18 16:21:18 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/21 17:42:56 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	clean_all(t_data *data)
 	//exit(exit_status);
 }
 
-char	**convrt_args_to_argv(t_args *args)
+char	**convrt_args_to_argv(t_args *args, char *cmd_name)
 {
 	t_args	*temp;
 	char	**argv;
@@ -91,10 +91,12 @@ char	**convrt_args_to_argv(t_args *args)
 		size++;
 		temp = temp->next;
 	}
-	argv = malloc(sizeof(char *) * (size + 1));
+	argv = malloc(sizeof(char *) * (size + 2));
 	// nul check
 	i = 0;
-	while (i < size)
+	temp = args;
+	argv[i++] = cmd_name;
+	while (i < size + 1)
 	{
 		argv[i] = ft_strdup(temp->value);
 		if (!argv[i])
@@ -102,6 +104,7 @@ char	**convrt_args_to_argv(t_args *args)
 		temp = temp->next;
 		i++;
 	}
+	argv[i] = NULL;
 	return (argv);
 }
 
