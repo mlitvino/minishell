@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 16:38:12 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/22 14:49:53 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:11:50 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	sig_handler(int	sig, siginfo_t *info, void	*context)
 	}
 }
 
-void	init_sigs(void)
+int	init_sigs(void)
 {
 	struct sigaction	sa;
 	struct sigaction	ig;
@@ -40,5 +40,6 @@ void	init_sigs(void)
 	return_code |= sigaction(SIGINT, &sa, NULL);
 	signal(SIGQUIT, SIG_IGN);
 	if (return_code != 0 || signal(SIGQUIT, SIG_IGN) == SIG_ERR)
-		clean_all(NULL, EXIT_FAILURE, "Error: signals init failed\n");
+		return (FAILURE);
+	return (SUCCESS);
 }

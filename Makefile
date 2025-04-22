@@ -6,7 +6,7 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/04/18 14:59:47 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/04/22 12:58:31 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ LIBFT_DIR	= ./libft
 INCLD_DIR	= ./includes
 
 INCLD = $(INCLD_DIR)/minishell.h
-SRC = $(SRC_DIR)/main.c $(SRC_DIR)/readline.c $(SRC_DIR)/executable_handler.c \
+SRC = $(SRC_DIR)/main.c $(SRC_DIR)/readline.c $(SRC_DIR)/executor_search.c \
 	$(SRC_DIR)/cmd_cd.c $(SRC_DIR)/cmd_echo.c $(SRC_DIR)/cmd_env.c $(SRC_DIR)/cmd_exit.c \
 	$(SRC_DIR)/cmd_export.c $(SRC_DIR)/cmd_pwd.c $(SRC_DIR)/cmd_unset.c \
 	$(SRC_DIR)/utils.c $(SRC_DIR)/signals.c $(SRC_DIR)/heredoc.c \

@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/22 15:02:12 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:12:08 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,8 +141,6 @@ typedef struct s_simple_cmd
 	t_pipe				*pipes;
 	int					cmd_i;
 	int					cmd_count;
-	t_list		*env;
-	t_list		*local_vars;
 	t_builtin	*builtin_arr;
 	int					std_fd[2];
 }				t_simple_cmd;
@@ -153,7 +151,7 @@ typedef struct s_pipe_line
 	struct s_pipe_line	*next;
 	t_simple_cmd		*child;
 
-	int					*exit_status;
+	int					exit_status;
 	pid_t				*pid_last_cmd;
 }				t_pipe_line;
 
@@ -217,12 +215,12 @@ void		read_input(int argc, char *argv[], char *env[]);
 void	hd_sig_hanlder(int sig);
 void	fill_heredoc(t_data *data, t_redir *heredoc);
 void	create_heredoc(t_data *data, t_redir *heredoc);
-void	check_create_heredoc(t_data *data, t_pipe_line *pipeline);
+int		check_create_heredoc(t_data *data, t_pipe_line *pipeline);
 void	unlink_heredoc(t_data *data, t_pipe_line *pipeline);
 
 // signals.c
 void	sig_handler(int	sig, siginfo_t *info, void	*context);
-void	init_sigs();
+int		init_sigs();
 
 // utils.c
 int	clean_all(t_data *data, int exit_code, char *err_message);
@@ -232,14 +230,20 @@ char	*expand_var(t_data *data, char *var);
 
 /*------------------------------EXECUTOR--------------------------------------*/
 
+
+
 // executor_redirect.c
 t_pipe	*init_pipes(int	cmd_count);
 void	close_pipes(t_pipe *pipes, int pipes_count);
 void	restart_fd(t_simple_cmd *cmd);
 void	redirect(t_simple_cmd *cmd, t_redir *redirs);
 
+// executor_search.c
+int	check_path_dirs(t_data *data, t_simple_cmd *cmd);
+int	search_exec(t_data *data, t_simple_cmd *cmd);
+
 // executor.c
-void	run_cmd(t_simple_cmd *cmd);
+void	run_cmd(t_data *data, t_simple_cmd *cmd);
 void	exec_simpl_cmd(t_data *data, t_simple_cmd *cmd, pid_t *pid_last_cmd);
 void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count);
 int		executor(t_data *data, t_cmd_list *cmd_list);

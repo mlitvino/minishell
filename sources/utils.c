@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:30:49 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/22 15:02:08 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/22 17:36:43 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ int	clean_all(t_data *data, int	exit_code, char *err_message)
 	free(data->builtin_arr);
 	data->builtin_arr = NULL;
 
+	if (data->cmd_list)
+	{
 		pipeline = data->cmd_list->childs;
 		while (pipeline)
 		{
@@ -54,6 +56,8 @@ int	clean_all(t_data *data, int	exit_code, char *err_message)
 
 					redir = redir->next;
 				}
+				close(cmd->std_fd[STDIN]);
+				close(cmd->std_fd[STDOUT]);
 
 				args = cmd->args;
 				while (args)
@@ -71,6 +75,7 @@ int	clean_all(t_data *data, int	exit_code, char *err_message)
 			}
 			pipeline = pipeline->next;
 		}
+	}
 	if (!err_message)
 		ft_putstr_fd(err_message, 2);
 	exit(exit_code);

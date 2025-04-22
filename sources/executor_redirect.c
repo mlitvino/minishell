@@ -6,30 +6,33 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:57:15 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/21 13:38:30 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:05:07 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_pipe	*init_pipes(int	cmd_count)
+t_pipe	*init_pipes(int	pipes_count)
 {
 	t_pipe	*pipes;
-	int		pipes_count;
 	int		i;
 	int		p[2];
 
-	pipes_count = cmd_count - 1;
 	pipes = malloc(sizeof(t_pipe) * pipes_count);
 	if (!pipes)
 	{
-		// null check
+		ft_putstr_fd("minishell: malloc failed\n", 2);
+		return (NULL);
 	}
 	i = 0;
 	while (i < pipes_count)
 	{
-		pipe(pipes[i].pipe);
-		// err check
+		if (pipe(pipes[i].pipe) != 0)
+		{
+			ft_putstr_fd("minishell: pipes creation failed\n", 2);
+			close_pipes(pipes, i);
+			return (NULL);
+		}
 		i++;
 	}
 	return (pipes);
@@ -56,6 +59,8 @@ void	restart_fd(t_simple_cmd *cmd)
 	dup2(cmd->std_fd[STDOUT], STDOUT);
 	close(cmd->std_fd[STDIN]);
 	close(cmd->std_fd[STDOUT]);
+	cmd->std_fd[STDIN] = -1;
+	cmd->std_fd[STDOUT] = -1;
 }
 
 void	redirect(t_simple_cmd *cmd, t_redir *redirs)
@@ -98,7 +103,7 @@ void	redirect(t_simple_cmd *cmd, t_redir *redirs)
 		{
 			dup2(redirs->fd, STDIN);
 		}
-		else if (redirs->type == RE_GREAT|| redirs->type == RE_DOUBLE_GREAT)
+		else if (redirs->type == RE_GREAT || redirs->type == RE_DOUBLE_GREAT)
 		{
 			dup2(redirs->fd, STDOUT);
 		}
