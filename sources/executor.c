@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:03:21 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/21 19:14:24 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/22 14:51:44 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,66 +26,6 @@ void	run_cmd(t_simple_cmd *cmd)
 	//err check
 	perror("execve");
 	exit(1);
-}
-
-
-int	check_path_dirs(t_data *data, t_simple_cmd *cmd)
-{
-		char	*path_value;
-		char	**path_tab;
-
-		path_value = expand_var(data, "PATH=");
-		path_tab = ft_split(path_value, ':');
-		if (!path_tab)
-		{
-			perror("malloc");
-			return (1);
-		}
-		int i = 0;
-		while (path_tab[i])
-		{
-			cmd->pathname = ft_strjoin("/", cmd->command);
-			if (!cmd->pathname)
-			{
-				perror("malloc");
-				return (1);
-			}
-			cmd->pathname = ft_strjoin(path_tab[i], cmd->pathname);
-			if (!cmd->pathname)
-			{
-				perror("malloc");
-				return (1);
-			}
-			if (access(cmd->pathname, F_OK) == 0)
-			{
-				if (access(cmd->pathname, X_OK) == 0)
-					return (0);
-				else
-					return (1);
-			}
-			i++;
-		}
-		return (127);
-}
-
-int	search_exec(t_data *data, t_simple_cmd *cmd)
-{
-	if (ft_strchr(cmd->command, '/') != NULL)
-	{
-
-		if (access(cmd->command, X_OK) != 0)
-			cmd->exit_code = 1;
-	}
-	else
-	{
-		cmd->exit_code = check_path_dirs(data, cmd);
-		if (cmd->exit_code == 127)
-		{
-			ft_putstr_fd(cmd->command, 2);
-			ft_putstr_fd(": command not found\n", 2);
-		}
-	}
-	return (cmd->exit_code);
 }
 
 void	exec_simpl_cmd(t_data *data, t_simple_cmd *cmd, pid_t *pid_last_cmd)
@@ -160,12 +100,12 @@ int	executor(t_data *data, t_cmd_list *cmd_list)
 	t_pipe_line	*pipeline;
 
 	pipeline = cmd_list->childs;
-	check_create_heredoc(pipeline);
+	check_create_heredoc(data, pipeline);
 	while (pipeline)
 	{
 		exec_pipeline(data, pipeline, pipeline->simple_cmd_count);
 		pipeline = pipeline->next;
 	}
-	unlink_heredoc(pipeline);
+	unlink_heredoc(data, pipeline);
 	return (0);
 }

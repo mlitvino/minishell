@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/21 17:36:40 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:02:12 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,15 @@
 # define STDIN 0
 # define STDOUT 1
 # define STDERR 2
+
+/*-------------------------------EXIT_CODES-----------------------------------*/
+
+# define SUCCESS 0
+# define FAILURE 1
+# define MISUSE 2
+# define CMD_NOT_FOUND 127
+# define TERM_SIGINT 130
+# define OUT_RANGE 255
 
 /*---------------------------------TOKENS-------------------------------------*/
 typedef enum e_token_type{
@@ -201,22 +210,22 @@ extern volatile sig_atomic_t g_signal_received;
 
 // readline.c
 int			is_builtin(t_builtin *arr, char	*cmd_name);
-t_builtin	*set_builtins(t_data *data);
+void		set_builtins(t_data *data);
 void		read_input(int argc, char *argv[], char *env[]);
 
 // heredoc.c
 void	hd_sig_hanlder(int sig);
-void	fill_heredoc(t_redir *heredoc);
-void	create_heredoc(t_redir *heredoc);
-void	check_create_heredoc(t_pipe_line *pipeline);
-void	unlink_heredoc(t_pipe_line *pipeline);
+void	fill_heredoc(t_data *data, t_redir *heredoc);
+void	create_heredoc(t_data *data, t_redir *heredoc);
+void	check_create_heredoc(t_data *data, t_pipe_line *pipeline);
+void	unlink_heredoc(t_data *data, t_pipe_line *pipeline);
 
 // signals.c
 void	sig_handler(int	sig, siginfo_t *info, void	*context);
-void	init_sigs(t_data *data);
+void	init_sigs();
 
 // utils.c
-void	clean_all(t_data *data);
+int	clean_all(t_data *data, int exit_code, char *err_message);
 char	**convrt_args_to_argv(t_args *args, char *cmd_name);
 char	**convrt_lst_to_argv(t_list *lst);
 char	*expand_var(t_data *data, char *var);

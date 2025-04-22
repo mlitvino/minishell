@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 19:06:58 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/16 18:37:17 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:01:30 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	hd_sig_hanlder(int sig)
 		g_signal_received = 1;
 }
 
-void	fill_heredoc(t_redir *heredoc)
+void	fill_heredoc(t_data *data, t_redir *heredoc)
 {
 	char	*delim;
 	char	*input;
@@ -51,7 +51,7 @@ void	fill_heredoc(t_redir *heredoc)
 	}
 }
 
-void	create_heredoc(t_redir *heredoc)
+void	create_heredoc(t_data *data, t_redir *heredoc)
 {
 	int		i;
 	char	*file_id;
@@ -79,7 +79,7 @@ void	create_heredoc(t_redir *heredoc)
 	heredoc->file_name = file_name;
 }
 
-void	check_create_heredoc(t_pipe_line *pipeline)
+void	check_create_heredoc(t_data *data, t_pipe_line *pipeline)
 {
 	t_simple_cmd	*cmd;
 	t_redir			*redir;
@@ -94,10 +94,11 @@ void	check_create_heredoc(t_pipe_line *pipeline)
 			{
 				if (redir->type == RE_DOUBLE_LESS)
 				{
-					signal(SIGINT, SIG_IGN);
-					create_heredoc(redir);
-					fill_heredoc(redir);
-					init_sigs(NULL);
+					if (signal(SIGINT, SIG_IGN) == SIG_ERR)
+						clean_all(data, EXIT_FAILURE, "Error: func signal failed\n");
+					create_heredoc(data, redir);
+					fill_heredoc(data, redir);
+					init_sigs();
 				}
 				redir = redir->next;
 			}
@@ -107,7 +108,7 @@ void	check_create_heredoc(t_pipe_line *pipeline)
 	}
 }
 
-void	unlink_heredoc(t_pipe_line *pipeline)
+void	unlink_heredoc(t_data *data, t_pipe_line *pipeline)
 {
 	t_simple_cmd	*cmd;
 	t_redir			*redir;

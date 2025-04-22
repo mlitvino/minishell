@@ -6,21 +6,18 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:30:49 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/21 17:42:56 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:02:08 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	clean_all(t_data *data)
+int	clean_all(t_data *data, int	exit_code, char *err_message)
 {
-	int				exit_status;
 	t_pipe_line		*pipeline;
 	t_simple_cmd	*cmd;
 	t_redir			*redir;
 	t_args			*args;
-
-	exit_status = 0; // change
 
 	free(data->read_line);
 	data->read_line = NULL;
@@ -34,47 +31,49 @@ void	clean_all(t_data *data)
 	free(data->builtin_arr);
 	data->builtin_arr = NULL;
 
-	pipeline = data->cmd_list->childs;
-	while (pipeline)
-	{
-		cmd = pipeline->child;
-		while (cmd)
+		pipeline = data->cmd_list->childs;
+		while (pipeline)
 		{
-			redir = cmd->redirections;
-			while (redir)
+			cmd = pipeline->child;
+			while (cmd)
 			{
-				if (redir->type == RE_DOUBLE_LESS)
+				redir = cmd->redirections;
+				while (redir)
 				{
-					unlink(redir->file_name);
+					if (redir->type == RE_DOUBLE_LESS)
+					{
+						unlink(redir->file_name);
+					}
+
+					free(redir->file_name);
+					redir->file_name = NULL;
+
+					// now heredoc is not handled
+					// free(redir->delim);
+					// redir->delim = NULL;
+
+					redir = redir->next;
 				}
 
-				free(redir->file_name);
-				redir->file_name = NULL;
+				args = cmd->args;
+				while (args)
+				{
+					free(args->value);
+					args->value = NULL;
+					args = args->next;
+				}
 
-				free(redir->delim);
-				redir->delim = NULL;
+				free(cmd->command);
+				cmd->command = NULL;
 
-				redir = redir->next;
+				close_pipes(cmd->pipes, cmd->cmd_count - 1);
+				cmd = cmd->next;
 			}
-
-			args = cmd->args;
-			while (args)
-			{
-				free(args->value);
-				args->value = NULL;
-				args = args->next;
-			}
-
-			free(cmd->command);
-			cmd->command = NULL;
-
-			// close_pipes(cmd->pipes, cmd->cmd_count - 1);
-			cmd = cmd->next;
+			pipeline = pipeline->next;
 		}
-		pipeline = pipeline->next;
-	}
-
-	//exit(exit_status);
+	if (!err_message)
+		ft_putstr_fd(err_message, 2);
+	exit(exit_code);
 }
 
 char	**convrt_args_to_argv(t_args *args, char *cmd_name)

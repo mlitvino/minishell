@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/20 23:14:09 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/22 14:38:06 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,49 +26,51 @@ int	is_builtin(t_builtin *arr, char	*cmd_name)
 	return (-1);
 }
 
-t_builtin	*set_builtins(t_data *data)
+void	set_builtins(t_data *data)
 {
-	t_builtin	*arr;
-	int			i;
+	data->builtin_arr = malloc(sizeof(t_builtin) * 8);
+	if (!data->builtin_arr)
+	{
+		ft_putstr_fd("Error: malloc failed\n", 2);
+		exit(1);
+	}
+	data->builtin_arr[0].name = CD_STR;
+	data->builtin_arr[0].func = cmd_cd;
+	data->builtin_arr[1].name = ECHO_STR;
+	data->builtin_arr[1].func = cmd_echo;
+	data->builtin_arr[2].name = ENV_STR;
+	data->builtin_arr[2].func = cmd_env;
+	data->builtin_arr[3].name = EXIT_STR;
+	data->builtin_arr[3].func = cmd_exit;
+	data->builtin_arr[4].name = EXPORT_STR;
+	data->builtin_arr[4].func = cmd_export;
+	data->builtin_arr[5].name = PWD_STR;
+	data->builtin_arr[5].func = cmd_pwd;
+	data->builtin_arr[6].name = UNSET_STR;
+	data->builtin_arr[6].func = cmd_unset;
+	data->builtin_arr[7].name = NULL;
+	data->builtin_arr[7].func = NULL;
+}
 
-	arr = malloc(sizeof(t_builtin) * 8);
-	// nul check
-	arr[0].name = CD_STR;
-	arr[0].func = cmd_cd;
-	arr[1].name = ECHO_STR;
-	arr[1].func = cmd_echo;
-	arr[2].name = ENV_STR;
-	arr[2].func = cmd_env;
-	arr[3].name = EXIT_STR;
-	arr[3].func = cmd_exit;
-	arr[4].name = EXPORT_STR;
-	arr[4].func = cmd_export;
-	arr[5].name = PWD_STR;
-	arr[5].func = cmd_pwd;
-	arr[6].name = UNSET_STR;
-	arr[6].func = cmd_unset;
-	arr[6].name = NULL;
-	arr[6].func = NULL;
-
-	return (arr);
+void	init_data(t_data *data, char **sys_env)
+{
+	data->cmd_list = NULL;
+	data->local_vars = NULL;
+	init_sigs();
+	set_builtins(data);
+	cpy_env(sys_env, data);
 }
 
 void	read_input(int argc, char *argv[], char *env[])
 {
 	t_data data;
 
-	data.local_vars = NULL;
-	data.builtin_arr = set_builtins(&data);
-	cpy_env(env, &data);
-	init_sigs(&data);
+	init_data(&data, env);
 	while (1)
 	{
 		data.read_line = readline("minishell$ ");
 		if (!data.read_line)
-		{
-			printf("EOF\n");
-			exit(0);
-		}
+			cmd_exit(&data, NULL);
 
 		add_history(data.read_line);
 

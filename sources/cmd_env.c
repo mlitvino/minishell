@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 16:43:02 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/18 14:49:26 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/22 14:37:18 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,15 @@ void	cpy_env(char *sys_env[], t_data *data)
 	while (sys_env[i])
 	{
 		content = ft_strdup(sys_env[i]);
-		// NUL check
 		new_node = ft_lstnew(content);
-		// NUL check
+		if (!content || !new_node)
+		{
+			ft_putstr_fd("Error: malloc failed\n", 2);
+			free(content);
+			free(new_node);
+			ft_lstclear(&new_env, free);
+			exit(1);
+		}
 		ft_lstadd_back(&new_env, new_node);
 		i++;
 	}
