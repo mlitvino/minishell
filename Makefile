@@ -6,7 +6,7 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/04/22 12:58:31 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/04/23 12:48:15 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ SRC = $(SRC_DIR)/main.c $(SRC_DIR)/readline.c $(SRC_DIR)/executor_search.c \
 	$(SRC_DIR)/cmd_cd.c $(SRC_DIR)/cmd_echo.c $(SRC_DIR)/cmd_env.c $(SRC_DIR)/cmd_exit.c \
 	$(SRC_DIR)/cmd_export.c $(SRC_DIR)/cmd_pwd.c $(SRC_DIR)/cmd_unset.c \
 	$(SRC_DIR)/utils.c $(SRC_DIR)/signals.c $(SRC_DIR)/heredoc.c \
-	$(SRC_DIR)/executor.c $(SRC_DIR)/executor_redirect.c \
+	$(SRC_DIR)/executor.c $(SRC_DIR)/executor_redirect.c $(SRC_DIR)/utils_clean.c \
 	\
 	$(SRC_DIR)/parser/cont_token_checker.c \
 	$(SRC_DIR)/parser/parser.c $(SRC_DIR)/parser/create_asteriks.c $(SRC_DIR)/parser/create_nodes.c \

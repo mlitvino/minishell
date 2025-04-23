@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:49:00 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/18 14:49:03 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/23 14:26:59 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	delete_var(t_list **list, char *var)
 	{
 		equals_sign = ft_strchr(temp->content, '=');
 		equals_i = equals_sign - (char *)temp->content;
-		if (ft_strncmp(temp->content, var, equals_i) == 0)
+		if (ft_strncmp(temp->content, var, equals_i + 1) == 0)
 		{
 			if (temp == *list)
 				*list = temp->next;
@@ -38,7 +38,7 @@ void	delete_var(t_list **list, char *var)
 	}
 }
 
-void	cmd_unset(t_data *data, t_args *args)
+int	cmd_unset(t_data *data, t_args *args)
 {
 	while (args)
 	{
@@ -46,4 +46,5 @@ void	cmd_unset(t_data *data, t_args *args)
 		delete_var(&data->env, args->value);
 		args = args->next;
 	}
+	return (SUCCESS);
 }

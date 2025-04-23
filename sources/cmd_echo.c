@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:35:42 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/18 16:13:43 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:39:54 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,41 +15,51 @@
 int	is_new_line(char *option)
 {
 	if (!option)
-		return (1);
+		return (SUCCESS);
 	if (ft_strncmp(option, "-n", 2) != 0)
-		return (1);
+		return (SUCCESS);
 	option += 2;
 	while (*option)
 	{
 		if (*option != 'n')
-			return (1);
+			return (SUCCESS);
 		option++;
 	}
-	return (0);
+	return (FAILURE);
 }
 
-void	cmd_echo(t_data *data, t_args *args)
+int	print_args(t_args *args)
 {
+	while (args)
+	{
+		if (printf("%s", args->value) < SUCCESS)
+			return (FAILURE);
+		if (args->next)
+			if (printf(" ") < SUCCESS)
+				return (FAILURE);
+		args = args->next;
+	}
+	return (SUCCESS);
+}
+
+int	cmd_echo(t_data *data, t_args *args)
+{
+	int	exit_code;
+
+	exit_code = 0;
 	if (!args || is_new_line(args->value) == 1)
 	{
-		while (args)
-		{
-			printf("%s", args->value);
-			if (args->next)
-				printf(" ");
-			args = args->next;
-		}
-		printf("\n");
+		exit_code |= print_args(args);
+		exit_code |= printf("\n");
+		if (exit_code < SUCCESS)
+			return (FAILURE);
 	}
 	else
 	{
 		args = args->next;
-		while (args)
-		{
-			printf("%s", args->value);
-			if (args->next)
-				printf(" ");
-			args = args->next;
-		}
+		exit_code |= print_args(args);
+		if (exit_code < SUCCESS)
+			return (FAILURE);
 	}
+	return (SUCCESS);
 }

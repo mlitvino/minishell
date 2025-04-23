@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:03:21 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/22 19:12:18 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:14:52 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	exec_simpl_cmd(t_data *data, t_simple_cmd *cmd, pid_t *pid_last_cmd)
 
 	temp = is_builtin(cmd->builtin_arr, cmd->command);
 	if (temp != -1)
-		cmd->builtin_arr[temp].func(data, cmd->args);
+		cmd->exit_code = cmd->builtin_arr[temp].func(data, cmd->args);
 	else
 	{
 		chld_pid = fork();
@@ -57,6 +57,10 @@ void	exec_simpl_cmd(t_data *data, t_simple_cmd *cmd, pid_t *pid_last_cmd)
 		{
 
 		}
+	}
+	if (cmd->exit_code != 0)
+	{
+		
 	}
 }
 
@@ -80,12 +84,9 @@ void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count)
 		curr_cmd->cmd_i = i;
 		curr_cmd->pipes = pipes;
 		curr_cmd->exit_code = 0;
-
-		redirect(curr_cmd, curr_cmd->redirections);
+		redirect(data, curr_cmd, curr_cmd->redirections);
 		exec_simpl_cmd(data, curr_cmd, pipeline->pid_last_cmd);
 		restart_fd(curr_cmd);
-
-
 		curr_cmd = curr_cmd->next;
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 19:06:58 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/22 19:17:47 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:21:19 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	fill_heredoc(t_data *data, t_redir *heredoc)
 		}
 		heredoc->fd = open(heredoc->file_name, O_WRONLY | O_APPEND);
 		if (heredoc->fd == -1)
-			clean_all(data, FAILURE, strerror(errno));
+			clean_all(data, FAILURE, strerror(errno)); // change strerror
 		ft_putendl_fd(input, heredoc->fd);
 		close(heredoc->fd);
 	}

@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/22 19:12:08 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/23 14:31:23 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ typedef struct s_args
 typedef struct s_builtin
 {
 	char	*name;
-	void	(*func)(t_data *data, t_args *args);
+	int	(*func)(t_data *data, t_args *args);
 }	t_builtin;
 
 typedef struct s_simple_cmd
@@ -222,8 +222,13 @@ void	unlink_heredoc(t_data *data, t_pipe_line *pipeline);
 void	sig_handler(int	sig, siginfo_t *info, void	*context);
 int		init_sigs();
 
+// utils_clean.c
+void	free_redir(t_redir *redir);
+void	free_args(t_args *args);
+void	free_cmd_list(t_cmd_list *cmd_list);
+int	clean_all(t_data *data, int	exit_code, char *err_message);
+
 // utils.c
-int	clean_all(t_data *data, int exit_code, char *err_message);
 char	**convrt_args_to_argv(t_args *args, char *cmd_name);
 char	**convrt_lst_to_argv(t_list *lst);
 char	*expand_var(t_data *data, char *var);
@@ -231,12 +236,12 @@ char	*expand_var(t_data *data, char *var);
 /*------------------------------EXECUTOR--------------------------------------*/
 
 
-
 // executor_redirect.c
 t_pipe	*init_pipes(int	cmd_count);
 void	close_pipes(t_pipe *pipes, int pipes_count);
 void	restart_fd(t_simple_cmd *cmd);
-void	redirect(t_simple_cmd *cmd, t_redir *redirs);
+void	redirect_files(t_data *data, t_simple_cmd *cmd, t_redir *redir);
+void	redirect(t_data *data, t_simple_cmd *cmd, t_redir *redirs);
 
 // executor_search.c
 int	check_path_dirs(t_data *data, t_simple_cmd *cmd);
@@ -251,25 +256,25 @@ int		executor(t_data *data, t_cmd_list *cmd_list);
 /*------------------------------BUILTINS--------------------------------------*/
 // cmd_cd.c
 int			is_new_line(char *option);
-void		update_oldpwd(t_data *data);
-void		cmd_cd(t_data *data, t_args *args);
+int		update_oldpwd(t_data *data, t_list *env);
+int		cmd_cd(t_data *data, t_args *args);
 // cmd_echo.c
 int			is_new_line(char *option);
-void		cmd_echo(t_data *data, t_args *args);
+int		cmd_echo(t_data *data, t_args *args);
 // cmd_env.c
-void		cpy_env(char *sys_env[], t_data *data);
-void		cmd_env(t_data *data, t_args *args);
+void	cpy_env(char *sys_env[], t_data *data);
+int		cmd_env(t_data *data, t_args *args);
 // cmd_exit.c
-void		cmd_exit(t_data *data, t_args *args);
+int		cmd_exit(t_data *data, t_args *args);
 // cmd_export.c
-t_list		*find_var(t_list **list, char *var, t_list **prev);
-void		add_replce_var(t_list **linked_list, char *arg);
-void		cmd_export(t_data *data, t_args *args);
+t_list		*find_var(t_list *list, char *var, t_list **prev);
+char		*add_replce_var(t_list **linked_list, char *arg);
+int		cmd_export(t_data *data, t_args *args);
 // cmd_pwd.c
-void		cmd_pwd(t_data *data, t_args *args);
+int		cmd_pwd(t_data *data, t_args *args);
 // cmd_unset.c
 void		delete_var(t_list **list, char *var);
-void		cmd_unset(t_data *data, t_args *args);
+int		cmd_unset(t_data *data, t_args *args);
 
 /*----------------------------------PARSER------------------------------------*/
 t_cmd_list	*ft_parser(t_token *tokens_list, int *status);

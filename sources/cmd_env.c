@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 16:43:02 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/22 14:37:18 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:34:32 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	cpy_env(char *sys_env[], t_data *data)
 			free(new_node);
 			ft_lstclear(&new_env, free);
 			exit(1);
+			// clean_all ? 
 		}
 		ft_lstadd_back(&new_env, new_node);
 		i++;
@@ -39,14 +40,16 @@ void	cpy_env(char *sys_env[], t_data *data)
 	data->env = new_env;
 }
 
-void	cmd_env(t_data *data, t_args *args)
+int	cmd_env(t_data *data, t_args *args)
 {
 	t_list	*env;
 
 	env = data->env;
 	while (env)
 	{
-		printf("%s\n", (char *)env->content);
+		if (printf("%s\n", (char *)env->content) < SUCCESS)
+			return (FAILURE);
 		env = env->next;
 	}
+	return (SUCCESS);
 }

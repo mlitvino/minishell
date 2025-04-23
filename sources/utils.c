@@ -6,80 +6,13 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:30:49 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/22 17:36:43 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/23 14:22:30 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	clean_all(t_data *data, int	exit_code, char *err_message)
-{
-	t_pipe_line		*pipeline;
-	t_simple_cmd	*cmd;
-	t_redir			*redir;
-	t_args			*args;
 
-	free(data->read_line);
-	data->read_line = NULL;
-
-	ft_lstclear(&data->local_vars, free);
-	data->local_vars = NULL;
-
-	ft_lstclear(&data->env, free);
-	data->env = NULL;
-
-	free(data->builtin_arr);
-	data->builtin_arr = NULL;
-
-	if (data->cmd_list)
-	{
-		pipeline = data->cmd_list->childs;
-		while (pipeline)
-		{
-			cmd = pipeline->child;
-			while (cmd)
-			{
-				redir = cmd->redirections;
-				while (redir)
-				{
-					if (redir->type == RE_DOUBLE_LESS)
-					{
-						unlink(redir->file_name);
-					}
-
-					free(redir->file_name);
-					redir->file_name = NULL;
-
-					// now heredoc is not handled
-					// free(redir->delim);
-					// redir->delim = NULL;
-
-					redir = redir->next;
-				}
-				close(cmd->std_fd[STDIN]);
-				close(cmd->std_fd[STDOUT]);
-
-				args = cmd->args;
-				while (args)
-				{
-					free(args->value);
-					args->value = NULL;
-					args = args->next;
-				}
-
-				free(cmd->command);
-				cmd->command = NULL;
-
-				close_pipes(cmd->pipes, cmd->cmd_count - 1);
-				cmd = cmd->next;
-			}
-			pipeline = pipeline->next;
-		}
-	}
-	if (!err_message)
-		ft_putstr_fd(err_message, 2);
-	exit(exit_code);
-}
 
 char	**convrt_args_to_argv(t_args *args, char *cmd_name)
 {
@@ -143,9 +76,9 @@ char	*expand_var(t_data *data, char *var)
 
 	key_var = ft_strjoin(var, "=");
 	// NULL check
-	temp = find_var(&data->local_vars, key_var, NULL);
+	temp = find_var(data->local_vars, key_var, NULL);
 	if (!temp)
-		temp = find_var(&data->env, key_var, NULL);
+		temp = find_var(data->env, key_var, NULL);
 	if (temp)
 	{
 		value_var = strchr(temp->content, '=') + 1;

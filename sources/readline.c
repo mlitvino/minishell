@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/22 18:42:39 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:03:36 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,14 @@ void	init_data(t_data *data, char **sys_env)
 {
 	data->cmd_list = NULL;
 	data->local_vars = NULL;
+	data->env = NULL;
 	if (init_sigs() == FAILURE)
 		clean_all(data, FAILURE, "minishell: signals init failed\n");
 	set_builtins(data);
 	cpy_env(sys_env, data);
 }
+
+
 
 void	read_input(int argc, char *argv[], char *env[])
 {
@@ -85,6 +88,8 @@ void	read_input(int argc, char *argv[], char *env[])
 		printf("\nEXECUTOR:\n"); // del
 
 		executor(&data, data.cmd_list);
-		// free cmd_list + read_line
+
+		free_cmd_list(data.cmd_list);
+		free(data.read_line);
 	}
 }

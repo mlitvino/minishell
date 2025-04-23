@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:57:15 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/22 19:05:07 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:12:58 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,50 +63,51 @@ void	restart_fd(t_simple_cmd *cmd)
 	cmd->std_fd[STDOUT] = -1;
 }
 
-void	redirect(t_simple_cmd *cmd, t_redir *redirs)
+void	redirect_files(t_data *data, t_simple_cmd *cmd, t_redir *redir)
+{
+	if (redir->type == RE_DOUBLE_LESS || redir->type == RE_LESS)
+		redir->fd = open(redir->file_name, O_RDONLY);
+	else if (redir->type == RE_GREAT)
+		redir->fd = open(redir->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else if (redir->type == RE_DOUBLE_GREAT)
+		redir->fd = open(redir->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (redir->fd == -1)
+	{
+		perror("minishell: dup2");
+		clean_all(data, FAILURE, NULL);
+	}
+	if (redir->type == RE_LESS || redir->type == RE_DOUBLE_LESS)
+		cmd->exit_code |= dup2(redir->fd, STDIN);
+	else if (redir->type == RE_GREAT || redir->type == RE_DOUBLE_GREAT)
+		cmd->exit_code |= dup2(redir->fd, STDOUT);
+	if (cmd->exit_code != 0)
+	{
+		perror("minishell: dup2");
+		clean_all(data, FAILURE, NULL);
+	}
+}
+
+void	redirect(t_data *data, t_simple_cmd *cmd, t_redir *redirs)
 {
 	cmd->std_fd[STDIN] = dup(STDIN);
 	cmd->std_fd[STDOUT] = dup(STDOUT);
-	if (cmd->cmd_i != 0)
+	if (cmd->std_fd[STDIN] != 0 || cmd->std_fd[STDOUT] != 0)
 	{
-		dup2(cmd->pipes[cmd->cmd_i - 1].pipe[STDIN], STDIN);
+		perror("minishell: dup");
+		clean_all(data, FAILURE, NULL);
 	}
+	if (cmd->cmd_i != 0)
+		cmd->exit_code |= dup2(cmd->pipes[cmd->cmd_i - 1].pipe[STDIN], STDIN);
 	if (cmd->cmd_i != cmd->cmd_count - 1)
+		cmd->exit_code |= dup2(cmd->pipes[cmd->cmd_i].pipe[STDOUT], STDOUT);
+	if (cmd->exit_code != 0)
 	{
-		dup2(cmd->pipes[cmd->cmd_i].pipe[STDOUT], STDOUT);
+		perror("minishell: dup2");
+		clean_all(data, FAILURE, NULL);
 	}
 	while (redirs)
 	{
-		if (redirs->type == RE_DOUBLE_LESS)
-		{
-			redirs->fd = open(redirs->file_name, O_RDONLY);
-		}
-		if (redirs->type == RE_LESS)
-		{
-			redirs->fd = open(redirs->file_name, O_RDONLY);
-		}
-		if (redirs->type == RE_GREAT)
-		{
-			redirs->fd = open(redirs->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		}
-		if (redirs->type == RE_DOUBLE_GREAT)
-		{
-			redirs->fd = open(redirs->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		}
-		if (redirs->fd == -1)
-		{
-			// err check
-		}
-
-
-		if (redirs->type == RE_LESS || redirs->type == RE_DOUBLE_LESS)
-		{
-			dup2(redirs->fd, STDIN);
-		}
-		else if (redirs->type == RE_GREAT || redirs->type == RE_DOUBLE_GREAT)
-		{
-			dup2(redirs->fd, STDOUT);
-		}
+		redirect_files(data, cmd, redirs);
 		close(redirs->fd);
 		redirs = redirs->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:14:50 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/18 14:50:50 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/23 14:32:22 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,49 +25,88 @@ void	update_pwd(t_data *data)
 	add_replce_var(&data->env, new_pwd);
 }
 
-void	update_oldpwd(t_data *data)
+int	update_oldpwd(t_data *data, t_list *env)
 {
 	char	*var_value;
 	char	*new_var;
-	t_list	*temp;
+	t_list	*env_var;
 
-	temp = data->env;
-	while (temp)
+	var_value = NULL;
+	// while (env)
+	// {
+	// 	if (ft_strncmp(env->content, "PWD=", 4) == 0)
+	// 	{
+	// 		var_value = ft_strdup(ft_strchr(env->content, '=') + 1);
+	// 		if (!var_value)
+	// 		{
+	// 			perror("minishell: cd: malloc");
+	// 			return (FAILURE);
+	// 		}
+	// 	}
+	// 	env = env->next;
+	// }
+	env_var = find_var(env, "PWD=", NULL);
+	if (!env_var)
+		env_var = find_var(data->local_vars, "PWD=", NULL);
+	if (!env_var)
 	{
-		if (ft_strncmp(temp->content, "PWD=", 4) == 0)
-		{
-			var_value = ft_strdup(ft_strchr(temp->content, '=') + 1);
-			// NUL CHECK
-		}
-		temp = temp->next;
+		delete_var(&env, "OLDPWD=");
+		delete_var(&data->local_vars, "OLDPWD=");
+		return (SUCCESS);
 	}
+	var_value = ft_strdup(ft_strchr(env_var->content, '=') + 1);
 	new_var = ft_strjoin("OLDPWD=", var_value);
-	// NUL check
-	add_replce_var(&data->env, new_var);
-	// NUL check
+	if (!var_value || !new_var)
+	{
+		
+	}
+	if (add_replce_var(&data->env, new_var) == NULL)
+	{
+
+	}
+
 }
 
-void	cmd_cd(t_data *data, t_args *args)
+int	cd_home(t_data *data, t_args *args)
 {
 	t_list	*temp;
 	char	*path;
 
+	temp = data->env;
+	while (temp)
+	{
+		if (ft_strncmp(temp->content, "HOME=", 5) == 0)
+		{
+			path = ft_strdup(ft_strchr(temp->content, '=') + 1);
+			if (!path)
+			{
+				perror("minishell: cd: malloc");
+				return (FAILURE);
+			}
+			return (SUCCESS);
+		}
+		temp = temp->next;
+	}
+	ft_putstr_fd("minishell: cd: HOME not set", 2);
+	return (FAILURE);
+}
+
+int	cmd_cd(t_data *data, t_args *args)
+{
+	char	*path;
+
 	path = args->value;
 	if (!path)
+		if (cd_home(data, args) != SUCCESS)
+			return (FAILURE);
+	if (*path == '\0');
+		return (SUCCESS);
+	if (chdir(path) != SUCCESS)
 	{
-		temp = data->env;
-		while (temp)
-		{
-			if (ft_strncmp(temp->content, "HOME=", 5) == 0)
-			{
-				path = ft_strdup(ft_strchr(temp->content, '=') + 1);
-				// NUL CHECK
-			}
-			temp = temp->next;
-		}
+		perror("minishell: cd:");
+		return (FAILURE);
 	}
-	chdir(path);
-	// err check
-	update_oldpwd(data);
+	update_oldpwd(data, data->env);
 	update_pwd(data);
+	return (SUCCESS);
 }
