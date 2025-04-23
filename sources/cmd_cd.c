@@ -6,45 +6,61 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:14:50 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/23 14:32:22 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:04:39 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	update_pwd(t_data *data)
+int	join_paste_var(t_data *data, char *key_var, char *var_value)
+{
+	char	*new_var;
+	t_list	*env_var;
+
+	new_var = ft_strjoin(key_var, var_value);
+	if (!new_var || !var_value)
+	{
+		free(var_value);
+		free(new_var);
+		perror("minishell: cd: malloc");
+		return (FAILURE);
+	}
+	free(var_value);
+	if (find_var(data->env, key_var, NULL) != NULL)
+	{
+		if (add_replce_var(&data->env, new_var) == NULL)
+			return (free(new_var), perror("minishell: cd: malloc"), FAILURE);
+	}
+	else if (find_var(data->local_vars, key_var, NULL) != NULL)
+	{
+		if (add_replce_var(&data->local_vars, new_var) == NULL)
+			return (free(new_var), perror("minishell: cd: malloc"), FAILURE);
+	}
+	return (SUCCESS);
+}
+
+int	update_pwd(t_data *data)
 {
 	char	*new_pwd;
-	char	*temp;
+	char	*cwd;
 
-	temp = getcwd(NULL, 0);
-	// NUL check
-	new_pwd = ft_strjoin("PWD=", temp);
-	// NUL check
-	free(temp);
-	add_replce_var(&data->env, new_pwd);
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+	{
+		perror("minishell: cd");
+		return (FAILURE);
+	}
+	if (join_paste_var(data, "PWD=", cwd) == FAILURE)
+		return (FAILURE);
+	return (SUCCESS);
 }
 
 int	update_oldpwd(t_data *data, t_list *env)
 {
 	char	*var_value;
-	char	*new_var;
+	char	*new_oldpwd;
 	t_list	*env_var;
 
-	var_value = NULL;
-	// while (env)
-	// {
-	// 	if (ft_strncmp(env->content, "PWD=", 4) == 0)
-	// 	{
-	// 		var_value = ft_strdup(ft_strchr(env->content, '=') + 1);
-	// 		if (!var_value)
-	// 		{
-	// 			perror("minishell: cd: malloc");
-	// 			return (FAILURE);
-	// 		}
-	// 	}
-	// 	env = env->next;
-	// }
 	env_var = find_var(env, "PWD=", NULL);
 	if (!env_var)
 		env_var = find_var(data->local_vars, "PWD=", NULL);
@@ -55,58 +71,60 @@ int	update_oldpwd(t_data *data, t_list *env)
 		return (SUCCESS);
 	}
 	var_value = ft_strdup(ft_strchr(env_var->content, '=') + 1);
-	new_var = ft_strjoin("OLDPWD=", var_value);
-	if (!var_value || !new_var)
-	{
-		
-	}
-	if (add_replce_var(&data->env, new_var) == NULL)
-	{
-
-	}
-
+	if (join_paste_var(data, "OLDPWD=", var_value) == FAILURE)
+		return (FAILURE);
+	return (SUCCESS);
 }
 
-int	cd_home(t_data *data, t_args *args)
+char	*get_home_path(t_data *data)
 {
-	t_list	*temp;
+	t_list	*var;
 	char	*path;
 
-	temp = data->env;
-	while (temp)
+	var = find_var(data->env, "HOME=", NULL);
+	if (!var)
+		var = find_var(data->local_vars, "HOME=", NULL);
+	if (var)
 	{
-		if (ft_strncmp(temp->content, "HOME=", 5) == 0)
+		path = ft_strdup(ft_strchr(var->content, '=') + 1);
+		if (!path)
 		{
-			path = ft_strdup(ft_strchr(temp->content, '=') + 1);
-			if (!path)
-			{
-				perror("minishell: cd: malloc");
-				return (FAILURE);
-			}
-			return (SUCCESS);
+			perror("minishell: cd: malloc");
+			return (NULL);
 		}
-		temp = temp->next;
+		return (path);
 	}
-	ft_putstr_fd("minishell: cd: HOME not set", 2);
-	return (FAILURE);
+	else
+	{
+		ft_putstr_fd("minishell: cd: HOME not set", 2);
+	}
+	return (NULL);
 }
 
 int	cmd_cd(t_data *data, t_args *args)
 {
 	char	*path;
 
-	path = args->value;
+	path = NULL;
+	if (args && args->next)
+		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
+	else if (args)
+		path = args->value;
+	else if (!args)
+		path = get_home_path(data);
 	if (!path)
-		if (cd_home(data, args) != SUCCESS)
-			return (FAILURE);
-	if (*path == '\0');
-		return (SUCCESS);
+		return (FAILURE);
+	if (*path == '\0')
+		return (free(path), SUCCESS);
 	if (chdir(path) != SUCCESS)
 	{
+		free(path);
 		perror("minishell: cd:");
 		return (FAILURE);
 	}
-	update_oldpwd(data, data->env);
-	update_pwd(data);
+	if (update_oldpwd(data, data->env) != SUCCESS)
+		return (FAILURE);
+	if (update_pwd(data) != SUCCESS)
+		return (FAILURE);
 	return (SUCCESS);
 }

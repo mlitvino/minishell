@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 16:43:02 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/23 13:34:32 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:48:58 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,9 @@ void	cpy_env(char *sys_env[], t_data *data)
 		new_node = ft_lstnew(content);
 		if (!content || !new_node)
 		{
-			ft_putstr_fd("Error: malloc failed\n", 2);
 			free(content);
 			free(new_node);
-			ft_lstclear(&new_env, free);
-			exit(1);
-			// clean_all ? 
+			clean_all(data, FAILURE, "minishell: malloc failed\n");
 		}
 		ft_lstadd_back(&new_env, new_node);
 		i++;

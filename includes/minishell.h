@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/23 14:31:23 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/23 19:23:39 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@
 # define SUCCESS 0
 # define FAILURE 1
 # define MISUSE 2
+# define CRIT_ERR 3
+# define CMD_NOT_EXEC 126
 # define CMD_NOT_FOUND 127
 # define TERM_SIGINT 130
 # define OUT_RANGE 255
@@ -223,6 +225,7 @@ void	sig_handler(int	sig, siginfo_t *info, void	*context);
 int		init_sigs();
 
 // utils_clean.c
+void	free_argv(char **argv);
 void	free_redir(t_redir *redir);
 void	free_args(t_args *args);
 void	free_cmd_list(t_cmd_list *cmd_list);
@@ -237,29 +240,32 @@ char	*expand_var(t_data *data, char *var);
 
 
 // executor_redirect.c
-t_pipe	*init_pipes(int	cmd_count);
+t_pipe	*init_pipes(t_data *data, int	cmd_count);
 void	close_pipes(t_pipe *pipes, int pipes_count);
-void	restart_fd(t_simple_cmd *cmd);
+void	restart_fd(t_data *data, t_simple_cmd *cmd);
 void	redirect_files(t_data *data, t_simple_cmd *cmd, t_redir *redir);
 void	redirect(t_data *data, t_simple_cmd *cmd, t_redir *redirs);
 
 // executor_search.c
-int	check_path_dirs(t_data *data, t_simple_cmd *cmd);
-int	search_exec(t_data *data, t_simple_cmd *cmd);
+int		check_path_dirs(t_data *data, t_simple_cmd *cmd, char **path_tab);
+int		search_exec(t_data *data, t_simple_cmd *cmd);
 
 // executor.c
 void	run_cmd(t_data *data, t_simple_cmd *cmd);
-void	exec_simpl_cmd(t_data *data, t_simple_cmd *cmd, pid_t *pid_last_cmd);
+int		exec_simpl_cmd(t_data *data, t_simple_cmd *cmd);
 void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count);
 int		executor(t_data *data, t_cmd_list *cmd_list);
 
 /*------------------------------BUILTINS--------------------------------------*/
 // cmd_cd.c
-int			is_new_line(char *option);
+int		join_paste_var(t_data *data, char *key_var, char *var_value);
+int		update_pwd(t_data *data);
 int		update_oldpwd(t_data *data, t_list *env);
+char	*get_home_path(t_data *data);
 int		cmd_cd(t_data *data, t_args *args);
 // cmd_echo.c
-int			is_new_line(char *option);
+int		is_new_line(char *option);
+int		print_args(t_args *args);
 int		cmd_echo(t_data *data, t_args *args);
 // cmd_env.c
 void	cpy_env(char *sys_env[], t_data *data);
@@ -267,13 +273,13 @@ int		cmd_env(t_data *data, t_args *args);
 // cmd_exit.c
 int		cmd_exit(t_data *data, t_args *args);
 // cmd_export.c
-t_list		*find_var(t_list *list, char *var, t_list **prev);
-char		*add_replce_var(t_list **linked_list, char *arg);
+t_list	*find_var(t_list *list, char *var, t_list **prev);
+t_list	*add_replce_var(t_list **list, char *new_var);
 int		cmd_export(t_data *data, t_args *args);
 // cmd_pwd.c
 int		cmd_pwd(t_data *data, t_args *args);
 // cmd_unset.c
-void		delete_var(t_list **list, char *var);
+void	delete_var(t_list **list, char *var);
 int		cmd_unset(t_data *data, t_args *args);
 
 /*----------------------------------PARSER------------------------------------*/

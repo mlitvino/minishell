@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:35:42 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/23 13:39:54 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:26:03 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	cmd_echo(t_data *data, t_args *args)
 	int	exit_code;
 
 	exit_code = 0;
-	if (!args || is_new_line(args->value) == 1)
+	if (!args || is_new_line(args->value) == SUCCESS)
 	{
 		exit_code |= print_args(args);
 		exit_code |= printf("\n");

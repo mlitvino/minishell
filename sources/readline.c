@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/23 13:03:36 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/23 19:36:50 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,7 @@ void	set_builtins(t_data *data)
 {
 	data->builtin_arr = malloc(sizeof(t_builtin) * 8);
 	if (!data->builtin_arr)
-	{
-		ft_putstr_fd("Error: malloc failed\n", 2);
-		exit(1);
-	}
+		clean_all(data, FAILURE, "minishell: malloc failed\n");
 	data->builtin_arr[0].name = CD_STR;
 	data->builtin_arr[0].func = cmd_cd;
 	data->builtin_arr[1].name = ECHO_STR;
@@ -62,8 +59,6 @@ void	init_data(t_data *data, char **sys_env)
 	set_builtins(data);
 	cpy_env(sys_env, data);
 }
-
-
 
 void	read_input(int argc, char *argv[], char *env[])
 {

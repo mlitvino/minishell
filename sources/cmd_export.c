@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:36:35 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/23 14:23:14 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:53:26 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_list	*find_var(t_list *list, char *var, t_list **prev)
 	return (NULL);
 }
 
-char	*add_replce_var(t_list **list, char *new_var)
+t_list	*add_replce_var(t_list **list, char *new_var)
 {
 	t_list	*list_var;
 	t_list	*prev;
@@ -69,13 +69,15 @@ int	cmd_export(t_data *data, t_args *args)
 		cpy_var2 = ft_strdup(args->value);
 		if (!cpy_var1 || ! cpy_var2)
 		{
-			ft_putstr_fd("minishell: export: malloc failed\n", 2); // change?
+			free(cpy_var1);
+			free(cpy_var2);
+			perror("minishell: export: malloc");
 			return (FAILURE);
 		}
 		if (add_replce_var(&data->local_vars, cpy_var1) == NULL)
-			return (FAILURE);
+			return (perror("minishell: export: malloc"), FAILURE);
 		if (add_replce_var(&data->env, cpy_var2) == NULL)
-			return (FAILURE);
+			return (perror("minishell: export: malloc"), FAILURE);
 		args = args->next;
 	}
 	return (SUCCESS);

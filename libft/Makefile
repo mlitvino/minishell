@@ -6,7 +6,7 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/31 17:29:24 by mlitvino          #+#    #+#              #
-#    Updated: 2025/03/27 22:25:44 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/04/23 17:12:17 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ SRC = \
 	ft_printf.c ft_putchar.c ft_puthex.c ft_putint.c ft_putptr.c ft_putu.c \
 	ft_putstr.c \
 	get_next_line.c get_next_line_utils.c \
-	ft_strcmp.c
+	ft_strcmp.c safe_atoi.c \
 BSRC = \
 	ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c \
 	ft_lstlast_bonus.c ft_lstadd_back_bonus.c ft_lstdelone_bonus.c \

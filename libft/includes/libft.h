@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 13:12:08 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/03/27 22:26:40 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:16:01 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,5 +91,7 @@ char	*free_buf(char ***buf_tab, int buf_len);
 char	**ft_init_buf(char **buf_tab, int *buf_len);
 char	*ft_read(char ***buf_tab, int fd, int tab_len, int *buf_len);
 char	**ft_realloc_buf_tab(char **old_tab, int *old_size, int new_size);
+
+long	safe_atoi(const char *str);
 
 #endif

@@ -6,13 +6,13 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:57:15 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/23 13:12:58 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/23 18:36:12 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_pipe	*init_pipes(int	pipes_count)
+t_pipe	*init_pipes(t_data *data, int	pipes_count)
 {
 	t_pipe	*pipes;
 	int		i;
@@ -20,17 +20,14 @@ t_pipe	*init_pipes(int	pipes_count)
 
 	pipes = malloc(sizeof(t_pipe) * pipes_count);
 	if (!pipes)
-	{
-		ft_putstr_fd("minishell: malloc failed\n", 2);
-		return (NULL);
-	}
+		clean_all(data, FAILURE, "minishell: pipe: malloc failed\n");
 	i = 0;
 	while (i < pipes_count)
 	{
 		if (pipe(pipes[i].pipe) != 0)
 		{
-			ft_putstr_fd("minishell: pipes creation failed\n", 2);
 			close_pipes(pipes, i);
+			clean_all(data, FAILURE, "minishell: pipes creation failed\n");
 			return (NULL);
 		}
 		i++;
@@ -53,10 +50,18 @@ void	close_pipes(t_pipe *pipes, int pipes_count)
 	pipes = NULL;
 }
 
-void	restart_fd(t_simple_cmd *cmd)
+void	restart_fd(t_data *data, t_simple_cmd *cmd)
 {
-	dup2(cmd->std_fd[STDIN], STDIN);
-	dup2(cmd->std_fd[STDOUT], STDOUT);
+	int	exit_code;
+
+	exit_code = 0;
+	exit_code |= dup2(cmd->std_fd[STDIN], STDIN);
+	exit_code |= dup2(cmd->std_fd[STDOUT], STDOUT);
+	if (exit_code != SUCCESS)
+	{
+		perror("minishell: dup2");
+		clean_all(data, FAILURE, NULL);
+	}
 	close(cmd->std_fd[STDIN]);
 	close(cmd->std_fd[STDOUT]);
 	cmd->std_fd[STDIN] = -1;
@@ -73,8 +78,8 @@ void	redirect_files(t_data *data, t_simple_cmd *cmd, t_redir *redir)
 		redir->fd = open(redir->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (redir->fd == -1)
 	{
-		perror("minishell: dup2");
-		clean_all(data, FAILURE, NULL);
+		perror("minishell: open");
+		//clean_all(data, FAILURE, NULL);
 	}
 	if (redir->type == RE_LESS || redir->type == RE_DOUBLE_LESS)
 		cmd->exit_code |= dup2(redir->fd, STDIN);
@@ -83,7 +88,7 @@ void	redirect_files(t_data *data, t_simple_cmd *cmd, t_redir *redir)
 	if (cmd->exit_code != 0)
 	{
 		perror("minishell: dup2");
-		clean_all(data, FAILURE, NULL);
+		//clean_all(data, FAILURE, NULL);
 	}
 }
 
@@ -103,7 +108,7 @@ void	redirect(t_data *data, t_simple_cmd *cmd, t_redir *redirs)
 	if (cmd->exit_code != 0)
 	{
 		perror("minishell: dup2");
-		clean_all(data, FAILURE, NULL);
+		//clean_all(data, FAILURE, NULL);
 	}
 	while (redirs)
 	{

@@ -6,11 +6,26 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 12:45:53 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/23 13:26:15 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/23 18:46:19 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_argv(char **argv)
+{
+	int	i;
+
+	i = 0;
+	while (argv && argv[i])
+	{
+		free(argv[i]);
+		argv[i] = NULL;
+		i++;
+	}
+	free(argv);
+	argv = NULL;
+}
 
 void	free_redir(t_redir *redir)
 {
@@ -93,11 +108,5 @@ int	clean_all(t_data *data, int	exit_code, char *err_message)
 		ft_putstr_fd(err_message, 2);
 	//else if (!err_message)
 	//	ft_putstr_fd("minishell: malloc failed\n", 2);
-
-	if (!err_message && exit_code == FAILURE && errno == SUCCESS)
-	{
-		// malloc message
-	}
-
 	exit(exit_code);
 }
