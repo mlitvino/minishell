@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 19:06:58 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/22 19:21:19 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:37:04 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,66 +74,78 @@ void	create_heredoc(t_data *data, t_redir *heredoc)
 	close(heredoc->fd);
 }
 
+t_redir	*get_next_heredoc(t_data *data)
+{
+	static t_pipe_line	*curr_pipeline = NULL;
+	static t_simple_cmd	*curr_cmd = NULL;
+	static t_redir		*curr_redir = NULL;
+
+	if (!curr_pipeline)
+		curr_pipeline = data->cmd_list->childs;
+	while (curr_pipeline)
+	{
+		if (!curr_cmd)
+			curr_cmd = curr_pipeline->child;
+		while(curr_cmd)
+		{
+			if (!curr_redir)
+				curr_redir = curr_cmd->redirections;
+			while (curr_redir)
+				if (curr_redir->type == RE_DOUBLE_LESS)
+					return (curr_redir);
+			curr_cmd = curr_cmd->next;
+		}
+		curr_pipeline = curr_pipeline->next;
+	}
+	curr_pipeline = NULL;
+	curr_cmd = NULL;
+	curr_redir = NULL;
+	return (NULL);
+}
+
 int	check_create_heredoc(t_data *data, t_pipe_line *pipeline)
 {
-	t_simple_cmd	*cmd;
-	t_redir			*redir;
 	pid_t			heredoc_pid;
-	int				status;
+	t_redir			*heredoc;
 
-	while (pipeline)
+	while (1)
 	{
-		cmd = pipeline->child;
-		while(cmd)
+		heredoc = get_next_heredoc(data);
+		if (heredoc)
 		{
-			redir = cmd->redirections;
-			while (redir)
-			{
-				if (redir->type == RE_DOUBLE_LESS)
-				{
-					if (signal(SIGINT, SIG_IGN) == SIG_ERR)
-						clean_all(data, FAILURE, "minishell: func signal failed\n");
-					create_heredoc(data, redir);
-					heredoc_pid = fork();
-					if (heredoc_pid == -1)
-						clean_all(data, FAILURE, NULL);
-					if (heredoc_pid == 0)
-						fill_heredoc(data, redir);
-					else
-						waitpid(0, &status, 0);
-					if (status != 0)
-						return (status);
-				}
-				redir = redir->next;
-			}
-			cmd = cmd->next;
+			if (signal(SIGINT, SIG_IGN) == SIG_ERR)
+				clean_all(data, FAILURE, "minishell: func signal failed\n");
+			create_heredoc(data, heredoc);
+			heredoc_pid = fork();
+			if (heredoc_pid == -1)
+				clean_all(data, FAILURE, NULL);
+			if (heredoc_pid == 0)
+				fill_heredoc(data, heredoc);
+			else
+				waitpid(0, &pipeline->exit_status, 0);
+			if (pipeline->exit_status != SUCCESS)
+				return (pipeline->exit_status);
 		}
-		pipeline = pipeline->next;
+		else
+			return (SUCCESS);
 	}
 	return (SUCCESS);
 }
 
 void	unlink_heredoc(t_data *data, t_pipe_line *pipeline)
 {
-	t_simple_cmd	*cmd;
-	t_redir			*redir;
+	t_redir *heredoc;
 
-	while (pipeline)
+	while (1)
 	{
-		cmd = pipeline->child;
-		while(cmd)
+		heredoc = get_next_heredoc(data);
+		if (heredoc)
 		{
-			redir = cmd->redirections;
-			while (redir)
-			{
-				if (redir->type == RE_DOUBLE_LESS)
-				{
-					unlink(redir->file_name);
-				}
-				redir = redir->next;
-			}
-			cmd = cmd->next;
+			unlink(heredoc->file_name);
 		}
-		pipeline = pipeline->next;
+		else
+		{
+			return ;
+		}
 	}
 }

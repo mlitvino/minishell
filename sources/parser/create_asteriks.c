@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_asteriks.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 23:45:15 by alfokin           #+#    #+#             */
-/*   Updated: 2025/04/14 00:18:07 by alfokin          ###   ########.fr       */
+/*   Updated: 2025/04/24 18:02:49 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,10 @@ t_pipe_line	*ft_init_pipe_line(void)
 	pipe_line->next = NULL;
 	pipe_line->child = NULL;
 	pipe_line->simple_cmd_count = 0;
+
+	// added by mlitivno
+	pipe_line->exit_status = SUCCESS;
+	pipe_line->pid_last_cmd = 0;
 	return (pipe_line);
 }
 

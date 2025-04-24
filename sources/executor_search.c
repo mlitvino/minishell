@@ -6,25 +6,27 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 13:12:48 by alfokin           #+#    #+#             */
-/*   Updated: 2025/04/23 19:31:46 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/24 16:48:02 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_access(t_data *data, char *pathname)
+int	check_access(t_data *data, t_simple_cmd *cmd)
 {
-	if (access(pathname, F_OK) != SUCCESS)
+	if (access(cmd->pathname, F_OK) != SUCCESS)
 	{
 		ft_putstr_fd("minishell: ", 2);
-		perror(pathname);
-		clean_all(data, CMD_NOT_FOUND, NULL);
+		perror(cmd->command);
+		cmd->exit_code = CMD_NOT_FOUND;
+		return (cmd->exit_code);
 	}
-	if (access(pathname, X_OK) != SUCCESS)
+	if (access(cmd->pathname, X_OK) != SUCCESS)
 	{
 		ft_putstr_fd("minishell: ", 2);
-		perror(pathname);
-		clean_all(data, CMD_NOT_EXEC, NULL);
+		perror(cmd->command);
+		cmd->exit_code = CMD_NOT_EXEC;
+		return (cmd->exit_code);
 	}
 	return (SUCCESS);
 }
@@ -39,7 +41,16 @@ int	check_path_dirs(t_data *data, t_simple_cmd *cmd, char **path_tab)
 			cmd->pathname = ft_strjoin(*path_tab, cmd->pathname);
 			if (!cmd->pathname)
 				clean_all(data, FAILURE, "minishell: command: malloc failed\n");
-			check_access(data, cmd->pathname);
+			if (access(cmd->pathname, F_OK) == SUCCESS)
+			{
+				if (check_access(data, cmd) == SUCCESS)
+					return (SUCCESS);
+				else
+				{
+					free_argv(path_tab);
+					clean_all(data, cmd->exit_code, NULL);
+				}
+			}
 			path_tab++;
 		}
 		return (CMD_NOT_FOUND);
@@ -52,7 +63,9 @@ int	search_exec(t_data *data, t_simple_cmd *cmd)
 
 	if (ft_strchr(cmd->command, '/') != NULL)
 	{
-		check_access(data, cmd->command);
+		cmd->pathname = cmd->command;
+		if (check_access(data, cmd) != SUCCESS)
+			clean_all(data, cmd->exit_code, NULL);
 	}
 	else
 	{
@@ -61,6 +74,7 @@ int	search_exec(t_data *data, t_simple_cmd *cmd)
 		if (!path_tab)
 			clean_all(data, FAILURE, "minishell: command: malloc failed\n");
 		check_path_dirs(data, cmd, path_tab);
+		free_argv(path_tab);
 	}
 	return (SUCCESS);
 }

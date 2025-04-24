@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:57:15 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/23 18:36:12 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/24 18:22:14 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,12 @@ void	close_pipes(t_pipe *pipes, int pipes_count)
 	i = 0;
 	while (pipes && i < pipes_count)
 	{
-		close(pipes[i].pipe[STDIN]);
-		close(pipes[i].pipe[STDOUT]);
+		if (pipes[i].pipe[STDIN] != -1)
+			close(pipes[i].pipe[STDIN]);
+		pipes[i].pipe[STDIN] = -1;
+		if (pipes[i].pipe[STDOUT] != -1)
+			close(pipes[i].pipe[STDOUT]);
+		pipes[i].pipe[STDOUT] = -1;
 		i++;
 	}
 	free(pipes);
@@ -57,7 +61,7 @@ void	restart_fd(t_data *data, t_simple_cmd *cmd)
 	exit_code = 0;
 	exit_code |= dup2(cmd->std_fd[STDIN], STDIN);
 	exit_code |= dup2(cmd->std_fd[STDOUT], STDOUT);
-	if (exit_code != SUCCESS)
+	if (exit_code == -1)
 	{
 		perror("minishell: dup2");
 		clean_all(data, FAILURE, NULL);
@@ -85,7 +89,7 @@ void	redirect_files(t_data *data, t_simple_cmd *cmd, t_redir *redir)
 		cmd->exit_code |= dup2(redir->fd, STDIN);
 	else if (redir->type == RE_GREAT || redir->type == RE_DOUBLE_GREAT)
 		cmd->exit_code |= dup2(redir->fd, STDOUT);
-	if (cmd->exit_code != 0)
+	if (cmd->exit_code == -1)
 	{
 		perror("minishell: dup2");
 		//clean_all(data, FAILURE, NULL);
@@ -96,7 +100,7 @@ void	redirect(t_data *data, t_simple_cmd *cmd, t_redir *redirs)
 {
 	cmd->std_fd[STDIN] = dup(STDIN);
 	cmd->std_fd[STDOUT] = dup(STDOUT);
-	if (cmd->std_fd[STDIN] != 0 || cmd->std_fd[STDOUT] != 0)
+	if (cmd->std_fd[STDIN] == -1 || cmd->std_fd[STDOUT] == -1)
 	{
 		perror("minishell: dup");
 		clean_all(data, FAILURE, NULL);

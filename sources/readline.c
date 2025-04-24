@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/23 19:36:50 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:55:28 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ void	init_data(t_data *data, char **sys_env)
 	data->cmd_list = NULL;
 	data->local_vars = NULL;
 	data->env = NULL;
-	if (init_sigs() == FAILURE)
-		clean_all(data, FAILURE, "minishell: signals init failed\n");
+	data->exit_var = 0;
+	init_sigs(data);
 	set_builtins(data);
 	cpy_env(sys_env, data);
 }
@@ -64,7 +64,7 @@ void	read_input(int argc, char *argv[], char *env[])
 {
 	t_data data;
 
-	init_data(&data, env); // Change error hanlding to clean_all
+	init_data(&data, env);
 	while (1)
 	{
 		data.read_line = readline("minishell$ ");
@@ -74,17 +74,21 @@ void	read_input(int argc, char *argv[], char *env[])
 		add_history(data.read_line);
 
 		t_token *token = ft_lexer(data.read_line);
-		show_token(token);
+		//show_token(token); // print
 
 		int status = 0;
 		data.cmd_list = ft_parser(token, &status);
-		show_cmd_list(data.cmd_list);
+		//show_cmd_list(data.cmd_list); //print
 
-		printf("\nEXECUTOR:\n"); // del
+		//printf("\nEXECUTOR:\n"); // print
 
 		executor(&data, data.cmd_list);
 
+
 		free_cmd_list(data.cmd_list);
+		data.cmd_list = NULL;
+
 		free(data.read_line);
+		data.read_line = NULL;
 	}
 }

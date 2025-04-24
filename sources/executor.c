@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:03:21 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/23 18:47:03 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/24 18:24:45 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	run_cmd(t_data *data, t_simple_cmd *cmd)
 	{
 		free_argv(env);
 		free_argv(argv);
-		ft_putstr_fd(cmd->cmd_count, 2);
+		ft_putstr_fd(cmd->command, 2);
 		clean_all(data, FAILURE, ": malloc failed\n");
 	}
 	execve(cmd->pathname, argv, env);
@@ -33,7 +33,6 @@ void	run_cmd(t_data *data, t_simple_cmd *cmd)
 
 int	exec_simpl_cmd(t_data *data, t_simple_cmd *cmd)
 {
-	pid_t	chld_pid;
 	int		builtin_i;
 
 	builtin_i = is_builtin(cmd->builtin_arr, cmd->command);
@@ -41,23 +40,24 @@ int	exec_simpl_cmd(t_data *data, t_simple_cmd *cmd)
 		cmd->exit_code = cmd->builtin_arr[builtin_i].func(data, cmd->args);
 	else
 	{
-		chld_pid = fork();
-		if (chld_pid == -1)
+		cmd->cmd_pid = fork();
+		if (cmd->cmd_pid == -1)
 		{
 			perror("minishell: fork");
-			cmd->exit_code = CRIT_ERR;
-			return (CRIT_ERR);
+			return (FAILURE);
 		}
-		if (chld_pid == 0)
+		if (cmd->cmd_pid == 0)
 		{
 			close(cmd->std_fd[STDIN]);
+			cmd->std_fd[STDIN] = -1;
 			close(cmd->std_fd[STDOUT]);
+			cmd->std_fd[STDIN] = -1;
 			close_pipes(cmd->pipes, cmd->cmd_count - 1);
 			if (search_exec(data, cmd) == SUCCESS)
 				run_cmd(data, cmd);
 		}
 	}
-	return (cmd->exit_code);
+	return (SUCCESS);
 }
 
 void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count)
@@ -77,19 +77,19 @@ void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count)
 		curr_cmd->cmd_count = cmd_count;
 		curr_cmd->cmd_i = i;
 		curr_cmd->pipes = pipes;
-		curr_cmd->exit_code = 0;
+		curr_cmd->exit_code = SUCCESS;
 		redirect(data, curr_cmd, curr_cmd->redirections);
-		if (exec_simpl_cmd(data, curr_cmd) == CRIT_ERR)
-			break ;
+		exec_simpl_cmd(data, curr_cmd);
 		restart_fd(data, curr_cmd);
-		curr_cmd = curr_cmd->next;
+		if (curr_cmd->next)
+			curr_cmd = curr_cmd->next;
 		i++;
 	}
-	while (waitpid(0, 0, 0) != -1)
+	while (waitpid(curr_cmd->cmd_pid, &curr_cmd->exit_code, 0) != -1
+		&& waitpid(0, 0, 0) != -1)
 		{ }
+	updte_exitcode_var(data, curr_cmd->exit_code);
 	close_pipes(pipes, cmd_count - 1);
-	if (curr_cmd->exit_code == CRIT_ERR)
-		clean_all(data, FAILURE, NULL);
 }
 
 int	executor(t_data *data, t_cmd_list *cmd_list)
@@ -97,9 +97,8 @@ int	executor(t_data *data, t_cmd_list *cmd_list)
 	t_pipe_line	*pipeline;
 
 	pipeline = cmd_list->childs;
-	pipeline->exit_status = check_create_heredoc(data, pipeline);
-	if (pipeline->exit_status == FAILURE)
-		clean_all(data, FAILURE, "minishell: heredoc failed");
+	if (check_create_heredoc(data, pipeline) != SUCCESS)
+		clean_all(data, pipeline->exit_status, "minishell: heredoc failed");
 	if (pipeline->exit_status != TERM_SIGINT)
 	{
 		while (pipeline)

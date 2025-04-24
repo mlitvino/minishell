@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:18:03 by codespace         #+#    #+#             */
-/*   Updated: 2025/04/15 15:58:01 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/24 18:08:31 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,11 @@ t_redir	*ft_create_redir(t_token **tokens, int index)
 	(*tokens) = (*tokens)->next;
 	redir->file_name = ft_strdup((*tokens)->value);
 	(*tokens) = (*tokens)->next;
+
+	// added by mlitvino
+	redir->fd = -1;
+	redir->delim = NULL;
+	redir->inside_quotes = 0;
 	return (redir);
 }
 

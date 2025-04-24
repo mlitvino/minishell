@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 23:49:54 by alfokin           #+#    #+#             */
-/*   Updated: 2025/04/15 18:13:57 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/24 18:05:48 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,19 @@ t_simple_cmd	*ft_init_simple_cmd(void)
 	cmd->next = NULL;
 	cmd->args = NULL;
 	cmd->redirections = NULL;
+
+	// added by mlitivno
+	cmd->inside_quotes = 0;
+
+	cmd->exit_code = SUCCESS;
+	cmd->pathname = NULL;
+	cmd->pipes = NULL;
+	cmd->cmd_i = 0;
+	cmd->cmd_count = 0;
+	cmd->builtin_arr = NULL;
+	cmd->cmd_pid = -1;
+	cmd->std_fd[STDIN] = -1;
+	cmd->std_fd[STDOUT] = -1;
 	return (cmd);
 }
 

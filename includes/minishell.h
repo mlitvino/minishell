@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/23 19:23:39 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/24 14:56:10 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ typedef struct s_redir
 	struct s_redir	*next;
 
 	int				fd;
-	char			*delim;
+	char			*delim; // delete, delim == file_name
 }				t_redir;
 
 typedef struct s_args
@@ -143,8 +143,9 @@ typedef struct s_simple_cmd
 	t_pipe				*pipes;
 	int					cmd_i;
 	int					cmd_count;
-	t_builtin	*builtin_arr;
+	t_builtin			*builtin_arr;
 	int					std_fd[2];
+	pid_t				cmd_pid;
 }				t_simple_cmd;
 
 typedef struct s_pipe_line
@@ -170,6 +171,8 @@ typedef struct s_data
 
 	t_list		*env;
 	t_list		*local_vars;
+
+	int			exit_var;
 
 	char		*read_line;
 }	t_data;
@@ -209,35 +212,37 @@ extern volatile sig_atomic_t g_signal_received;
 // }	t_cmd_tab;
 
 // readline.c
-int			is_builtin(t_builtin *arr, char	*cmd_name);
-void		set_builtins(t_data *data);
-void		read_input(int argc, char *argv[], char *env[]);
+int		is_builtin(t_builtin *arr, char	*cmd_name);
+void	set_builtins(t_data *data);
+void	read_input(int argc, char *argv[], char *env[]);
 
 // heredoc.c
 void	hd_sig_hanlder(int sig);
 void	fill_heredoc(t_data *data, t_redir *heredoc);
 void	create_heredoc(t_data *data, t_redir *heredoc);
+t_redir	*get_next_heredoc(t_data *data);
 int		check_create_heredoc(t_data *data, t_pipe_line *pipeline);
 void	unlink_heredoc(t_data *data, t_pipe_line *pipeline);
 
 // signals.c
 void	sig_handler(int	sig, siginfo_t *info, void	*context);
-int		init_sigs();
+void	init_sigs(t_data *data);
 
 // utils_clean.c
 void	free_argv(char **argv);
 void	free_redir(t_redir *redir);
 void	free_args(t_args *args);
 void	free_cmd_list(t_cmd_list *cmd_list);
-int	clean_all(t_data *data, int	exit_code, char *err_message);
+int		clean_all(t_data *data, int	exit_code, char *err_message);
 
 // utils.c
+int	args_size(t_args *args);
 char	**convrt_args_to_argv(t_args *args, char *cmd_name);
 char	**convrt_lst_to_argv(t_list *lst);
 char	*expand_var(t_data *data, char *var);
+void	updte_exitcode_var(t_data *data, int exit_code);
 
 /*------------------------------EXECUTOR--------------------------------------*/
-
 
 // executor_redirect.c
 t_pipe	*init_pipes(t_data *data, int	cmd_count);
@@ -247,6 +252,7 @@ void	redirect_files(t_data *data, t_simple_cmd *cmd, t_redir *redir);
 void	redirect(t_data *data, t_simple_cmd *cmd, t_redir *redirs);
 
 // executor_search.c
+int		check_access(t_data *data, t_simple_cmd *cmd);
 int		check_path_dirs(t_data *data, t_simple_cmd *cmd, char **path_tab);
 int		search_exec(t_data *data, t_simple_cmd *cmd);
 
@@ -265,7 +271,7 @@ char	*get_home_path(t_data *data);
 int		cmd_cd(t_data *data, t_args *args);
 // cmd_echo.c
 int		is_new_line(char *option);
-int		print_args(t_args *args);
+int		print_args(t_data *data, t_args *args);
 int		cmd_echo(t_data *data, t_args *args);
 // cmd_env.c
 void	cpy_env(char *sys_env[], t_data *data);

@@ -6,7 +6,7 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/31 17:29:24 by mlitvino          #+#    #+#              #
-#    Updated: 2025/04/23 17:12:17 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/04/24 13:48:39 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,11 +32,11 @@ SRC = \
 	ft_printf.c ft_putchar.c ft_puthex.c ft_putint.c ft_putptr.c ft_putu.c \
 	ft_putstr.c \
 	get_next_line.c get_next_line_utils.c \
-	ft_strcmp.c safe_atoi.c \
+	ft_strcmp.c safe_atoi.c
 BSRC = \
 	ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c \
 	ft_lstlast_bonus.c ft_lstadd_back_bonus.c ft_lstdelone_bonus.c \
-	ft_lstclear_bonus.c ft_lstiter_bonus.c ft_lstmap_bonus.c
+	ft_lstclear_bonus.c ft_lstiter_bonus.c ft_lstmap_bonus.c 
 INCLD = $(INCLD_DIR)/libft.h
 
 OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)

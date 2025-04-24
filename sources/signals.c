@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 16:38:12 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/22 15:11:50 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:41:53 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 volatile sig_atomic_t	g_signal_received = 0;
 
-void	sig_handler(int	sig, siginfo_t *info, void	*context)
+void	sig_handler(int	sig, siginfo_t *info, void *context)
 {
 	if (sig == SIGINT)
 	{
@@ -26,7 +26,7 @@ void	sig_handler(int	sig, siginfo_t *info, void	*context)
 	}
 }
 
-int	init_sigs(void)
+void	init_sigs(t_data *data)
 {
 	struct sigaction	sa;
 	struct sigaction	ig;
@@ -38,8 +38,9 @@ int	init_sigs(void)
 	return_code |= sigemptyset(&sa.sa_mask);
 	return_code |= sigaddset(&sa.sa_mask, SIGINT);
 	return_code |= sigaction(SIGINT, &sa, NULL);
-	signal(SIGQUIT, SIG_IGN);
 	if (return_code != 0 || signal(SIGQUIT, SIG_IGN) == SIG_ERR)
-		return (FAILURE);
-	return (SUCCESS);
+	{
+		perror("minishell: init_sigs");
+		clean_all(data, FAILURE, NULL);
+	}
 }
