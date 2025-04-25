@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:57:15 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/24 18:22:14 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/25 18:54:44 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,44 +14,43 @@
 
 t_pipe	*init_pipes(t_data *data, int	pipes_count)
 {
-	t_pipe	*pipes;
 	int		i;
 	int		p[2];
 
-	pipes = malloc(sizeof(t_pipe) * pipes_count);
-	if (!pipes)
+	data->pipes = malloc(sizeof(t_pipe) * pipes_count);
+	if (!data->pipes)
 		clean_all(data, FAILURE, "minishell: pipe: malloc failed\n");
 	i = 0;
 	while (i < pipes_count)
 	{
-		if (pipe(pipes[i].pipe) != 0)
+		if (pipe(data->pipes[i].pipe) != 0)
 		{
-			close_pipes(pipes, i);
+			close_pipes(data, i);
 			clean_all(data, FAILURE, "minishell: pipes creation failed\n");
 			return (NULL);
 		}
 		i++;
 	}
-	return (pipes);
+	return (NULL);
 }
 
-void	close_pipes(t_pipe *pipes, int pipes_count)
+void	close_pipes(t_data	*data, int pipes_count)
 {
 	int	i;
 
 	i = 0;
-	while (pipes && i < pipes_count)
+	while (data->pipes && i < pipes_count)
 	{
-		if (pipes[i].pipe[STDIN] != -1)
-			close(pipes[i].pipe[STDIN]);
-		pipes[i].pipe[STDIN] = -1;
-		if (pipes[i].pipe[STDOUT] != -1)
-			close(pipes[i].pipe[STDOUT]);
-		pipes[i].pipe[STDOUT] = -1;
+		if (data->pipes[i].pipe[STDIN] != -1)
+			close(data->pipes[i].pipe[STDIN]);
+		data->pipes[i].pipe[STDIN] = -1;
+		if (data->pipes[i].pipe[STDOUT] != -1)
+			close(data->pipes[i].pipe[STDOUT]);
+		data->pipes[i].pipe[STDOUT] = -1;
 		i++;
 	}
-	free(pipes);
-	pipes = NULL;
+	free(data->pipes);
+	data->pipes = NULL;
 }
 
 void	restart_fd(t_data *data, t_simple_cmd *cmd)
@@ -106,14 +105,23 @@ void	redirect(t_data *data, t_simple_cmd *cmd, t_redir *redirs)
 		clean_all(data, FAILURE, NULL);
 	}
 	if (cmd->cmd_i != 0)
-		cmd->exit_code |= dup2(cmd->pipes[cmd->cmd_i - 1].pipe[STDIN], STDIN);
+		cmd->exit_code |= dup2(data->pipes[cmd->cmd_i - 1].pipe[STDIN], STDIN);
 	if (cmd->cmd_i != cmd->cmd_count - 1)
-		cmd->exit_code |= dup2(cmd->pipes[cmd->cmd_i].pipe[STDOUT], STDOUT);
-	if (cmd->exit_code != 0)
+		cmd->exit_code |= dup2(data->pipes[cmd->cmd_i].pipe[STDOUT], STDOUT);
+	if (cmd->exit_code == -1)
 	{
 		perror("minishell: dup2");
 		//clean_all(data, FAILURE, NULL);
 	}
+
+
+	// if (ft_strcmp(cmd->command, "sort") == 0)
+	// {
+	// 	printf("PIPE %s\n", get_next_line(STDIN)); // del
+	// }
+	// printf("WHOIAM %s\n", cmd->command); //del
+
+
 	while (redirs)
 	{
 		redirect_files(data, cmd, redirs);

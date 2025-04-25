@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:03:21 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/24 18:24:45 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/25 19:03:18 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,23 +52,22 @@ int	exec_simpl_cmd(t_data *data, t_simple_cmd *cmd)
 			cmd->std_fd[STDIN] = -1;
 			close(cmd->std_fd[STDOUT]);
 			cmd->std_fd[STDIN] = -1;
-			close_pipes(cmd->pipes, cmd->cmd_count - 1);
+			close_pipes(data, cmd->cmd_count - 1);
 			if (search_exec(data, cmd) == SUCCESS)
 				run_cmd(data, cmd);
 		}
 	}
+	close(data->pipes[cmd->cmd_i].pipe[STDOUT]); // improve
 	return (SUCCESS);
 }
 
 void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count)
 {
 	t_simple_cmd	*curr_cmd;
-	t_pipe			*pipes;
 	int				i;
 
-	pipes = NULL;
 	if (cmd_count > 1)
-		pipes = init_pipes(data, cmd_count - 1);
+		init_pipes(data, cmd_count - 1);
 	curr_cmd = pipeline->child;
 	i = 0;
 	while (i < pipeline->simple_cmd_count)
@@ -76,7 +75,6 @@ void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count)
 		curr_cmd->builtin_arr = data->builtin_arr;
 		curr_cmd->cmd_count = cmd_count;
 		curr_cmd->cmd_i = i;
-		curr_cmd->pipes = pipes;
 		curr_cmd->exit_code = SUCCESS;
 		redirect(data, curr_cmd, curr_cmd->redirections);
 		exec_simpl_cmd(data, curr_cmd);
@@ -85,11 +83,11 @@ void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count)
 			curr_cmd = curr_cmd->next;
 		i++;
 	}
-	while (waitpid(curr_cmd->cmd_pid, &curr_cmd->exit_code, 0) != -1
+	data->exit_var = curr_cmd->exit_code;
+	while (waitpid(curr_cmd->cmd_pid, &data->exit_var, 0) != -1
 		&& waitpid(0, 0, 0) != -1)
 		{ }
-	updte_exitcode_var(data, curr_cmd->exit_code);
-	close_pipes(pipes, cmd_count - 1);
+	close_pipes(data, cmd_count - 1);
 }
 
 int	executor(t_data *data, t_cmd_list *cmd_list)

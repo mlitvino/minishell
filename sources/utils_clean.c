@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 12:45:53 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/24 18:34:33 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/25 18:53:28 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,18 +63,22 @@ void	free_args(t_args *args)
 	}
 }
 
-void	free_cmd_list(t_cmd_list *cmd_list)
+void	free_cmd_list(t_data *data, t_cmd_list *cmd_list)
 {
 	t_pipe_line		*pipeline;
 	t_simple_cmd	*cmd;
 	void			*prev_ptr;
 
+	if (!cmd_list)
+		return ;
 	pipeline = cmd_list->childs;
 	while (pipeline)
 	{
 		cmd = pipeline->child;
 		while (cmd)
 		{
+			close_pipes(data, cmd->cmd_count - 1); //cahgne place
+
 			free_args(cmd->args);
 			free_redir(cmd->redirections);
 
@@ -88,8 +92,6 @@ void	free_cmd_list(t_cmd_list *cmd_list)
 
 			free(cmd->pathname);
 			cmd->pathname = NULL;
-
-			close_pipes(cmd->pipes, cmd->cmd_count - 1);
 
 			prev_ptr = cmd;
 			cmd = cmd->next;
@@ -121,7 +123,7 @@ int	clean_all(t_data *data, int	exit_code, char *err_message)
 
 	if (data->cmd_list)
 	{
-		free_cmd_list(data->cmd_list);
+		free_cmd_list(data, data->cmd_list);
 	}
 	if (err_message)
 		ft_putstr_fd(err_message, 2);

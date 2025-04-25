@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/24 14:56:10 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/25 18:52:02 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,6 @@ typedef struct s_simple_cmd
 
 	int					exit_code;
 	char				*pathname;
-	t_pipe				*pipes;
 	int					cmd_i;
 	int					cmd_count;
 	t_builtin			*builtin_arr;
@@ -168,6 +167,7 @@ typedef struct s_data
 {
 	t_cmd_list	*cmd_list;
 	t_builtin	*builtin_arr;
+	t_pipe		*pipes;
 
 	t_list		*env;
 	t_list		*local_vars;
@@ -232,7 +232,7 @@ void	init_sigs(t_data *data);
 void	free_argv(char **argv);
 void	free_redir(t_redir *redir);
 void	free_args(t_args *args);
-void	free_cmd_list(t_cmd_list *cmd_list);
+void	free_cmd_list(t_data *data, t_cmd_list *cmd_list);
 int		clean_all(t_data *data, int	exit_code, char *err_message);
 
 // utils.c
@@ -246,7 +246,7 @@ void	updte_exitcode_var(t_data *data, int exit_code);
 
 // executor_redirect.c
 t_pipe	*init_pipes(t_data *data, int	cmd_count);
-void	close_pipes(t_pipe *pipes, int pipes_count);
+void	close_pipes(t_data *data, int pipes_count);
 void	restart_fd(t_data *data, t_simple_cmd *cmd);
 void	redirect_files(t_data *data, t_simple_cmd *cmd, t_redir *redir);
 void	redirect(t_data *data, t_simple_cmd *cmd, t_redir *redirs);
@@ -277,10 +277,12 @@ int		cmd_echo(t_data *data, t_args *args);
 void	cpy_env(char *sys_env[], t_data *data);
 int		cmd_env(t_data *data, t_args *args);
 // cmd_exit.c
+char	exit_atoi(const char *str);
 int		cmd_exit(t_data *data, t_args *args);
 // cmd_export.c
 t_list	*find_var(t_list *list, char *var, t_list **prev);
 t_list	*add_replce_var(t_list **list, char *new_var);
+int		check_export_arg(t_args *args, int *exit_code);
 int		cmd_export(t_data *data, t_args *args);
 // cmd_pwd.c
 int		cmd_pwd(t_data *data, t_args *args);

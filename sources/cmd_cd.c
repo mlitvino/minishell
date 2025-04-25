@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:14:50 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/23 17:04:39 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/25 16:14:34 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,9 @@ int	cmd_cd(t_data *data, t_args *args)
 
 	path = NULL;
 	if (args && args->next)
-		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
+		return (ft_putstr_fd("minishell: cd: too many arguments\n", 2), FAILURE);
 	else if (args)
-		path = args->value;
+		path = ft_strdup(args->value);
 	else if (!args)
 		path = get_home_path(data);
 	if (!path)
@@ -119,7 +119,7 @@ int	cmd_cd(t_data *data, t_args *args)
 	if (chdir(path) != SUCCESS)
 	{
 		free(path);
-		perror("minishell: cd:");
+		perror("minishell: cd");
 		return (FAILURE);
 	}
 	if (update_oldpwd(data, data->env) != SUCCESS)

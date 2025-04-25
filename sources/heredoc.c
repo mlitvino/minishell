@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 19:06:58 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/24 13:37:04 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/25 18:24:52 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,11 @@ t_redir	*get_next_heredoc(t_data *data)
 			if (!curr_redir)
 				curr_redir = curr_cmd->redirections;
 			while (curr_redir)
+			{
 				if (curr_redir->type == RE_DOUBLE_LESS)
 					return (curr_redir);
+				curr_redir = curr_redir->next;
+			}
 			curr_cmd = curr_cmd->next;
 		}
 		curr_pipeline = curr_pipeline->next;
