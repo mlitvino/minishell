@@ -32,7 +32,7 @@ void	ft_destoy_token_list(t_token *tokens_list)
 		tokens_list->value = NULL;
 		free(tokens_list);
 		tokens_list = NULL;
-		//write(1, CYAN, ft_strlen(CYAN));
+		// write(1, CYAN, ft_strlen(CYAN));
 	}
 }
 
@@ -48,8 +48,8 @@ t_token	*first_token(void)
 	return (new_token);
 }
 
-void	add_token(t_token *token_list, t_token_type type,
-			   char *content, int index)
+void	add_token(t_token *token_list, t_token_type type, char *content,
+		int index)
 {
 	t_token	*tmp;
 

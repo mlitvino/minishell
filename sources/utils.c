@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:30:49 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/24 16:43:41 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/26 19:56:02 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,20 +88,16 @@ char	*expand_var(t_data *data, char *key_var)
 	return (NULL);
 }
 
-void	updte_exitcode_var(t_data *data, int exit_code)
+int	is_builtin(t_builtin *arr, char *cmd_name)
 {
-	char	*str_code;
-	char	*var_code;
+	int	i;
 
-	str_code = ft_itoa(exit_code);
-	var_code = ft_strjoin("?=", str_code);
-	if (!str_code || !var_code)
+	i = 0;
+	while (arr && arr[i].name)
 	{
-		free(str_code);
-		free(var_code);
-		clean_all(data, FAILURE, "minishell: malloc failed\n");
+		if (ft_strcmp(arr[i].name, cmd_name) == 0)
+			return (i);
+		i++;
 	}
-	free(str_code);
-	if (add_replce_var(&data->local_vars, var_code) == NULL)
-		clean_all(data, FAILURE, "minishell: malloc failed\n");
+	return (-1);
 }

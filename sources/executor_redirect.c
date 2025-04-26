@@ -12,10 +12,10 @@
 
 #include "minishell.h"
 
-t_pipe	*init_pipes(t_data *data, int	pipes_count)
+t_pipe	*init_pipes(t_data *data, int pipes_count)
 {
-	int		i;
-	int		p[2];
+	int	i;
+	int	p[2];
 
 	data->pipes = malloc(sizeof(t_pipe) * pipes_count);
 	if (!data->pipes)
@@ -34,7 +34,7 @@ t_pipe	*init_pipes(t_data *data, int	pipes_count)
 	return (NULL);
 }
 
-void	close_pipes(t_data	*data, int pipes_count)
+void	close_pipes(t_data *data, int pipes_count)
 {
 	int	i;
 

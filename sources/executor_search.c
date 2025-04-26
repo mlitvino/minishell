@@ -46,27 +46,27 @@ int	check_path_dirs(t_data *data, t_simple_cmd *cmd, char **path_tab)
 {
 	char	*temp;
 
-		while (*path_tab)
+	while (*path_tab)
+	{
+		temp = ft_strjoin("/", cmd->command);
+		if (!temp)
+			clean_all(data, FAILURE, "minishell: command: malloc failed\n");
+		cmd->pathname = ft_strjoin(*path_tab, temp);
+		if (!cmd->pathname)
+			clean_all(data, FAILURE, "minishell: command: malloc failed\n");
+		if (access(cmd->pathname, F_OK) == SUCCESS)
 		{
-			temp = ft_strjoin("/", cmd->command);
-			if (!temp)
-				clean_all(data, FAILURE, "minishell: command: malloc failed\n");
-			cmd->pathname = ft_strjoin(*path_tab, temp);
-			if (!cmd->pathname)
-				clean_all(data, FAILURE, "minishell: command: malloc failed\n");
-			if (access(cmd->pathname, F_OK) == SUCCESS)
+			if (check_access(data, cmd) == SUCCESS)
+				return (SUCCESS);
+			else
 			{
-				if (check_access(data, cmd) == SUCCESS)
-					return (SUCCESS);
-				else
-				{
-					free_argv(path_tab);
-					clean_all(data, cmd->exit_code, NULL);
-				}
+				free_argv(path_tab);
+				clean_all(data, cmd->exit_code, NULL);
 			}
-			path_tab++;
 		}
-		return (CMD_NOT_FOUND);
+		path_tab++;
+	}
+	return (CMD_NOT_FOUND);
 }
 
 int	search_exec(t_data *data, t_simple_cmd *cmd)

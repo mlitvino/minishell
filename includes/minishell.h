@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/26 18:18:54 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/26 19:43:50 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,38 +183,10 @@ typedef struct s_data
 
 extern volatile sig_atomic_t g_signal_received;
 
-// typedef struct s_file
-// {
-// 	char	*path_name;
-// 	int		fd;
-// 	int		mod;
-// }	t_file;
-
-// typedef struct s_cmd
-// {
-// 	char	*cmd_path;
-// 	char	*cmd_name;
-// 	int		cmd_num;
-// 	char	*optns;
-// 	int		wildcard;
-// 	int		is_builtin;
-// 	char	**arg_list; // cmd_name + optns + args
-// 	t_file	*infile;
-// 	t_file	*outfile;
-// }	t_cmd;
-
-// typedef struct s_cmd_tab
-// {
-// 	t_cmd	*cmds;
-// 	int		cmd_count;
-// 	int		exit_code;
-// 	t_pipe	*pipes;
-// }	t_cmd_tab;
-
-// readline.c
+// inits.c
 int		is_builtin(t_builtin *arr, char	*cmd_name);
-void	set_builtins(t_data *data);
-void	read_input(int argc, char *argv[], char *env[]);
+void	init_builtins(t_data *data);
+void	init_data(t_data *data, char **sys_env);
 
 // heredoc.c
 void	hd_sig_hanlder(int sig);
@@ -240,7 +212,7 @@ int		args_size(t_args *args);
 char	**convrt_args_to_argv(t_args *args, char *cmd_name);
 char	**convrt_lst_to_argv(t_list *lst);
 char	*expand_var(t_data *data, char *var);
-void	updte_exitcode_var(t_data *data, int exit_code);
+int		is_builtin(t_builtin *arr, char	*cmd_name);
 
 /*------------------------------EXECUTOR--------------------------------------*/
 
@@ -277,7 +249,7 @@ int		is_new_line(char *option);
 int		print_args(t_data *data, t_args *args);
 int		cmd_echo(t_data *data, t_args *args);
 // cmd_env.c
-void	cpy_env(char *sys_env[], t_data *data);
+void	init_env(char *sys_env[], t_data *data);
 int		cmd_env(t_data *data, t_args *args);
 // cmd_exit.c
 char	exit_atoi(const char *str);

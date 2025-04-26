@@ -6,13 +6,13 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 16:43:02 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/23 16:48:58 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:32:04 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	cpy_env(char *sys_env[], t_data *data)
+void	init_env(char *sys_env[], t_data *data)
 {
 	int			i;
 	t_list		*new_env;

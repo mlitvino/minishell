@@ -14,12 +14,12 @@
 
 void	hd_sig_hanlder(int sig)
 {
-		printf("\n");
-		rl_replace_line("", 0);
-		rl_redisplay();
-		rl_on_new_line();
-		g_signal_received = TERM_SIGINT;
-		close(STDIN);
+	printf("\n");
+	rl_replace_line("", 0);
+	rl_redisplay();
+	rl_on_new_line();
+	g_signal_received = TERM_SIGINT;
+	close(STDIN);
 }
 
 void	fill_heredoc(t_data *data, t_redir *heredoc)
@@ -37,7 +37,8 @@ void	fill_heredoc(t_data *data, t_redir *heredoc)
 			{
 				dup2(STDOUT, STDERR);
 				printf("minishell: warning: here-document delimited \
-					by end-of-file (wanted `%s')", heredoc->delim);
+					by end-of-file (wanted `%s')",
+						heredoc->delim);
 			}
 			clean_all(data, g_signal_received, NULL);
 		}
@@ -66,7 +67,7 @@ void	create_heredoc(t_data *data, t_redir *heredoc)
 			clean_all(data, FAILURE, "minishell: malloc failed\n");
 		heredoc->fd = open(heredoc->file_name, O_RDWR | O_CREAT | O_EXCL, 0644);
 		if (heredoc->fd != -1)
-			break;
+			break ;
 		else if (heredoc->fd == -1 && errno != EEXIST)
 			clean_all(data, FAILURE, strerror(errno));
 		i++;
@@ -86,7 +87,7 @@ t_redir	*get_next_heredoc(t_data *data)
 	{
 		if (!curr_cmd)
 			curr_cmd = curr_pipeline->child;
-		while(curr_cmd)
+		while (curr_cmd)
 		{
 			if (!curr_redir)
 				curr_redir = curr_cmd->redirections;
@@ -108,8 +109,8 @@ t_redir	*get_next_heredoc(t_data *data)
 
 int	check_create_heredoc(t_data *data, t_pipe_line *pipeline)
 {
-	pid_t			heredoc_pid;
-	t_redir			*heredoc;
+	pid_t	heredoc_pid;
+	t_redir	*heredoc;
 
 	while (1)
 	{
@@ -137,7 +138,7 @@ int	check_create_heredoc(t_data *data, t_pipe_line *pipeline)
 
 void	unlink_heredoc(t_data *data, t_pipe_line *pipeline)
 {
-	t_redir *heredoc;
+	t_redir	*heredoc;
 
 	while (1)
 	{

@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:03:21 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/26 18:18:46 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/26 20:06:29 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	execve_cmd(t_data *data, t_simple_cmd *cmd)
 
 int	exec_simpl_cmd(t_data *data, t_simple_cmd *cmd)
 {
-	int		builtin_i;
+	int	builtin_i;
 
 	builtin_i = is_builtin(cmd->builtin_arr, cmd->command);
 	if (builtin_i != -1)
@@ -89,18 +89,17 @@ void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count)
 int	executor(t_data *data, t_cmd_list *cmd_list)
 {
 	t_pipe_line	*pipeline;
+	int			exit_code;
 
 	pipeline = cmd_list->childs;
-	if (check_create_heredoc(data, pipeline) != SUCCESS)
+	exit_code = check_create_heredoc(data, pipeline);
+	if (exit_code != SUCCESS)
 		clean_all(data, pipeline->exit_status, "minishell: heredoc failed");
-	if (pipeline->exit_status != TERM_SIGINT)
+	while (exit_code == SUCCESS && pipeline)
 	{
-		while (pipeline)
-		{
-			exec_pipeline(data, pipeline, pipeline->simple_cmd_count);
-			pipeline = pipeline->next;
-		}
+		exec_pipeline(data, pipeline, pipeline->simple_cmd_count);
+		pipeline = pipeline->next;
 	}
 	unlink_heredoc(data, pipeline);
-	return (0);
+	return (SUCCESS);
 }
