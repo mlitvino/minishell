@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/25 18:52:02 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:18:54 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,7 +236,7 @@ void	free_cmd_list(t_data *data, t_cmd_list *cmd_list);
 int		clean_all(t_data *data, int	exit_code, char *err_message);
 
 // utils.c
-int	args_size(t_args *args);
+int		args_size(t_args *args);
 char	**convrt_args_to_argv(t_args *args, char *cmd_name);
 char	**convrt_lst_to_argv(t_list *lst);
 char	*expand_var(t_data *data, char *var);
@@ -248,16 +248,19 @@ void	updte_exitcode_var(t_data *data, int exit_code);
 t_pipe	*init_pipes(t_data *data, int	cmd_count);
 void	close_pipes(t_data *data, int pipes_count);
 void	restart_fd(t_data *data, t_simple_cmd *cmd);
-void	redirect_files(t_data *data, t_simple_cmd *cmd, t_redir *redir);
-void	redirect(t_data *data, t_simple_cmd *cmd, t_redir *redirs);
+int		redirect_files(t_data *data, t_simple_cmd *cmd, t_redir *redir);
+int		redirect(t_data *data, t_simple_cmd *cmd, t_redir *redirs);
 
 // executor_search.c
 int		check_access(t_data *data, t_simple_cmd *cmd);
 int		check_path_dirs(t_data *data, t_simple_cmd *cmd, char **path_tab);
 int		search_exec(t_data *data, t_simple_cmd *cmd);
 
+// executor_utils.c
+void	wait_childs(t_data *data, t_simple_cmd *lst_cmd);
+
 // executor.c
-void	run_cmd(t_data *data, t_simple_cmd *cmd);
+void	execve_cmd(t_data *data, t_simple_cmd *cmd);
 int		exec_simpl_cmd(t_data *data, t_simple_cmd *cmd);
 void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count);
 int		executor(t_data *data, t_cmd_list *cmd_list);

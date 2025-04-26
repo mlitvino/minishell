@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/25 18:57:30 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/26 17:46:53 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,17 +75,18 @@ void	read_input(int argc, char *argv[], char *env[])
 		add_history(data.read_line);
 
 		t_token *token = ft_lexer(data.read_line);
-		show_token(token); // print
+		///show_token(token); // print
 
 		int status = 0;
 		data.cmd_list = ft_parser(token, &status);
-		show_cmd_list(data.cmd_list); //print
+		//show_cmd_list(data.cmd_list); //print
 
-		printf("\nEXECUTOR:\n"); // print
+		//printf("\nEXECUTOR:\n"); // print
 		if (data.cmd_list && data.cmd_list->childs)
 			executor(&data, data.cmd_list);
 
-		printf("\nCLEAN\n"); //del
+		//printf("\nCLEAN\n"); //del
+
 		free_cmd_list(&data, data.cmd_list);
 		data.cmd_list = NULL;
 		free(data.read_line);

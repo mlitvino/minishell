@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 12:29:45 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/25 15:59:12 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/26 15:38:29 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,14 @@ int	cmd_exit(t_data *data, t_args *args)
 		clean_all(data, exit_code, NULL);
 	else if (args)
 	{
-		exit_code = (int)exit_atoi(args->value);
-		if (exit_code == -1)
+		if (exit_atoi(args->value) == -1)
 		{
 			ft_putstr_fd("bash: exit: ", 2);
 			ft_putstr_fd(args->value, 2);
 			ft_putstr_fd(": numeric argument required\n", 2);
 			clean_all(data, MISUSE, NULL);
 		}
-		exit_code = (unsigned char)exit_code;
+		exit_code = (unsigned char)exit_atoi(args->value);
 	}
 	if (args->next)
 	{
