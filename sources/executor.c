@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:03:21 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/27 20:43:33 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/27 21:19:43 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,16 @@ void	execve_cmd(t_data *data, t_simple_cmd *cmd)
 	char	**argv;
 	char	**env;
 
+	/*
+	void	*builtin_func;
+
+	if (builtin_i != -1)
+	{
+		builtin_func = cmd->builtin_arr[builtin_i].func(data, cmd->args)
+		clean_all(data, builtin_func, NULL);
+	}
+
+	*/
 	argv = convrt_args_to_argv(cmd->args, cmd->command);
 	env = convrt_lst_to_argv(data->env);
 	if (!env || !argv)
@@ -57,6 +67,34 @@ int	exec_simpl_cmd(t_data *data, t_simple_cmd *cmd)
 				execve_cmd(data, cmd);
 		}
 	}
+	/*
+
+	if (builtin_i == -1 || cmd->cmd_count > 1)
+	{
+		cmd->cmd_pid = fork();
+		if (cmd->cmd_pid == -1)
+		{
+			perror("minishell: fork");
+			return (FAILURE);
+		}
+		if (cmd->cmd_pid == 0)
+		{
+			close(cmd->std_fd[STDIN]);
+			cmd->std_fd[STDIN] = -1;
+			close(cmd->std_fd[STDOUT]);
+			cmd->std_fd[STDIN] = -1;
+			close_pipes(data, cmd->cmd_count - 1);
+			if (builtin_i != -1 || search_exec(data, cmd) == SUCCESS)
+				execve_cmd(data, cmd);
+		}
+	}
+	else
+	{
+		cmd->exit_code = cmd->builtin_arr[builtin_i].func(data, cmd->args);
+	}
+
+	*/
+
 	return (SUCCESS);
 }
 
@@ -74,6 +112,7 @@ void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count)
 		curr_cmd->builtin_arr = data->builtin_arr;
 		curr_cmd->cmd_count = cmd_count;
 		curr_cmd->cmd_i = i;
+		// delete quot + expand
 		curr_cmd->exit_code = redirect(data, curr_cmd, curr_cmd->redirections);
 		if (curr_cmd->exit_code == SUCCESS)
 			exec_simpl_cmd(data, curr_cmd);
