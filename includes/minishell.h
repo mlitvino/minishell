@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/26 19:43:50 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/27 20:51:53 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,8 @@ typedef struct s_redir
 	struct s_redir	*next;
 
 	int				fd;
-	char			*delim; // delete, delim == file_name
+	int				existing;
+	char			*delim;
 }				t_redir;
 
 typedef struct s_args
@@ -184,7 +185,7 @@ typedef struct s_data
 extern volatile sig_atomic_t g_signal_received;
 
 // inits.c
-int		is_builtin(t_builtin *arr, char	*cmd_name);
+t_pipe	*init_pipes(t_data *data, int	cmd_count);
 void	init_builtins(t_data *data);
 void	init_data(t_data *data, char **sys_env);
 
@@ -192,9 +193,12 @@ void	init_data(t_data *data, char **sys_env);
 void	hd_sig_hanlder(int sig);
 void	fill_heredoc(t_data *data, t_redir *heredoc);
 void	create_heredoc(t_data *data, t_redir *heredoc);
-t_redir	*get_next_heredoc(t_data *data);
-int		check_create_heredoc(t_data *data, t_pipe_line *pipeline);
-void	unlink_heredoc(t_data *data, t_pipe_line *pipeline);
+int		check_create_heredoc(t_data *data, t_redir *heredoc);
+int		unlink_heredoc(t_data *data, t_redir *heredoc);
+
+// heredoc_utils.c
+int		map_heredoc(t_data *data, int (*func)(t_data *data, t_redir *heredoc));
+int		bzero_existing(t_data *data, t_redir *heredoc);
 
 // signals.c
 void	sig_handler(int	sig, siginfo_t *info, void	*context);
@@ -217,7 +221,6 @@ int		is_builtin(t_builtin *arr, char	*cmd_name);
 /*------------------------------EXECUTOR--------------------------------------*/
 
 // executor_redirect.c
-t_pipe	*init_pipes(t_data *data, int	cmd_count);
 void	close_pipes(t_data *data, int pipes_count);
 void	restart_fd(t_data *data, t_simple_cmd *cmd);
 int		redirect_files(t_data *data, t_simple_cmd *cmd, t_redir *redir);
@@ -229,6 +232,7 @@ int		check_path_dirs(t_data *data, t_simple_cmd *cmd, char **path_tab);
 int		search_exec(t_data *data, t_simple_cmd *cmd);
 
 // executor_utils.c
+int		wait_get_exitcode(t_data *data, pid_t child_pid);
 void	wait_childs(t_data *data, t_simple_cmd *lst_cmd);
 
 // executor.c

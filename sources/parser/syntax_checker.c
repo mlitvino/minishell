@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_checker.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 23:17:56 by alfokin           #+#    #+#             */
-/*   Updated: 2025/04/15 01:44:04 by alfokin          ###   ########.fr       */
+/*   Updated: 2025/04/27 13:28:54 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	ft_check_word_semi_pipe_redir(t_token *tokens_list, t_token *token,
 	if (token->type == NONE)
 		result = check_first_token(tokens_list, token->next, status);
 	else if (token->type == GREAT || token->type == DOUBLE_GREAT
-		|| token->type == LESS)
+		|| token->type == LESS || token->type == DOUBLE_LESS)
 		result = check_redir(tokens_list, token->next, status);
 	else if (token->type == PIPE)
 		result = check_token_next_pipe(tokens_list, token->next, status);

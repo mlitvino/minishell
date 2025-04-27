@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:18:03 by codespace         #+#    #+#             */
-/*   Updated: 2025/04/24 18:08:31 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/27 13:52:43 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,17 @@ t_redir	*ft_create_redir(t_token **tokens, int index)
 		redir->type = RE_DOUBLE_GREAT;
 	else if ((*tokens)->type == LESS)
 		redir->type = RE_LESS;
+	else if ((*tokens)->type == DOUBLE_LESS)
+		redir->type = RE_DOUBLE_LESS;
 	(*tokens) = (*tokens)->next;
 	redir->file_name = ft_strdup((*tokens)->value);
 	(*tokens) = (*tokens)->next;
 
 	// added by mlitvino
 	redir->fd = -1;
-	redir->delim = NULL;
+	redir->existing = 0;
 	redir->inside_quotes = 0;
+	redir->delim = NULL;
 	return (redir);
 }
 

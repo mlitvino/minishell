@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 12:45:53 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/26 20:05:34 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/27 20:52:19 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,6 @@ void	free_redir(t_redir *redir)
 
 	while (redir)
 	{
-		if (redir->type == RE_DOUBLE_LESS)
-			unlink(redir->file_name);
-
 		free(redir->file_name);
 		redir->file_name = NULL;
 
@@ -108,6 +105,8 @@ int	clean_all(t_data *data, int	exit_code, char *err_message)
 {
 	while (waitpid(0, 0, 0) != -1)
 		{ }
+
+	map_heredoc(data, unlink_heredoc);
 
 	free(data->read_line);
 	data->read_line = NULL;

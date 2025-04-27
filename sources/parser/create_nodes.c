@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 23:49:54 by alfokin           #+#    #+#             */
-/*   Updated: 2025/04/25 18:54:13 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/27 13:30:01 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ t_simple_cmd	*ft_create_simple_cmd(t_token **tokens)
 		&& (*tokens)->type != NEWLINE)
 	{
 		if ((*tokens)->type == GREAT || (*tokens)->type == DOUBLE_GREAT
-			|| (*tokens)->type == LESS)
+			|| (*tokens)->type == LESS || (*tokens)->type == DOUBLE_LESS)
 		{
 			cmd->redirections = ft_insert_redir(cmd->redirections,
 					tokens, r);

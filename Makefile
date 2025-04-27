@@ -6,11 +6,11 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/04/26 23:51:38 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/04/27 20:49:31 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC 			= cc
+CC 			= cc -ggdb
 CFLAGS 		= -I$(LIBFT_DIR)/$(INCLD_DIR) -I$(INCLD_DIR)
 # -Wall -Wextra -Werror
 
@@ -28,7 +28,7 @@ BUILT_DIR	= builtins
 INCLD		= $(INCLD_DIR)/minishell.h
 
 SRC =	$(addprefix $(SRC_DIR)/, \
-		main.c utils.c signals.c heredoc.c utils_clean.c inits.c \
+		main.c utils.c signals.c heredoc.c heredoc_utils.c utils_clean.c inits.c \
 		executor_search.c executor.c executor_redirect.c executor_utils.c \
 		$(PARSER_SRC) $(BUILT_SRC) \
 		test.c)

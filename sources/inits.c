@@ -6,11 +6,33 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/26 19:43:25 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/27 20:51:07 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_pipe	*init_pipes(t_data *data, int pipes_count)
+{
+	int	i;
+	int	p[2];
+
+	data->pipes = malloc(sizeof(t_pipe) * pipes_count);
+	if (!data->pipes)
+		clean_all(data, FAILURE, "minishell: pipe: malloc failed\n");
+	i = 0;
+	while (i < pipes_count)
+	{
+		if (pipe(data->pipes[i].pipe) != 0)
+		{
+			close_pipes(data, i);
+			clean_all(data, FAILURE, "minishell: pipes creation failed\n");
+			return (NULL);
+		}
+		i++;
+	}
+	return (NULL);
+}
 
 void	init_builtins(t_data *data)
 {
@@ -40,7 +62,7 @@ void	init_data(t_data *data, char **sys_env)
 	data->cmd_list = NULL;
 	data->local_vars = NULL;
 	data->env = NULL;
-	data->exit_var = 0;
+	data->exit_var = SUCCESS;
 	data->pipes = NULL;
 	init_sigs(data);
 	init_builtins(data);

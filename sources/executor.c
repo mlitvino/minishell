@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:03:21 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/26 20:06:29 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/27 20:43:33 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,17 +89,14 @@ void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count)
 int	executor(t_data *data, t_cmd_list *cmd_list)
 {
 	t_pipe_line	*pipeline;
-	int			exit_code;
 
 	pipeline = cmd_list->childs;
-	exit_code = check_create_heredoc(data, pipeline);
-	if (exit_code != SUCCESS)
-		clean_all(data, pipeline->exit_status, "minishell: heredoc failed");
-	while (exit_code == SUCCESS && pipeline)
+	map_heredoc(data, check_create_heredoc);
+	while (data->exit_var != TERM_SIGINT && pipeline)
 	{
 		exec_pipeline(data, pipeline, pipeline->simple_cmd_count);
 		pipeline = pipeline->next;
 	}
-	unlink_heredoc(data, pipeline);
+	map_heredoc(data, unlink_heredoc);
 	return (SUCCESS);
 }

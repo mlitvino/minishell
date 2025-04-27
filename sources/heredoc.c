@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 19:06:58 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/25 18:24:52 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/27 20:50:01 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,16 @@ void	fill_heredoc(t_data *data, t_redir *heredoc)
 			{
 				dup2(STDOUT, STDERR);
 				printf("minishell: warning: here-document delimited \
-					by end-of-file (wanted `%s')",
-						heredoc->delim);
+					by end-of-file (wanted `%s')", heredoc->delim);
 			}
 			clean_all(data, g_signal_received, NULL);
 		}
 		heredoc->fd = open(heredoc->file_name, O_WRONLY | O_APPEND);
 		if (heredoc->fd == -1)
-			clean_all(data, FAILURE, strerror(errno)); // change strerror
+		{
+			perror("minishell: temp heredoc");//dell
+			clean_all(data, FAILURE, NULL); // change strerror
+		}
 		ft_putendl_fd(input, heredoc->fd);
 		close(heredoc->fd);
 	}
@@ -69,87 +71,62 @@ void	create_heredoc(t_data *data, t_redir *heredoc)
 		if (heredoc->fd != -1)
 			break ;
 		else if (heredoc->fd == -1 && errno != EEXIST)
-			clean_all(data, FAILURE, strerror(errno));
+		{
+			perror("minishell: heredoc: open");
+			clean_all(data, FAILURE, NULL);
+		}
 		i++;
 	}
+	heredoc->existing = 1;
 	close(heredoc->fd);
 }
 
-t_redir	*get_next_heredoc(t_data *data)
-{
-	static t_pipe_line	*curr_pipeline = NULL;
-	static t_simple_cmd	*curr_cmd = NULL;
-	static t_redir		*curr_redir = NULL;
-
-	if (!curr_pipeline)
-		curr_pipeline = data->cmd_list->childs;
-	while (curr_pipeline)
-	{
-		if (!curr_cmd)
-			curr_cmd = curr_pipeline->child;
-		while (curr_cmd)
-		{
-			if (!curr_redir)
-				curr_redir = curr_cmd->redirections;
-			while (curr_redir)
-			{
-				if (curr_redir->type == RE_DOUBLE_LESS)
-					return (curr_redir);
-				curr_redir = curr_redir->next;
-			}
-			curr_cmd = curr_cmd->next;
-		}
-		curr_pipeline = curr_pipeline->next;
-	}
-	curr_pipeline = NULL;
-	curr_cmd = NULL;
-	curr_redir = NULL;
-	return (NULL);
-}
-
-int	check_create_heredoc(t_data *data, t_pipe_line *pipeline)
+void	fork_heredoc(t_data *data, t_redir *heredoc, int *exit_status)
 {
 	pid_t	heredoc_pid;
-	t_redir	*heredoc;
 
-	while (1)
+	heredoc_pid = fork();
+	if (heredoc_pid == -1)
 	{
-		heredoc = get_next_heredoc(data);
-		if (heredoc)
-		{
-			if (signal(SIGINT, SIG_IGN) == SIG_ERR)
-				clean_all(data, FAILURE, "minishell: func signal failed\n");
-			create_heredoc(data, heredoc);
-			heredoc_pid = fork();
-			if (heredoc_pid == -1)
-				clean_all(data, FAILURE, NULL);
-			if (heredoc_pid == 0)
-				fill_heredoc(data, heredoc);
-			else
-				waitpid(0, &pipeline->exit_status, 0);
-			if (pipeline->exit_status != SUCCESS)
-				return (pipeline->exit_status);
-		}
-		else
-			return (SUCCESS);
+		perror("minishell: heredoc: fork");
+		clean_all(data, FAILURE, NULL);
+	}
+	if (heredoc_pid == 0)
+	{
+		map_heredoc(data, bzero_existing);
+		fill_heredoc(data, heredoc);
+		clean_all(data, SUCCESS, NULL);
+	}
+	else
+	{
+		wait_get_exitcode(data, heredoc_pid);
+	}
+	if (data->exit_var == FAILURE)
+		clean_all(data, FAILURE, NULL);
+	init_sigs(data);
+}
+
+int	check_create_heredoc(t_data *data, t_redir *heredoc)
+{
+	heredoc->delim = heredoc->file_name;
+	heredoc->file_name = NULL;
+	if (signal(SIGINT, SIG_IGN) == SIG_ERR)
+		clean_all(data, FAILURE, "minishell: func signal failed\n");
+	create_heredoc(data, heredoc);
+	fork_heredoc(data, heredoc, &data->exit_var);
+	if (data->exit_var == TERM_SIGINT)
+		return (TERM_SIGINT);
+	init_sigs(data);
+	return (SUCCESS);
+}
+
+int	unlink_heredoc(t_data *data, t_redir *heredoc)
+{
+	if (heredoc->existing == 1)
+	{
+		unlink(heredoc->file_name);
 	}
 	return (SUCCESS);
 }
 
-void	unlink_heredoc(t_data *data, t_pipe_line *pipeline)
-{
-	t_redir	*heredoc;
 
-	while (1)
-	{
-		heredoc = get_next_heredoc(data);
-		if (heredoc)
-		{
-			unlink(heredoc->file_name);
-		}
-		else
-		{
-			return ;
-		}
-	}
-}
