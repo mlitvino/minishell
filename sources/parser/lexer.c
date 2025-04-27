@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 01:50:24 by alfokin           #+#    #+#             */
-/*   Updated: 2025/04/15 15:58:37 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/28 00:18:50 by alfokin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_destoy_token_list(t_token *tokens_list)
+void	ft_destroy_token_list(t_token *tokens_list)
 {
 	t_token	*tmp;
 

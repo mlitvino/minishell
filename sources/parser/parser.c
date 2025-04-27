@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:18:03 by codespace         #+#    #+#             */
-/*   Updated: 2025/04/15 15:58:01 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/28 01:06:38 by alfokin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,6 @@ t_cmd_list	*ft_parser(t_token *tokens_list, int *status)
 	command_list = NULL;
 	//write(1, RED, ft_strlen(RED));
 	if (!ft_syntax_check(tokens_list, status))
-	{
 		command_list = ft_create_asteriks(tokens_list);
-		ft_destoy_token_list(tokens_list);
-	}
 	return (command_list);
 }

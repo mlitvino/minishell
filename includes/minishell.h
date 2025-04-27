@@ -6,7 +6,7 @@
 /*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/27 23:50:39 by alfokin          ###   ########.fr       */
+/*   Updated: 2025/04/28 01:14:49 by alfokin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,6 +205,10 @@ char	*expand_var(t_data *data, char *var);
 
 /*------------------------------EXECUTE HANDLER-------------------------------*/
 void		is_executable(const char *name, char *env[]);
+static char	**build_argv(t_simple_cmd *cmd);
+static int	is_builtin_cmd(char *name);
+static void	run_builtin(t_data *data, t_simple_cmd *cmd);
+void		execute_cmd_list(t_data *data, t_cmd_list *cmd_list, char *envp[]);
 
 /*----------------------------------PARSER------------------------------------*/
 t_cmd_list	*ft_parser(t_token *tokens_list, int *status);
@@ -272,7 +276,7 @@ t_token			*ft_lexer(char *line);
 void			ft_get_word(t_token *tokens_list, char *line, int *table);
 void			get_space_pipe_semi_redir(t_token *tokens_list,
 					char *line, int *j, int *index);
-void			ft_destoy_token_list(t_token *tokens_list);
+void			ft_destroy_token_list(t_token *tokens_list);
 void			print_tokens(t_token *tokens_list);
 void			add_token(t_token *token_list, t_token_type type,
 					char *content, int index);

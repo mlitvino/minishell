@@ -6,7 +6,7 @@
 /*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/27 23:46:58 by alfokin          ###   ########.fr       */
+/*   Updated: 2025/04/28 00:41:44 by alfokin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,23 +93,28 @@ void	is_builtin(t_data *data, char *read_line)
 
 void	read_input(int argc, char *argv[], char *env[])
 {
-	char *read_line;
-	t_data data;
+	char		*read_line;
+	int			status;
+	t_data		data;
+	t_token		*token;
+	t_cmd_list	*cmd_list;
 
 	cpy_env(env, &data);
 	while (1)
 	{
 		read_line = readline("minishell$ ");
 		add_history(read_line);
-
-		t_token *token = ft_lexer(read_line);
-		//show_token(token);
-
-		int status = 0;
-		t_cmd_list *cmd_list = ft_parser(token, &status);
-		is_builtin(&data, read_line);
-		//show_cmd_list(cmd_list);
-
-		//free(read_line);
+		token = ft_lexer(read_line);
+		status = 0;
+		cmd_list = ft_parser(token, &status);
+		if (cmd_list)
+		{
+			execute_cmd_list(&data, cmd_list, env);
+			ft_destroy_ast(cmd_list);
+		}
+		else
+			is_builtin(&data, read_line);
+		ft_destroy_token_list(token);
+		free(read_line);
 	}
 }
