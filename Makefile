@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
+#    By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/04/15 15:08:12 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/04/27 20:05:08 by alfokin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 

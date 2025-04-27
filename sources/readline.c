@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/15 15:46:07 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/27 23:46:58 by alfokin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,13 +102,13 @@ void	read_input(int argc, char *argv[], char *env[])
 		read_line = readline("minishell$ ");
 		add_history(read_line);
 
-		is_builtin(&data, read_line);
 		t_token *token = ft_lexer(read_line);
-		show_token(token);
+		//show_token(token);
 
 		int status = 0;
 		t_cmd_list *cmd_list = ft_parser(token, &status);
-		show_cmd_list(cmd_list);
+		is_builtin(&data, read_line);
+		//show_cmd_list(cmd_list);
 
 		//free(read_line);
 	}
