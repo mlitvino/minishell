@@ -16,14 +16,14 @@
 # std_libs
 
 {
-   ignore_std_libs
-   Memcheck:Leak
-   ...
-   obj:*/lib*/lib*.so
+	ignore_std_libs
+	Memcheck:Leak
+	...
+	obj:*/lib*/lib*.so
 }
 {
-   ignore_std_libs
-   Memcheck:Leak
-   ...
-   obj:*/lib*/lib*.so.*
+	ignore_std_libs
+	Memcheck:Leak
+	...
+	obj:*/lib*/lib*.so.*
 }

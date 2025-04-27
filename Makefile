@@ -6,7 +6,7 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/04/26 19:39:36 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/04/26 23:51:38 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,19 +30,16 @@ INCLD		= $(INCLD_DIR)/minishell.h
 SRC =	$(addprefix $(SRC_DIR)/, \
 		main.c utils.c signals.c heredoc.c utils_clean.c inits.c \
 		executor_search.c executor.c executor_redirect.c executor_utils.c \
-		 \
-		test.c \
-		$(addprefix $(BUILT_DIR)/, \
+		$(PARSER_SRC) $(BUILT_SRC) \
+		test.c)
+PARSER_SRC = $(addprefix $(PARSER_DIR)/, \
+		cont_token_checker.c parser.c create_asteriks.c create_nodes.c \
+		destroy_nodes.c syntax_checker.c token_checker.c word_checker.c \
+		lexer.c lexer_get_tokens.c lexer_get_tokens_op.c \
+		lexer_get_tokens_word.c)
+BUILT_SRC = $(addprefix $(BUILT_DIR)/, \
 		cmd_cd.c cmd_echo.c cmd_env.c cmd_exit.c cmd_export.c cmd_pwd.c \
-		cmd_unset.c \
-		) \
-		$(addprefix $(PARSER_DIR)/, \
-			cont_token_checker.c parser.c create_asteriks.c create_nodes.c \
-			destroy_nodes.c syntax_checker.c token_checker.c word_checker.c \
-			lexer.c lexer_get_tokens.c lexer_get_tokens_op.c \
-			lexer_get_tokens_word.c \
-		) \
-)
+		cmd_unset.c)
 
 OBJ = $(addprefix $(OBJ_DIR)/,$(notdir $(SRC:.c=.o)))
 

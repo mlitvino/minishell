@@ -67,10 +67,13 @@ void	show_cmd(t_simple_cmd *cmd)
 
 void	show_cmd_list(t_cmd_list *list)
 {
-	printf("pipe_line_count: %d\n", list->pipe_line_count);
+	if (list)
+		printf("pipe_line_count: %d\n", list->pipe_line_count);
 	printf("-------------PIPE_LINES-------------\n");
 
-	t_pipe_line *childs = list->childs;
+	t_pipe_line *childs = NULL;
+	if (list)
+		childs = list->childs;
 	for(int i = 0; childs; i++)
 	{
 		printf("i: %d\n", i);
