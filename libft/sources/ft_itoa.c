@@ -6,57 +6,51 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 14:35:50 by mlitvino          #+#    #+#             */
-/*   Updated: 2024/11/06 20:29:46 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/28 15:08:41 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_strlen_itoa(int n)
+static int	ft_nbr_len(int n)
 {
-	int	str_len;
+	int	len;
 
-	str_len = 0;
-	if (n == 0)
-		return (1);
-	if (n < 0)
+	if (n <= 0)
+		len = 1;
+	else
+		len = 0;
+	while (n)
 	{
-		n = -n;
-		str_len++;
-	}
-	while (n / 10 > 0)
-	{
-		str_len++;
+		len++;
 		n /= 10;
 	}
-	if (n % 10 > 0)
-		str_len++;
-	return (str_len);
+	return (len);
 }
 
 char	*ft_itoa(int n)
 {
 	char	*str;
-	int		str_len;
+	int		len;
+	long	nb;
 
-	if (n == -2147483648)
-		return (ft_strdup("-2147483648"));
-	str_len = ft_strlen_itoa(n);
-	str = (char *)malloc(sizeof(char) * (str_len + 1));
-	if (str == NULL)
+	nb = n;
+	len = ft_numlen(n);
+	str = (char *)malloc(sizeof(char) * (len + 1));
+	if (!str)
 		return (NULL);
-	ft_bzero(str, str_len + 1);
-	if (n < 0)
+	str[len] = '\0';
+	if (nb < 0)
 	{
 		str[0] = '-';
-		n = -n;
+		nb = -nb;
 	}
-	while (str_len-- > 0 && str[str_len] != '-')
+	if (nb == 0)
+		str[0] = '0';
+	while (nb > 0)
 	{
-		str[str_len] = (n % 10) + '0';
-		if (str_len == 0)
-			break ;
-		n /= 10;
+		str[--len] = (nb % 10) + '0';
+		nb /= 10;
 	}
 	return (str);
 }

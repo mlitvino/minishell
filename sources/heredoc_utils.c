@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 20:48:09 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/27 20:48:44 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/28 13:14:38 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	bzero_existing(t_data *data, t_redir *heredoc)
 {
 	heredoc->existing = 0;
+	return (SUCCESS);
 }
 
 int	map_heredoc(t_data *data, int (*func)(t_data *data, t_redir *heredoc))

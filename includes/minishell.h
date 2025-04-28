@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/27 20:51:53 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/28 19:00:21 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,7 +215,6 @@ int		clean_all(t_data *data, int	exit_code, char *err_message);
 int		args_size(t_args *args);
 char	**convrt_args_to_argv(t_args *args, char *cmd_name);
 char	**convrt_lst_to_argv(t_list *lst);
-char	*expand_var(t_data *data, char *var);
 int		is_builtin(t_builtin *arr, char	*cmd_name);
 
 /*------------------------------EXECUTOR--------------------------------------*/
