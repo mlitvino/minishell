@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:03:21 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/28 19:43:22 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:52:33 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ int	exec_simpl_cmd(t_data *data, t_simple_cmd *cmd)
 {
 	int	builtin_i;
 
+	if (!cmd->command[0] && cmd->inside_quotes == 0)
+		return (SUCCESS);
 	builtin_i = is_builtin(cmd->builtin_arr, cmd->command);
 	if (builtin_i != -1)
 		cmd->exit_code = cmd->builtin_arr[builtin_i].func(data, cmd->args);
@@ -98,167 +100,29 @@ int	exec_simpl_cmd(t_data *data, t_simple_cmd *cmd)
 	return (SUCCESS);
 }
 
-// char	*expand_var(t_data *data, char *str, int *curr_i)
-// {
-// 	char	*env_var;
-// 	int		i;
-// 	char	*value;
-
-// 	if (ft_strncmp(str, "$?", 2) == 0)
-// 		return (ft_itoa(data->exit_var));
-// 	i = 1;
-// 	if (ft_isdigit(str[i]) == 1)
-// 		return (ft_stdup(""));
-// 	while (str[i] && ft_isalnum(str[i]) == 1)
-// 		i++;
-// 	if (curr_i)
-// 		*curr_i += i;
-// 	env_var = ft_substr(str, 1, i);
-// 	if (!env_var)
-// 		return (NULL);
-// 	if (find_var(data->env, env_var, NULL) == NULL) // fix find_var
-// 		value = ft_strdup("");
-// 	else
-// 		value = ft_strdup(find_var(data->env, env_var, NULL)->content);
-// 	free(env_var);
-// 	return (value);
-// }
-
-char	*expand_var(t_data *data, char *str)
+void	check_empty(t_data *data, t_simple_cmd *cmd)
 {
-	char	*env_var;
-	int		i;
-	char	*value;
-
-	i = 1;
-	if (ft_strncmp(str, "$?", 2) == 0)
-		return (ft_itoa(data->exit_var));
-	if (ft_isdigit(str[i]) == 1)
-		return (ft_stdup(""));
-	while (str[i] && ft_isalnum(str[i]) == 1)
-		i++;
-	if (i == 1)
-		return (ft_strdup("$"));
-	env_var = ft_substr(str, 1, i);
-	if (!env_var)
-		return (NULL);
-	if (find_var(data->env, env_var, NULL) == NULL) // fix find_var
-		value = ft_strdup("");
-	else
-		value = ft_strdup(find_var(data->env, env_var, NULL)->content);
-	free(env_var);
-	return (value);
-}
-
-char	*trim_quotes(t_data *data, char *orig_str, int *orig_i)
-{
-	int		curr_i;
-	char	*new_str;
-	char	*piece_str;
-
-	curr_i = 0;
-	new_str = NULL;
-	if (orig_str[curr_i] == '\'')
-		return (ft_strtrim(orig_str, "\'"));
-	else
-		new_str = ft_strtrim(orig_str, "\"");
-	while (orig_str && orig_str[curr_i])
-	{
-		piece_str = get_next_piece(data, orig_str, &curr_i);
-		new_str = ft_strjoin(new_str, piece_str);
-		if (!new_str || !piece_str)
-		{
-			free(piece_str);
-			clean_all(data, FAILURE, NULL);
-		}
-		free(piece_str);
-	}
-	return (new_str);
-}
-
-char	*get_next_piece(t_data *data, char *orig_str, int *orig_i)
-{
-	int		curr_i;
-	char	*res;
-
-	curr_i = *orig_i;
-	while (orig_str[curr_i] && orig_str[curr_i] != '$'
-		&& orig_str[curr_i] != '\'' && orig_str[curr_i] != '\"')
-		curr_i++;
-	if (curr_i != 0)
-		res = ft_substr(orig_str, *orig_i, curr_i);
-	else if (orig_str[curr_i] == '$')
-	{
-		res = expand_var(data, &orig_str[curr_i], orig_i);
-		while (orig_str[++curr_i] != orig_str[*orig_i])
-			curr_i++;
-	}
-	else if (orig_str[curr_i] == '\'' || orig_str[curr_i] == '\"')
-	{
-		res = trim_quotes(data, &orig_str[curr_i], orig_i);
-		while (orig_str[curr_i] != orig_str[*orig_i])
-			curr_i++;
-	}
-	*orig_i += curr_i;
-	return (res);
-}
-
-char	*trim_expand(t_data *data, char *orig_str)
-{
-	int		curr_i;
-	char	*new_str;
-	char	*piece_str;
-
-	curr_i = 0;
-	new_str = NULL;
-	if (*orig_str == '\0')
-		return (orig_str);
-	while (orig_str && orig_str[curr_i])
-	{
-		piece_str = get_next_piece(data, orig_str, &curr_i);
-		new_str = ft_strjoin(new_str, piece_str);
-		if (!new_str || !piece_str)
-		{
-			free(piece_str);
-			clean_all(data, FAILURE, NULL);
-		}
-		free(piece_str);
-	}
-	free(orig_str);
-	return (new_str);
-}
-
-void	check_quote_flg(char *str, int *quote_flg)
-{
-	if (ft_strchr(str, '\'') != NULL)
-		*quote_flg = 1;
-	else if (ft_strchr(str, '\"') != NULL)
-		*quote_flg = 1;
-}
-
-int	check_quots_expand(t_data *data, t_simple_cmd *cmd)
-{
+	void	*temp;
 	t_args	*args;
-	t_redir	*redir;
 
-	check_quote_flg(cmd->command, cmd->inside_quotes);
-	cmd->command = trim_expand(data, cmd->command);
+	while (cmd->command[0] == '\0' && cmd->inside_quotes == 0 && cmd->args)
+	{
+		free(cmd->command);
+		cmd->command = cmd->args->value;
+		cmd->inside_quotes = cmd->args->inside_quotes;
+		temp = cmd->args->next;
+		free(cmd->args);
+		cmd->args = temp;
+	}
 	args = cmd->args;
-	while (args)
+	while (args && args->value[0] == '\0' && args->inside_quotes == 0)
 	{
-		check_quote_flg(args->value, args->inside_quotes);
-		args->value = trim_expand(data, args->value);
-		args = args->next;
+		temp = args->next;
+		free(args->value);
+		free(args);
+		args = temp;
 	}
-	redir = cmd->redirections;
-	while (redir)
-	{
-		check_quote_flg(redir->file_name, redir->inside_quotes);
-		redir->file_name = trim_expand(data, redir->file_name);
-		redir = redir->next;
-	}
-	// check_move all
-	return (SUCCESS);
+	cmd->args = args;
 }
 
 void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count)
@@ -276,6 +140,7 @@ void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count)
 		curr_cmd->cmd_count = cmd_count;
 		curr_cmd->cmd_i = i;
 		check_quots_expand(data, curr_cmd);
+		check_empty(data, curr_cmd);
 		curr_cmd->exit_code = redirect(data, curr_cmd, curr_cmd->redirections); // chang return value
 		if (curr_cmd->exit_code == SUCCESS)
 			exec_simpl_cmd(data, curr_cmd);

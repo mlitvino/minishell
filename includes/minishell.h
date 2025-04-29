@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/28 19:00:21 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:52:39 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,9 +196,22 @@ void	create_heredoc(t_data *data, t_redir *heredoc);
 int		check_create_heredoc(t_data *data, t_redir *heredoc);
 int		unlink_heredoc(t_data *data, t_redir *heredoc);
 
+// expand.c
+char	*find_var_value(t_data *data, char *env_var);
+int		get_i_end_token(char *str, char token);
+char	*expand_var(t_data *data, char *var);
+char	*expand_str(t_data *data, char *orig_str, char *new_str);
+
 // heredoc_utils.c
 int		map_heredoc(t_data *data, int (*func)(t_data *data, t_redir *heredoc));
 int		bzero_existing(t_data *data, t_redir *heredoc);
+
+// quotes.c
+void	check_quote_flg(char *str, int *quote_flg);
+char	*trim_quotes(t_data *data, char *str);
+char	*get_next_piece(t_data *data, char *orig_str, int *orig_i);
+char	*trim_expand(t_data *data, char *orig_str);
+int		check_quots_expand(t_data *data, t_simple_cmd *cmd);
 
 // signals.c
 void	sig_handler(int	sig, siginfo_t *info, void	*context);
@@ -233,6 +246,7 @@ int		search_exec(t_data *data, t_simple_cmd *cmd);
 // executor_utils.c
 int		wait_get_exitcode(t_data *data, pid_t child_pid);
 void	wait_childs(t_data *data, t_simple_cmd *lst_cmd);
+void	check_empty(t_data *data, t_simple_cmd *cmd);
 
 // executor.c
 void	execve_cmd(t_data *data, t_simple_cmd *cmd);

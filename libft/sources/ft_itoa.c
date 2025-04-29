@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 14:35:50 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/28 15:08:41 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:27:36 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*ft_itoa(int n)
 	long	nb;
 
 	nb = n;
-	len = ft_numlen(n);
+	len = ft_nbr_len(n);
 	str = (char *)malloc(sizeof(char) * (len + 1));
 	if (!str)
 		return (NULL);

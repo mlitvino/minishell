@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 13:12:48 by alfokin           #+#    #+#             */
-/*   Updated: 2025/04/26 18:16:19 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:08:32 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	search_exec(t_data *data, t_simple_cmd *cmd)
 	}
 	else
 	{
-		path_value = expand_var(data, "PATH=");
+		path_value = expand_var(data, "$PATH"); // FIX
 		path_tab = ft_split(path_value, ':');
 		if (!path_tab)
 			clean_all(data, FAILURE, "minishell: command: malloc failed\n");
