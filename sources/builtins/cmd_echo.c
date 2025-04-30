@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:35:42 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/30 18:23:12 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:33:03 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,22 @@ int	is_new_line(t_data *data, t_args *args)
 	new_arg = ft_substr(option, 1, ft_strlen(option));
 	if (!new_arg)
 		clean_all(data, FAILURE, "minishell: echo: malloc failed\n");
+	free(args->value);
 	args->value = new_arg;
-	printf("new_Arg (%s)\n", new_arg); // del
 	return (FAILURE);
 }
 
-int	print_args(t_data *data, t_args *args)
+int	print_args(t_data *data, t_args *args, int newlne)
 {
+	if (args)
+	{
+		if (printf("%s", args->value) < SUCCESS)
+			return (FAILURE);
+		if (newlne != FAILURE)
+			if (printf(" ") < SUCCESS)
+				return (FAILURE);
+		args = args->next;
+	}
 	while (args)
 	{
 		if (printf("%s", args->value) < SUCCESS)
@@ -56,19 +65,20 @@ int	print_args(t_data *data, t_args *args)
 int	cmd_echo(t_data *data, t_args *args)
 {
 	int	exit_code;
+	int	newlne;
 
 	exit_code = 0;
-	if (!args || is_new_line(data, args) == SUCCESS)
+	newlne = is_new_line(data, args);
+	if (!args || newlne == SUCCESS)
 	{
-		exit_code |= print_args(data, args);
+		exit_code |= print_args(data, args, newlne);
 		exit_code |= printf("\n");
 		if (exit_code < SUCCESS)
 			return (FAILURE);
 	}
 	else
 	{
-		
-		exit_code |= print_args(data, args);
+		exit_code |= print_args(data, args, newlne);
 		if (exit_code < SUCCESS)
 			return (FAILURE);
 	}

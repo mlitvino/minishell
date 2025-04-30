@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/30 17:44:00 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:32:33 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,7 +263,7 @@ char	*get_home_path(t_data *data);
 int		cmd_cd(t_data *data, t_args *args);
 // cmd_echo.c
 int		is_new_line(t_data *data, t_args *args);
-int		print_args(t_data *data, t_args *args);
+int		print_args(t_data *data, t_args *args, int newlne);
 int		cmd_echo(t_data *data, t_args *args);
 // cmd_env.c
 void	init_env(char *sys_env[], t_data *data);
