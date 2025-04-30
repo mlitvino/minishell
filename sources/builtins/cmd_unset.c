@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:49:00 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/23 14:26:59 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/30 12:45:28 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	cmd_unset(t_data *data, t_args *args)
 {
 	while (args)
 	{
-		delete_var(&data->local_vars, args->value);
 		delete_var(&data->env, args->value);
 		args = args->next;
 	}

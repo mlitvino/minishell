@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 12:45:53 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/27 20:52:19 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/30 12:44:54 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,6 @@ int	clean_all(t_data *data, int	exit_code, char *err_message)
 
 	free(data->read_line);
 	data->read_line = NULL;
-
-	ft_lstclear(&data->local_vars, free);
-	data->local_vars = NULL;
 
 	ft_lstclear(&data->env, free);
 	data->env = NULL;

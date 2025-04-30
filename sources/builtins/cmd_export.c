@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:36:35 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/29 16:04:46 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/30 12:44:16 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,6 @@ int	cmd_export(t_data *data, t_args *args)
 	{
 		if (check_export_arg(args, &exit_code) == SUCCESS)
 		{
-			cpy_var = ft_strdup(args->value);
-			if (!cpy_var)
-				return (perror("minishell: export: malloc"), FAILURE);
-			if (add_replce_var(&data->local_vars, cpy_var) == NULL)
-				return (perror("minishell: export: malloc"), FAILURE);
 			cpy_var = ft_strdup(args->value);
 			if (!cpy_var)
 				return (perror("minishell: export: malloc"), FAILURE);

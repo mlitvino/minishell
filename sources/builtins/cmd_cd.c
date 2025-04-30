@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:14:50 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/25 16:14:34 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/30 12:46:49 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,6 @@ int	join_paste_var(t_data *data, char *key_var, char *var_value)
 	if (find_var(data->env, key_var, NULL) != NULL)
 	{
 		if (add_replce_var(&data->env, new_var) == NULL)
-			return (free(new_var), perror("minishell: cd: malloc"), FAILURE);
-	}
-	else if (find_var(data->local_vars, key_var, NULL) != NULL)
-	{
-		if (add_replce_var(&data->local_vars, new_var) == NULL)
 			return (free(new_var), perror("minishell: cd: malloc"), FAILURE);
 	}
 	return (SUCCESS);
@@ -63,11 +58,8 @@ int	update_oldpwd(t_data *data, t_list *env)
 
 	env_var = find_var(env, "PWD=", NULL);
 	if (!env_var)
-		env_var = find_var(data->local_vars, "PWD=", NULL);
-	if (!env_var)
 	{
 		delete_var(&env, "OLDPWD=");
-		delete_var(&data->local_vars, "OLDPWD=");
 		return (SUCCESS);
 	}
 	var_value = ft_strdup(ft_strchr(env_var->content, '=') + 1);
@@ -82,8 +74,6 @@ char	*get_home_path(t_data *data)
 	char	*path;
 
 	var = find_var(data->env, "HOME=", NULL);
-	if (!var)
-		var = find_var(data->local_vars, "HOME=", NULL);
 	if (var)
 	{
 		path = ft_strdup(ft_strchr(var->content, '=') + 1);

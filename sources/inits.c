@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/27 20:51:07 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/30 12:44:33 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ void	init_builtins(t_data *data)
 void	init_data(t_data *data, char **sys_env)
 {
 	data->cmd_list = NULL;
-	data->local_vars = NULL;
 	data->env = NULL;
 	data->exit_var = SUCCESS;
 	data->pipes = NULL;
