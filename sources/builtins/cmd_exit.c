@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 12:29:45 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/26 15:38:29 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/30 13:32:07 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	cmd_exit(t_data *data, t_args *args)
 	int	exit_code;
 
 	exit_code = SUCCESS;
-	ft_putstr_fd("exit\n", 1); // change to STDERR later
+	//ft_putstr_fd("exit\n", 1); // change to STDERR later
 	if (!args)
 		clean_all(data, exit_code, NULL);
 	else if (args)

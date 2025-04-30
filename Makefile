@@ -6,7 +6,7 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/04/29 17:17:57 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/04/30 17:46:44 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,11 +51,11 @@ $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $^ $(LIBFT) -lreadline -lncurses -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INCLD)
-	mkdir -p $(OBJ_DIR)
+	@[ -d $(OBJ_DIR) ] || mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/*/%.c $(INCLD)
-	mkdir -p $(OBJ_DIR)
+	@[ -d $(OBJ_DIR) ] || mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(LIBFT):

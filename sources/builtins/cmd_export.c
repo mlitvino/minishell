@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:36:35 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/30 12:44:16 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/30 12:57:10 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,17 @@
 t_list	*find_var(t_list *list, char *var, t_list **prev)
 {
 	t_list	*list_var;
-	char	*equals_sign;
-	int		equals_i;
+	char	*compare_sign;
+	int		sign_i;
 
 	list_var = list;
 	while (list_var)
 	{
-		equals_sign = ft_strchr(list_var->content, '=');
-		equals_i = equals_sign - (char *)list_var->content;
-		if (ft_strncmp(list_var->content, var, equals_i + 1) == 0)
+		compare_sign = ft_strchr(list_var->content, '=');
+		if (!compare_sign)
+			compare_sign = ft_strchr(list_var->content, '\0');
+		sign_i = compare_sign - (char *)list_var->content;
+		if (ft_strncmp(list_var->content, var, sign_i) == 0)
 		{
 			return (list_var);
 		}

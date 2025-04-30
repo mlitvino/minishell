@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:03:21 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/29 17:52:33 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:06:46 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,17 +125,35 @@ void	check_empty(t_data *data, t_simple_cmd *cmd)
 	cmd->args = args;
 }
 
+t_simple_cmd	*init_null_cmd(t_simple_cmd **curr_cmd)
+{
+
+	if (!*curr_cmd)
+	{
+		*curr_cmd = malloc(sizeof(t_simple_cmd));
+		if (*curr_cmd)
+			return (NULL);
+	}
+	if (!(*curr_cmd)->command)
+	{
+		(*curr_cmd)->command = ft_strdup("");
+		if (!(*curr_cmd)->command)
+			return (NULL);
+	}
+	return (*curr_cmd);
+}
+
 void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count)
 {
 	t_simple_cmd	*curr_cmd;
 	int				i;
 
-	if (cmd_count > 1)
-		init_pipes(data, cmd_count - 1);
+	init_pipes(data, cmd_count - 1);
 	curr_cmd = pipeline->child;
 	i = 0;
 	while (i < pipeline->simple_cmd_count)
 	{
+		init_null_cmd(&curr_cmd);
 		curr_cmd->builtin_arr = data->builtin_arr;
 		curr_cmd->cmd_count = cmd_count;
 		curr_cmd->cmd_i = i;
@@ -157,6 +175,8 @@ int	executor(t_data *data, t_cmd_list *cmd_list)
 {
 	t_pipe_line	*pipeline;
 
+	if (data->exit_var == TERM_SIGINT)
+		data->exit_var = SUCCESS;
 	pipeline = cmd_list->childs;
 	map_heredoc(data, check_create_heredoc);
 	while (data->exit_var != TERM_SIGINT && pipeline)

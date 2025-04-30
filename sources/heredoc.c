@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 19:06:58 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/27 20:50:01 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:12:20 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	hd_sig_hanlder(int sig)
 void	fill_heredoc(t_data *data, t_redir *heredoc)
 {
 	char	*input;
+	char	*temp;
 
 	if (signal(SIGINT, hd_sig_hanlder) == SIG_ERR)
 		clean_all(data, FAILURE, "Error: func signal failed\n");
@@ -39,8 +40,15 @@ void	fill_heredoc(t_data *data, t_redir *heredoc)
 				printf("minishell: warning: here-document delimited \
 					by end-of-file (wanted `%s')", heredoc->delim);
 			}
+			free(input);
 			clean_all(data, g_signal_received, NULL);
 		}
+		temp = expand_str(data, input, ft_strdup(""));
+		free(input);
+		if (!temp)
+			clean_all(data, g_signal_received, NULL);
+		else
+			input = temp;
 		heredoc->fd = open(heredoc->file_name, O_WRONLY | O_APPEND);
 		if (heredoc->fd == -1)
 		{
@@ -99,6 +107,7 @@ void	fork_heredoc(t_data *data, t_redir *heredoc, int *exit_status)
 	}
 	else
 	{
+		signal(SIGINT, SIG_IGN);
 		wait_get_exitcode(data, heredoc_pid);
 	}
 	if (data->exit_var == FAILURE)
@@ -106,10 +115,41 @@ void	fork_heredoc(t_data *data, t_redir *heredoc, int *exit_status)
 	init_sigs(data);
 }
 
+char	*trim_delim(t_data *data, t_redir *heredoc)
+{
+	char	*new_delim;
+	int		len;
+	int		i;
+
+	len = 0;
+	i = 0;
+	while (heredoc->delim[i])
+	{
+		if (heredoc->delim[i] != '\'' && heredoc->delim[i] != '\"')
+			len++;
+		i++;
+	}
+	new_delim = malloc(sizeof(char) * (len + 1));
+	if (!new_delim)
+		return (NULL);
+	len++;
+	while (len>= 0 && i >= 0)
+	{
+		if (heredoc->delim[i] != '\'' && heredoc->delim[i] != '\"')
+			new_delim[--len] = heredoc->delim[i];
+		i--;
+	}
+	free(heredoc->delim);
+	heredoc->delim = new_delim;
+	return (new_delim);
+}
+
 int	check_create_heredoc(t_data *data, t_redir *heredoc)
 {
 	heredoc->delim = heredoc->file_name;
 	heredoc->file_name = NULL;
+	if (trim_delim(data, heredoc) == NULL)
+		clean_all(data, FAILURE, "minishell: heredoc: malloc failed\n");
 	if (signal(SIGINT, SIG_IGN) == SIG_ERR)
 		clean_all(data, FAILURE, "minishell: func signal failed\n");
 	create_heredoc(data, heredoc);

@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:14:10 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/29 18:08:36 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/30 13:41:35 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*expand_var(t_data *data, char *var)
 	i = 1;
 	if (ft_strncmp(var, "$?", 2) == 0)
 		return (ft_itoa(data->exit_var));
-	if (ft_isdigit(var[i]) == 1)
+	if (ft_isdigit(var[i]) == 1 || var[i] == '\'' || var[i] == '\"')
 		return (ft_strdup(""));
 	while (var[i] && (ft_isalnum(var[i]) == 1 || var[i] == '_'))
 		i++;
@@ -62,11 +62,6 @@ char	*expand_var(t_data *data, char *var)
 	env_var = ft_substr(var, 1, i - 1);
 	if (!env_var)
 		return (NULL);
-
-	char *temp = ft_strjoin(env_var, "="); // change logic
-	free(env_var);
-	env_var = temp;
-
 	value = find_var_value(data, env_var);
 	if (!value)
 		value = ft_strdup("");

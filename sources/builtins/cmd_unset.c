@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:49:00 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/30 12:45:28 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/30 13:00:53 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,17 @@ void	delete_var(t_list **list, char *var)
 {
 	t_list	*temp;
 	t_list	*prev;
-	int		equals_i;
-	char	*equals_sign;
+	int		sign_i;
+	char	*compare_sign;
 
 	temp = *list;
 	while (temp)
 	{
-		equals_sign = ft_strchr(temp->content, '=');
-		equals_i = equals_sign - (char *)temp->content;
-		if (ft_strncmp(temp->content, var, equals_i + 1) == 0)
+		compare_sign = ft_strchr(temp->content, '=');
+		if (!compare_sign)
+			compare_sign = ft_strchr(temp->content, '\0');
+		sign_i = compare_sign - (char *)temp->content;
+		if (ft_strncmp(temp->content, var, sign_i) == 0)
 		{
 			if (temp == *list)
 				*list = temp->next;

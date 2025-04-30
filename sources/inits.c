@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/30 12:44:33 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/04/30 14:53:12 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ t_pipe	*init_pipes(t_data *data, int pipes_count)
 	int	i;
 	int	p[2];
 
+	if (pipes_count < 1)
+		return (NULL);
 	data->pipes = malloc(sizeof(t_pipe) * pipes_count);
 	if (!data->pipes)
 		clean_all(data, FAILURE, "minishell: pipe: malloc failed\n");
