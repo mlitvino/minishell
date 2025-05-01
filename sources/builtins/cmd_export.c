@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:36:35 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/30 12:57:10 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:01:25 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,21 @@
 t_list	*find_var(t_list *list, char *var, t_list **prev)
 {
 	t_list	*list_var;
-	char	*compare_sign;
-	int		sign_i;
+	char	*env_var;
+	int		i;
 
 	list_var = list;
 	while (list_var)
 	{
-		compare_sign = ft_strchr(list_var->content, '=');
-		if (!compare_sign)
-			compare_sign = ft_strchr(list_var->content, '\0');
-		sign_i = compare_sign - (char *)list_var->content;
-		if (ft_strncmp(list_var->content, var, sign_i) == 0)
-		{
+		i = 0;
+		env_var = (char *)list_var->content;
+		while (env_var[i] && var[i]
+			&& env_var[i] == var[i]
+			&& env_var[i] != '=')
+			i++;
+		if (env_var[i] == var[i]
+			|| (!var[i] && env_var[i] == '='))
 			return (list_var);
-		}
 		if (prev)
 			*prev = list_var;
 		list_var = list_var->next;
@@ -41,6 +42,7 @@ t_list	*add_replce_var(t_list **list, char *new_var)
 	t_list	*list_var;
 	t_list	*prev;
 	t_list	*temp;
+	char	*key;
 
 	temp = ft_lstnew(new_var);
 	if (!temp)

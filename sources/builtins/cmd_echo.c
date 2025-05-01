@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:35:42 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/30 18:33:03 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/01 15:49:28 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ int	is_new_line(t_data *data, t_args *args)
 	char	*option;
 	char	*new_arg;
 
-	option = args->value;
-	if (!option)
+	if (!args)
 		return (SUCCESS);
+	option = args->value;
 	if (ft_strncmp(option, "-n", 2) != 0)
 		return (SUCCESS);
 	option += 2;
@@ -29,7 +29,7 @@ int	is_new_line(t_data *data, t_args *args)
 			break ;
 		option++;
 	}
-	if (*option && *option != ' ')
+	if ((*option && *option != ' ') || (*option == ' ' && !*(option + 1)))
 		return (SUCCESS);
 	new_arg = ft_substr(option, 1, ft_strlen(option));
 	if (!new_arg)
@@ -45,7 +45,7 @@ int	print_args(t_data *data, t_args *args, int newlne)
 	{
 		if (printf("%s", args->value) < SUCCESS)
 			return (FAILURE);
-		if (newlne != FAILURE)
+		if (newlne != FAILURE && args->next)
 			if (printf(" ") < SUCCESS)
 				return (FAILURE);
 		args = args->next;

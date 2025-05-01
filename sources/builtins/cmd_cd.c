@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:14:50 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/30 13:17:55 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/01 14:24:42 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,9 @@ int	cmd_cd(t_data *data, t_args *args)
 		return (free(path), SUCCESS);
 	if (chdir(path) != SUCCESS)
 	{
+		ft_putstr_fd("minishell: cd: ", 2);
+		perror(path);
 		free(path);
-		perror("minishell: cd");
 		return (FAILURE);
 	}
 	if (update_oldpwd(data, data->env) != SUCCESS)
