@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/30 18:32:33 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/01 17:08:05 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,7 +249,7 @@ void	wait_childs(t_data *data, t_simple_cmd *lst_cmd);
 void	check_empty(t_data *data, t_simple_cmd *cmd);
 
 // executor.c
-void	execve_cmd(t_data *data, t_simple_cmd *cmd);
+void	execve_cmd(t_data *data, t_simple_cmd *cmd, int builtin_i);
 int		exec_simpl_cmd(t_data *data, t_simple_cmd *cmd);
 void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count);
 int		executor(t_data *data, t_cmd_list *cmd_list);

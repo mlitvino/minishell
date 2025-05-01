@@ -6,27 +6,23 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:03:21 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/30 17:06:46 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/01 17:13:13 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	execve_cmd(t_data *data, t_simple_cmd *cmd)
+void	execve_cmd(t_data *data, t_simple_cmd *cmd, int builtin_i)
 {
 	char	**argv;
 	char	**env;
-
-	/*
-	void	*builtin_func;
+	int		exit_code;
 
 	if (builtin_i != -1)
 	{
-		builtin_func = cmd->builtin_arr[builtin_i].func(data, cmd->args)
-		clean_all(data, builtin_func, NULL);
+		exit_code = cmd->builtin_arr[builtin_i].func(data, cmd->args);
+		clean_all(data, exit_code, NULL);
 	}
-
-	*/
 	argv = convrt_args_to_argv(cmd->args, cmd->command);
 	env = convrt_lst_to_argv(data->env);
 	if (!env || !argv)
@@ -48,29 +44,6 @@ int	exec_simpl_cmd(t_data *data, t_simple_cmd *cmd)
 	if (!cmd->command[0] && cmd->inside_quotes == 0)
 		return (SUCCESS);
 	builtin_i = is_builtin(cmd->builtin_arr, cmd->command);
-	if (builtin_i != -1)
-		cmd->exit_code = cmd->builtin_arr[builtin_i].func(data, cmd->args);
-	else
-	{
-		cmd->cmd_pid = fork();
-		if (cmd->cmd_pid == -1)
-		{
-			perror("minishell: fork");
-			return (FAILURE);
-		}
-		if (cmd->cmd_pid == 0)
-		{
-			close(cmd->std_fd[STDIN]);
-			cmd->std_fd[STDIN] = -1;
-			close(cmd->std_fd[STDOUT]);
-			cmd->std_fd[STDIN] = -1;
-			close_pipes(data, cmd->cmd_count - 1);
-			if (search_exec(data, cmd) == SUCCESS)
-				execve_cmd(data, cmd);
-		}
-	}
-	/*
-
 	if (builtin_i == -1 || cmd->cmd_count > 1)
 	{
 		cmd->cmd_pid = fork();
@@ -87,16 +60,11 @@ int	exec_simpl_cmd(t_data *data, t_simple_cmd *cmd)
 			cmd->std_fd[STDIN] = -1;
 			close_pipes(data, cmd->cmd_count - 1);
 			if (builtin_i != -1 || search_exec(data, cmd) == SUCCESS)
-				execve_cmd(data, cmd);
+				execve_cmd(data, cmd, builtin_i);
 		}
 	}
 	else
-	{
 		cmd->exit_code = cmd->builtin_arr[builtin_i].func(data, cmd->args);
-	}
-
-	*/
-
 	return (SUCCESS);
 }
 
