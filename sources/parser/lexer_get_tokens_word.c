@@ -6,7 +6,7 @@
 /*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 01:50:58 by alfokin           #+#    #+#             */
-/*   Updated: 2025/04/27 23:48:18 by alfokin          ###   ########.fr       */
+/*   Updated: 2025/05/02 00:06:29 by alfokin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static char	*get_no_quoting_word(char *line, int *i)
 	int		j;
 
 	j = *i;
-	while (line[j] && !ft_strrchr("\t '\"\\<>;|", line[j]))
+	while (line[j] && !ft_strrchr("\t '\"<>;|", line[j]))
 		j++;
 	word = ft_substr(line, *i, j - *i);
 	*i = j;
@@ -32,7 +32,7 @@ static int	ft_count_backslashes(char *line, int j)
 
 	k = j - 1;
 	back_slash_count = 0;
-	while (line[k] == '\\')
+	while (k >= 0 && line[k] == '\\')
 	{
 		back_slash_count++;
 		k--;
@@ -44,58 +44,25 @@ static char	*get_double_quotes_word(char *line, int *i)
 {
 	int start;
 	int j;
-	char *raw;
-	char *processed;
-	int k;
-	int p;
+	char *word;
 
 	start = *i;
 	j = *i + 1;
-	while (line[j])
+	while (line[j] && line[j] != '\"')
 	{
-		if (line[j] == '\"' && line[j - 1] != '\\')
+		if (line[j] == '\"' && line[j-1] != '\\')
 			break ;
-		else if (line[j] == '\"' && line[j - 1] == '\\')
-		{
-			if (ft_count_backslashes(line, j) % 2 == 0)
-				break ;
-		}
 		j++;
 	}
 	if (line[j] == '\0')
 	{
-		raw = ft_substr(line, start, j - start);
+		word = ft_substr(line, start, j - start);
 		*i = j;
-		return (raw);
+		return (word);
 	}
-	raw = ft_substr(line, start + 1, j - start - 1);
+	word = ft_substr(line, start + 1, j - start - 1);
 	*i = j + 1;
-	processed = (char *)malloc(ft_strlen(raw) + 1);
-	if (!processed)
-	{
-		free(raw);
-		return (NULL);
-	}
-	k = 0;
-	p = 0;
-	while (raw[k])
-	{
-		if (raw[k] == '\\' && raw[k + 1] != '\0')
-		{
-			if (raw[k + 1] == '\"' || raw[k + 1] == '\\' || raw[k + 1] == '$')
-			{
-				processed[p++] = raw[k + 1];
-				k += 2;
-				continue ;
-			}
-			processed[p++] = raw[k++];
-			continue ;
-		}
-		processed[p++] = raw[k++];
-	}
-	processed[p] = '\0';
-	free(raw);
-	return (processed);
+	return (word);
 }
 
 static char	*get_quoting_word(char *line, int *i, int quoting)
@@ -107,16 +74,8 @@ static char	*get_quoting_word(char *line, int *i, int quoting)
 	word = NULL;
 	if (quoting == 1)
 	{
-		if (line[j + 1] == '\0')
-		{
-			word = ft_substr(line, j, 1);
-			*i += 1;
-		}
-		else
-		{
-			word = ft_substr(line, j + 1, 1);
-			*i += 2;
-		}
+		word = ft_substr(line, j, 1);
+		*i += 1;
 		return (word);
 	}
 	else if (quoting == 2)
@@ -131,7 +90,7 @@ static char	*get_quoting_word(char *line, int *i, int quoting)
 		}
 		else
 		{
-			word = ft_substr(line, *i + 1, j - *i - 1);
+			word = ft_substr(line, *i, j - *i + 1);
 			*i = j + 1;
 		}
 		return (word);

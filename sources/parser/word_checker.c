@@ -6,7 +6,7 @@
 /*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 23:40:39 by alfokin           #+#    #+#             */
-/*   Updated: 2025/04/14 00:17:38 by alfokin          ###   ########.fr       */
+/*   Updated: 2025/05/02 00:33:27 by alfokin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,62 +22,23 @@ int	count_bachslashes(char *word, int *index, int back_slash)
 	return (back_slash);
 }
 
-int	ft_get_first_double_quotes(char *word, int *index, int *back_slash)
+void	ft_check_quotes(int *in_double, int *in_single,
+			char *word, int *i)
 {
-	int	quote;
-
-	quote = 0;
-	if (*index != 0 && word[*index - 1] != 92)
-		quote += 2;
-	else
+	if (word[*i] == '\\' && !(*in_single) && word[(*i) + 1] != '\0')
+		(*i)++;
+	else if (word[(*i)] == '\"' && !(*in_single))
 	{
-		if (*back_slash % 2 == 0)
-			quote += 2;
+		if (!(*in_double))
+			(*in_double) = 1;
+		else
+			(*in_double) = 0;
 	}
-	(*index)++;
-	*back_slash = 0;
-	return (quote);
-}
-
-int	ft_get_first_single_quotes(char *word, int *index, int *back_slash)
-{
-	int	quote;
-
-	quote = 0;
-	if (word[*index - 1] != 92)
+	else if (word[(*i)] == '\'' && !(*in_double))
 	{
-		quote += 1;
+		if (!(*in_single))
+			(*in_single) = 1;
+		else
+			(*in_single) = 0;
 	}
-	else
-	{
-		if (*back_slash % 2 == 0)
-		{
-			quote += 1;
-		}
-	}
-	(*index)++;
-	*back_slash = 0;
-	return (quote);
-}
-
-void	ft_get_close_double_quotes(char *word, int *index, int *back_slash,
-			int *quote)
-{
-	if (word[*index - 1] != 92)
-		*quote -= 2;
-	else
-	{
-		if (*back_slash % 2 == 0)
-			*quote -= 2;
-	}
-	*back_slash = 0;
-	(*index)++;
-}
-
-void	ft_get_close_single_quotes(int *index, int *back_slash,
-			int *quote)
-{
-	(*index)++;
-	*quote -= 1;
-	*back_slash = 0;
 }

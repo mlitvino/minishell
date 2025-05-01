@@ -6,7 +6,7 @@
 /*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/28 01:14:49 by alfokin          ###   ########.fr       */
+/*   Updated: 2025/05/02 00:33:38 by alfokin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,7 +221,6 @@ t_args		*ft_create_arg(char *value);
 int			ft_syntax_check(t_token *tokens_list, int *status);
 int			ft_check_word_semi_pipe_redir(t_token *tokens_list, t_token *token,
 				int *status);
-int			ft_check_backslash(char *word);
 int			ft_check_closing_quotes(char *word);
 int			quote_return(int quote);
 
@@ -242,12 +241,8 @@ void		ft_print_systax_error(t_token *token);
 
 /*--------------------------------WORD CHECKER--------------------------------*/
 int			count_bachslashes(char *word, int *index, int back_slash);
-int			ft_get_first_double_quotes(char *word, int *index, int *back_slash);
-int			ft_get_first_single_quotes(char *word, int *index, int *back_slash);
-void		ft_get_close_double_quotes(char *word, int *index, int *back_slash,
-				int *quote);
-void		ft_get_close_single_quotes(int *index, int *back_slash,
-				int *quote);
+void		ft_check_quotes(int *in_double, int *in_single,
+				char *word, int *i);
 
 /*-------------------------------CREATE ASTERIKS------------------------------*/
 t_pipe_line	*ft_init_pipe_line(void);
