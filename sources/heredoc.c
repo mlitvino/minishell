@@ -6,54 +6,27 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 19:06:58 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/30 17:12:20 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/02 14:33:09 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	hd_sig_hanlder(int sig)
-{
-	printf("\n");
-	rl_replace_line("", 0);
-	rl_redisplay();
-	rl_on_new_line();
-	g_signal_received = TERM_SIGINT;
-	close(STDIN);
-}
-
 void	fill_heredoc(t_data *data, t_redir *heredoc)
 {
 	char	*input;
-	char	*temp;
 
 	if (signal(SIGINT, hd_sig_hanlder) == SIG_ERR)
 		clean_all(data, FAILURE, "Error: func signal failed\n");
 	while (1)
 	{
 		input = readline("> ");
-		if (!input || ft_strcmp(input, heredoc->delim) == 0)
-		{
-			if (!input && g_signal_received == 0)
-			{
-				dup2(STDOUT, STDERR);
-				printf("minishell: warning: here-document delimited \
-					by end-of-file (wanted `%s')", heredoc->delim);
-			}
-			free(input);
-			clean_all(data, g_signal_received, NULL);
-		}
-		temp = expand_str(data, input, ft_strdup(""));
-		free(input);
-		if (!temp)
-			clean_all(data, g_signal_received, NULL);
-		else
-			input = temp;
+		input = check_hd_input(data, heredoc, input);
 		heredoc->fd = open(heredoc->file_name, O_WRONLY | O_APPEND);
 		if (heredoc->fd == -1)
 		{
-			perror("minishell: temp heredoc");//dell
-			clean_all(data, FAILURE, NULL); // change strerror
+			perror("minishell: heredoc file");
+			clean_all(data, FAILURE, NULL);
 		}
 		ft_putendl_fd(input, heredoc->fd);
 		close(heredoc->fd);
@@ -115,35 +88,6 @@ void	fork_heredoc(t_data *data, t_redir *heredoc, int *exit_status)
 	init_sigs(data);
 }
 
-char	*trim_delim(t_data *data, t_redir *heredoc)
-{
-	char	*new_delim;
-	int		len;
-	int		i;
-
-	len = 0;
-	i = 0;
-	while (heredoc->delim[i])
-	{
-		if (heredoc->delim[i] != '\'' && heredoc->delim[i] != '\"')
-			len++;
-		i++;
-	}
-	new_delim = malloc(sizeof(char) * (len + 1));
-	if (!new_delim)
-		return (NULL);
-	len++;
-	while (len>= 0 && i >= 0)
-	{
-		if (heredoc->delim[i] != '\'' && heredoc->delim[i] != '\"')
-			new_delim[--len] = heredoc->delim[i];
-		i--;
-	}
-	free(heredoc->delim);
-	heredoc->delim = new_delim;
-	return (new_delim);
-}
-
 int	check_create_heredoc(t_data *data, t_redir *heredoc)
 {
 	heredoc->delim = heredoc->file_name;
@@ -168,5 +112,3 @@ int	unlink_heredoc(t_data *data, t_redir *heredoc)
 	}
 	return (SUCCESS);
 }
-
-

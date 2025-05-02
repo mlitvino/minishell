@@ -6,11 +6,30 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/30 14:53:12 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/02 14:31:55 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	init_sigs(t_data *data)
+{
+	struct sigaction	sa;
+	struct sigaction	ig;
+	int					return_code;
+
+	return_code = 0;
+	sa.sa_flags = SA_SIGINFO;
+	sa.sa_sigaction = sig_handler;
+	return_code |= sigemptyset(&sa.sa_mask);
+	return_code |= sigaddset(&sa.sa_mask, SIGINT);
+	return_code |= sigaction(SIGINT, &sa, NULL);
+	if (return_code != 0 || signal(SIGQUIT, SIG_IGN) == SIG_ERR)
+	{
+		perror("minishell: init_sigs");
+		clean_all(data, FAILURE, NULL);
+	}
+}
 
 t_pipe	*init_pipes(t_data *data, int pipes_count)
 {

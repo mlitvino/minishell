@@ -6,7 +6,7 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/05/01 18:25:45 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/05/02 14:35:55 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,8 @@ EXEC_DIR	= executor
 INCLD		= $(INCLD_DIR)/minishell.h
 
 SRC =	$(addprefix $(SRC_DIR)/, \
-		main.c utils.c signals.c expand.c quotes.c heredoc.c heredoc_utils.c utils_clean.c inits.c \
+		main.c utils.c signals.c check_cmd.c expand.c quotes.c \
+		heredoc.c heredoc_utils.c utils_clean.c inits.c \
 		$(PARSER_SRC) $(BUILT_SRC) $(EXEC_SRC) \
 		test.c)
 PARSER_SRC = $(addprefix $(PARSER_DIR)/, \
@@ -43,7 +44,9 @@ BUILT_SRC = $(addprefix $(BUILT_DIR)/, \
 BUILT_SRC = $(addprefix $(BUILT_DIR)/, \
 		cmd_cd.c cmd_echo.c cmd_env.c cmd_exit.c cmd_export.c cmd_pwd.c \
 		cmd_unset.c)
-EXEC_SRC = $(addprefix $(EXEC_DIR)/, executor_search.c executor.c executor_redirect.c executor_utils.c)
+EXEC_SRC = $(addprefix $(EXEC_DIR)/, \
+		executor.c executor_utils.c search_exec.c redirect.c \
+		check_cmd.c search_utils.c)
 
 OBJ = $(addprefix $(OBJ_DIR)/,$(notdir $(SRC:.c=.o)))
 

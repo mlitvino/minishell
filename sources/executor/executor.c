@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:03:21 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/01 17:13:13 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/02 14:03:21 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,7 @@ int	exec_simpl_cmd(t_data *data, t_simple_cmd *cmd)
 	{
 		cmd->cmd_pid = fork();
 		if (cmd->cmd_pid == -1)
-		{
-			perror("minishell: fork");
-			return (FAILURE);
-		}
+			return (perror("minishell: fork"), FAILURE);
 		if (cmd->cmd_pid == 0)
 		{
 			close(cmd->std_fd[STDIN]);
@@ -68,49 +65,6 @@ int	exec_simpl_cmd(t_data *data, t_simple_cmd *cmd)
 	return (SUCCESS);
 }
 
-void	check_empty(t_data *data, t_simple_cmd *cmd)
-{
-	void	*temp;
-	t_args	*args;
-
-	while (cmd->command[0] == '\0' && cmd->inside_quotes == 0 && cmd->args)
-	{
-		free(cmd->command);
-		cmd->command = cmd->args->value;
-		cmd->inside_quotes = cmd->args->inside_quotes;
-		temp = cmd->args->next;
-		free(cmd->args);
-		cmd->args = temp;
-	}
-	args = cmd->args;
-	while (args && args->value[0] == '\0' && args->inside_quotes == 0)
-	{
-		temp = args->next;
-		free(args->value);
-		free(args);
-		args = temp;
-	}
-	cmd->args = args;
-}
-
-t_simple_cmd	*init_null_cmd(t_simple_cmd **curr_cmd)
-{
-
-	if (!*curr_cmd)
-	{
-		*curr_cmd = malloc(sizeof(t_simple_cmd));
-		if (*curr_cmd)
-			return (NULL);
-	}
-	if (!(*curr_cmd)->command)
-	{
-		(*curr_cmd)->command = ft_strdup("");
-		if (!(*curr_cmd)->command)
-			return (NULL);
-	}
-	return (*curr_cmd);
-}
-
 void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count)
 {
 	t_simple_cmd	*curr_cmd;
@@ -121,13 +75,8 @@ void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count)
 	i = 0;
 	while (i < pipeline->simple_cmd_count)
 	{
-		init_null_cmd(&curr_cmd);
-		curr_cmd->builtin_arr = data->builtin_arr;
-		curr_cmd->cmd_count = cmd_count;
-		curr_cmd->cmd_i = i;
-		check_quots_expand(data, curr_cmd);
-		check_empty(data, curr_cmd);
-		curr_cmd->exit_code = redirect(data, curr_cmd, curr_cmd->redirections); // chang return value
+		check_cmd(data, curr_cmd, cmd_count, i);
+		curr_cmd->exit_code = redirect(data, curr_cmd, curr_cmd->redirections);
 		if (curr_cmd->exit_code == SUCCESS)
 			exec_simpl_cmd(data, curr_cmd);
 		restart_fd(data, curr_cmd);
@@ -143,10 +92,8 @@ int	executor(t_data *data, t_cmd_list *cmd_list)
 {
 	t_pipe_line	*pipeline;
 
-	if (data->exit_var == TERM_SIGINT)
-		data->exit_var = SUCCESS;
 	pipeline = cmd_list->childs;
-	map_heredoc(data, check_create_heredoc);
+	data->exit_var = map_heredoc(data, check_create_heredoc);
 	while (data->exit_var != TERM_SIGINT && pipeline)
 	{
 		exec_pipeline(data, pipeline, pipeline->simple_cmd_count);
