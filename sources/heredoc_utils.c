@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 20:48:09 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/02 14:30:46 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/05 15:05:52 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,40 +27,14 @@ char	*check_hd_input(t_data *data, t_redir *heredoc, char *input)
 		free(input);
 		clean_all(data, g_signal_received, NULL);
 	}
-	expnd_str = expand_str(data, input, ft_strdup(""));
+	if (heredoc->inside_quotes == 0)
+		expnd_str = expand_str(data, input, ft_strdup(""), 0);
+	else
+		expnd_str = ft_strdup(input);
 	free(input);
 	if (!expnd_str)
 		clean_all(data, FAILURE, "minishell: heredoc: malloc failed\n");
 	return (expnd_str);
-}
-
-char	*trim_delim(t_data *data, t_redir *heredoc)
-{
-	char	*new_delim;
-	int		len;
-	int		i;
-
-	len = 0;
-	i = 0;
-	while (heredoc->delim[i])
-	{
-		if (heredoc->delim[i] != '\'' && heredoc->delim[i] != '\"')
-			len++;
-		i++;
-	}
-	new_delim = malloc(sizeof(char) * (len + 1));
-	if (!new_delim)
-		return (NULL);
-	len++;
-	while (len >= 0 && i >= 0)
-	{
-		if (heredoc->delim[i] != '\'' && heredoc->delim[i] != '\"')
-			new_delim[--len] = heredoc->delim[i];
-		i--;
-	}
-	free(heredoc->delim);
-	heredoc->delim = new_delim;
-	return (new_delim);
 }
 
 int	bzero_existing(t_data *data, t_redir *heredoc)
@@ -84,6 +58,7 @@ static int	find_hd(t_data *data, t_simple_cmd *cmd,
 		}
 		cmd = cmd->next;
 	}
+	return (SUCCESS);
 }
 
 int	map_heredoc(t_data *data, int (*func)(t_data *data, t_redir *heredoc))

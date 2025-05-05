@@ -6,7 +6,7 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/05/02 14:35:55 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/05/05 13:47:43 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,17 +30,15 @@ INCLD		= $(INCLD_DIR)/minishell.h
 
 SRC =	$(addprefix $(SRC_DIR)/, \
 		main.c utils.c signals.c check_cmd.c expand.c quotes.c \
-		heredoc.c heredoc_utils.c utils_clean.c inits.c \
+		heredoc.c heredoc_utils.c heredoc_trim.c utils_clean.c inits.c \
 		$(PARSER_SRC) $(BUILT_SRC) $(EXEC_SRC) \
 		test.c)
+
 PARSER_SRC = $(addprefix $(PARSER_DIR)/, \
 		cont_token_checker.c parser.c create_asteriks.c create_nodes.c \
 		destroy_nodes.c syntax_checker.c token_checker.c word_checker.c \
 		lexer.c lexer_get_tokens.c lexer_get_tokens_op.c \
 		lexer_get_tokens_word.c)
-BUILT_SRC = $(addprefix $(BUILT_DIR)/, \
-		cmd_cd.c cmd_echo.c cmd_env.c cmd_exit.c cmd_export.c cmd_pwd.c \
-		cmd_unset.c)
 BUILT_SRC = $(addprefix $(BUILT_DIR)/, \
 		cmd_cd.c cmd_echo.c cmd_env.c cmd_exit.c cmd_export.c cmd_pwd.c \
 		cmd_unset.c)

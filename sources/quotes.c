@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:15:56 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/03 15:28:07 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/05 15:14:25 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*trim_quotes(t_data *data, char *str)
 	if (!temp)
 		return (NULL);
 	if (*str == '\"')
-		new_str = expand_str(data, temp, ft_strdup(""));
+		new_str = expand_str(data, temp, ft_strdup(""), 0);
 	else
 		new_str = ft_strdup(temp);
 	free(temp);
@@ -53,7 +53,7 @@ char	*get_next_piece(t_data *data, char *orig_str, int *orig_i)
 		res = ft_substr(orig_str, 0, curr_i);
 	else if (orig_str[curr_i] == '$')
 	{
-		res = expand_var(data, &orig_str[curr_i]);
+		res = expand_var(data, &orig_str[curr_i], 0);
 		curr_i += get_i_end_token(&orig_str[curr_i], '$');
 	}
 	else if (orig_str[curr_i] == '\'' || orig_str[curr_i] == '\"')

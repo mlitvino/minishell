@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:14:10 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/30 13:41:35 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/05 15:13:06 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,55 @@ int	get_i_end_token(char *str, char token)
 	return (i);
 }
 
-char	*expand_var(t_data *data, char *var)
+char	*trim_spaces(char *value)
+{
+	char	*new_val;
+	int		len;
+	int		i;
+
+	len = 0;
+	i = 0;
+	while (value[i++])
+		if (value[i - 1] != ' ' || (value[i - 1] == ' ' && value[i] != ' '))
+			len++;
+	new_val = malloc(sizeof(char) * (len + 1));
+	if (!new_val)
+		return (NULL);
+	new_val[len] = '\0';
+	i = 0;
+	len = 0;
+	while (value[i])
+	{
+		if (value[i] != ' ' || (value[i] == ' ' && value[i + 1] != ' '))
+			new_val[len++] = value[i];
+		i++;
+	}
+	return (new_val);
+}
+
+char	*substr_value(t_data *data, char *var, int trim_flg, int i)
 {
 	char	*env_var;
+	char	*value;
+
+	env_var = ft_substr(var, 1, i - 1);
+	if (!env_var)
+		return (NULL);
+	value = find_var_value(data, env_var);
+	if (!value)
+		value = ft_strdup("");
+	else
+		value = ft_strdup(value);
+	free(env_var);
+	value = ft_strtrim(value, " ");
+	if (!value)
+		return (NULL);
+	value = trim_spaces(value);
+	return (value);
+}
+
+char	*expand_var(t_data *data, char *var, int trim_flg)
+{
 	int		i;
 	char	*value;
 
@@ -59,19 +105,11 @@ char	*expand_var(t_data *data, char *var)
 		i++;
 	if (i == 1)
 		return (ft_strdup("$"));
-	env_var = ft_substr(var, 1, i - 1);
-	if (!env_var)
-		return (NULL);
-	value = find_var_value(data, env_var);
-	if (!value)
-		value = ft_strdup("");
-	else
-		value = ft_strdup(value);
-	free(env_var);
+	value = substr_value(data, var, trim_flg, i);
 	return (value);
 }
 
-char	*expand_str(t_data *data, char *orig_str, char *new_str)
+char	*expand_str(t_data *data, char *orig_str, char *new_str, int trim_flg)
 {
 	int		i;
 	char	*piece_str;
@@ -88,13 +126,13 @@ char	*expand_str(t_data *data, char *orig_str, char *new_str)
 		piece_str = ft_substr(orig_str, 0, i);
 	else if (orig_str[i] == '$')
 	{
-		piece_str = expand_var(data, &orig_str[i]);
+		piece_str = expand_var(data, &orig_str[i], trim_flg);
 		i += get_i_end_token(&orig_str[i], '$');
 	}
 	temp = ft_strjoin(new_str, piece_str); // change logic
-	if (!temp || !piece_str)
-		return (free(new_str), free(piece_str), NULL);
 	free(new_str);
+	if (!temp || !piece_str)
+		return (free(temp), free(piece_str), NULL);
 	free(piece_str);
-	return (expand_str(data, &orig_str[i], temp));
+	return (expand_str(data, &orig_str[i], temp, trim_flg));
 }

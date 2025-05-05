@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/02 14:35:03 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/05 15:04:33 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,21 +189,25 @@ t_pipe	*init_pipes(t_data *data, int	cmd_count);
 void	init_builtins(t_data *data);
 void	init_data(t_data *data, char **sys_env);
 
+// expand.c
+char	*find_var_value(t_data *data, char *env_var);
+int		get_i_end_token(char *str, char token);
+char	*substr_value(t_data *data, char *var, int trim_flg, int i);
+char	*expand_var(t_data *data, char *var, int trim_flg);
+char	*expand_str(t_data *data, char *orig_str, char *new_str, int trim_flg);
+
+// heredoc_trim.c
+int		is_valid(char *char_ptr);
+char	*trim_delim(t_data *data, t_redir *heredoc);
+
 // heredoc.c
 void	fill_heredoc(t_data *data, t_redir *heredoc);
 void	create_heredoc(t_data *data, t_redir *heredoc);
 int		check_create_heredoc(t_data *data, t_redir *heredoc);
 int		unlink_heredoc(t_data *data, t_redir *heredoc);
 
-// expand.c
-char	*find_var_value(t_data *data, char *env_var);
-int		get_i_end_token(char *str, char token);
-char	*expand_var(t_data *data, char *var);
-char	*expand_str(t_data *data, char *orig_str, char *new_str);
-
 // heredoc_utils.c
 char	*check_hd_input(t_data *data, t_redir *heredoc, char *input);
-char	*trim_delim(t_data *data, t_redir *heredoc);
 int		map_heredoc(t_data *data, int (*func)(t_data *data, t_redir *heredoc));
 int		bzero_existing(t_data *data, t_redir *heredoc);
 
