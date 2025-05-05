@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 13:47:25 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/05 14:05:38 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/05 15:30:19 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	*trim_delim(t_data *data, t_redir *heredoc)
 	while (len >= 0 && i >= 0)
 	{
 		if (is_valid(&heredoc->delim[i]) == SUCCESS)
-			new_delim[--len] = heredoc->delim[i];
+			new_delim[len--] = heredoc->delim[i];
 		i--;
 	}
 	free(heredoc->delim);
