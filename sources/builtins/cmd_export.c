@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:36:35 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/05 13:21:32 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/05 18:05:52 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ t_list	*find_var(t_list *list, char *var, t_list **prev)
 			&& env_var[i] != '=')
 			i++;
 		if (env_var[i] == var[i]
-			|| (!var[i] && env_var[i] == '='))
+			|| (!var[i] && env_var[i] == '=')
+			|| (!env_var[i] && var[i] == '='))
 			return (list_var);
 		if (prev)
 			*prev = list_var;
@@ -81,13 +82,28 @@ int	check_export_arg(t_args *args, int *exit_code) // SPACE CHECK
 			arg_value++;
 		}
 		if (!*arg_value)
-			return (MISUSE);
+			return (SUCCESS);
 	}
 	*exit_code = 1;
-	ft_putstr_fd("minishell: export: `", 2);
-	ft_putstr_fd(args->value, 2);
-	ft_putstr_fd("': not a valid identifier\n", 2);
+	print_strs_fd("minishell: export: `", args->value,
+		"': not a valid identifier\n", 2);
 	return (FAILURE);
+}
+
+int	export_no_args(t_data *data)
+{
+	t_list	*env;
+
+	env = data->env;
+	while (env)
+	{
+		if (printf("declare -x ") < SUCCESS)
+			return (FAILURE);
+		if (printf("%s\n", (char *)env->content) < SUCCESS)
+			return (FAILURE);
+		env = env->next;
+	}
+	return (SUCCESS);
 }
 
 int	cmd_export(t_data *data, t_args *args)
@@ -96,6 +112,8 @@ int	cmd_export(t_data *data, t_args *args)
 	int		exit_code;
 
 	exit_code = SUCCESS;
+	if (!args)
+		exit_code = export_no_args(data);
 	while (args)
 	{
 		if (check_export_arg(args, &exit_code) == SUCCESS)

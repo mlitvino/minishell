@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 16:43:02 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/26 18:32:04 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/05 17:57:20 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,9 @@ int	cmd_env(t_data *data, t_args *args)
 	env = data->env;
 	while (env)
 	{
-		if (printf("%s\n", (char *)env->content) < SUCCESS)
-			return (FAILURE);
+		if (ft_strchr((char *)env->content, '=') != NULL)
+			if (printf("%s\n", (char *)env->content) < SUCCESS)
+				return (FAILURE);
 		env = env->next;
 	}
 	return (SUCCESS);
