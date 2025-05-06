@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/06 13:12:46 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/06 14:33:18 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -360,12 +360,12 @@ void		ft_destroy_ast(t_cmd_list *cmd_list);
 
 /*-----------------------------------LEXER------------------------------------*/
 t_token			*ft_lexer(char *line);
-void			ft_get_word(t_token *tokens_list, char *line, int *table);
-void			get_space_pipe_semi_redir(t_token *tokens_list,
+void			*ft_get_word(t_token *tokens_list, char *line, int *table);
+void			*get_space_pipe_semi_redir(t_token *tokens_list,
 					char *line, int *j, int *index);
 void			ft_destoy_token_list(t_token *tokens_list);
 void			print_tokens(t_token *tokens_list);
-void			add_token(t_token *token_list, t_token_type type,
+void			*add_token(t_token *token_list, t_token_type type,
 					char *content, int index);
 char			*ft_get_words(char *line, int *j, char *word, int *quoting);
 

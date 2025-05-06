@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 01:50:24 by alfokin           #+#    #+#             */
-/*   Updated: 2025/04/15 15:58:37 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/06 14:32:40 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ t_token	*first_token(void)
 	t_token	*new_token;
 
 	new_token = (t_token *)malloc(sizeof(t_token));
+	if (!new_token)
+		return (NULL);
 	new_token->value = ft_strdup("NONE");
 	new_token->next = NULL;
 	new_token->type = NONE;
@@ -48,15 +50,22 @@ t_token	*first_token(void)
 	return (new_token);
 }
 
-void	add_token(t_token *token_list, t_token_type type, char *content,
+void	*add_token(t_token *token_list, t_token_type type, char *content,
 		int index)
 {
 	t_token	*tmp;
 
+	if (!content)
+		return (NULL);
 	tmp = token_list;
 	while (tmp->next != NULL)
 		tmp = tmp->next;
 	tmp->next = (t_token *)malloc(sizeof(t_token));
+	if (!tmp->next)
+	{
+		free(content);
+		return (NULL);
+	}
 	tmp->next->index = index;
 	tmp->next->type = type;
 	tmp->next->value = content;
@@ -67,7 +76,7 @@ void	add_token(t_token *token_list, t_token_type type, char *content,
  * table[5];
  * 0 = i  ; 1 = j ; k = 2; index = 3 ; quote = 4;
  * */
-void	create_tokens_list(t_token *tokens_list, char *line)
+void	*create_tokens_list(t_token *tokens_list, char *line)
 {
 	int	table[5];
 
@@ -80,7 +89,10 @@ void	create_tokens_list(t_token *tokens_list, char *line)
 		while (line[table[1]] == ' ' || line[table[1]] == '\t')
 			table[1]++;
 		if (ft_strrchr("|;><", line[table[1]]) != NULL)
-			get_space_pipe_semi_redir(tokens_list, line, &table[1], &table[3]);
+		{
+			if (get_space_pipe_semi_redir(tokens_list, line, &table[1], &table[3]) == NULL)
+				return (NULL);
+		}
 		if (ft_strrchr("\t <>;|", line[table[1]]) == NULL
 			|| line[table[1]] == '\\')
 		{
@@ -89,7 +101,8 @@ void	create_tokens_list(t_token *tokens_list, char *line)
 		}
 		table[0] = table[1];
 	}
-	add_token(tokens_list, NEWLINE, ft_strdup("newline"), table[3]);
+	if (add_token(tokens_list, NEWLINE, ft_strdup("newline"), table[3]) == NULL)
+		return (NULL);
 }
 
 t_token	*ft_lexer(char *line)
@@ -98,6 +111,12 @@ t_token	*ft_lexer(char *line)
 
 	tokens_list = NULL;
 	tokens_list = first_token();
-	create_tokens_list(tokens_list, line);
+	if (!tokens_list)
+		return (NULL);
+	if (create_tokens_list(tokens_list, line) == NULL)
+	{
+		// delete tokens_list
+		// tokens_list = NULL;
+	}
 	return (tokens_list);
 }
