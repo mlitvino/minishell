@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/05 15:04:33 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/06 13:12:46 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,7 +277,7 @@ int		update_oldpwd(t_data *data, t_list *env);
 char	*get_home_path(t_data *data);
 int		cmd_cd(t_data *data, t_args *args);
 // cmd_echo.c
-int		is_new_line(t_data *data, t_args *args);
+t_args	*is_option(t_args *args, int *option);
 int		print_args(t_data *data, t_args *args, int newlne);
 int		cmd_echo(t_data *data, t_args *args);
 // cmd_env.c

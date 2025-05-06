@@ -6,50 +6,38 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:35:42 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/05 18:08:30 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/06 13:12:40 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_new_line(t_data *data, t_args *args)
+t_args	*is_option(t_args *args, int *option)
 {
-	char	*option;
-	char	*new_arg;
+	int	i;
 
-	if (!args)
-		return (SUCCESS);
-	option = args->value;
-	if (ft_strncmp(option, "-n", 2) != 0)
-		return (SUCCESS);
-	option += 2;
-	while (*option)
+	while (args)
 	{
-		if (*option != 'n')
-			break ;
-		option++;
+		i = 0;
+		while (args->value[i])
+		{
+			if (args->value[i] == '-' && args->value[i + 1] == 'n')
+				while (args->value[++i] == 'n')
+					{ }
+			else
+				break ;
+		}
+		if (!args->value[i])
+			*option = SUCCESS;
+		else
+			return (args);
+		args = args->next;
 	}
-	if ((*option && *option != ' ') || (*option == ' ' && !*(option + 1)))
-		return (SUCCESS);
-	new_arg = ft_substr(option, 1, ft_strlen(option));
-	if (!new_arg)
-		clean_all(data, FAILURE, "minishell: echo: malloc failed\n");
-	free(args->value);
-	args->value = new_arg;
-	return (FAILURE);
+	return (NULL);
 }
 
 int	print_args(t_data *data, t_args *args, int newlne)
 {
-	if (args)
-	{
-		if (printf("%s", args->value) < SUCCESS)
-			return (FAILURE);
-		if (newlne != FAILURE && args->next)
-			if (printf(" ") < SUCCESS)
-				return (FAILURE);
-		args = args->next;
-	}
 	while (args)
 	{
 		if (printf("%s", args->value) < SUCCESS)
@@ -62,68 +50,24 @@ int	print_args(t_data *data, t_args *args, int newlne)
 	return (SUCCESS);
 }
 
-int	get_i_newline(char *str)
-{
-	int	i;
-	int	optn_flg;
-
-	i = 0;
-	optn_flg = 0;
-	while (str[i])
-	{
-		if (str[i] == '-' && str[i + 1] == 'n')
-			while (str[++i] == 'n')
-				optn_flg |= 1;
-		else if (ft_isspace(str[i]) == 1)
-			while (ft_isspace(str[++i]) == 1)
-				{ }
-		else
-			break ;
-	}
-	if (optn_flg == 1 && !str[i])
-		return (-1);
-	else if (optn_flg == 1 && str[i])
-		return (i);
-	return (optn_flg);
-}
-
-int	check_split_arg(t_data *data, t_args *args)
-{
-	t_args	*temp;
-	int		newlne;
-	int		res;
-
-	res = get_i_newline(args->value);
-	temp = args;
-	newlne = res;
-	if (temp && (newlne != -1 || newlne != 0))
-	{
-		// trim_extra_optn
-		temp = args->next;
-		get_i_newline(temp->value);
-	}
-	return (res);
-}
-
 int	cmd_echo(t_data *data, t_args *args)
 {
 	int		exit_code;
-	int		newlne;
+	int		option;
 
 	exit_code = 0;
-	newlne = 0;
-	if (args)
-		newlne = check_split_arg(data, args);
-	if (!args || newlne == SUCCESS)
+	option = FAILURE;
+	args = is_option(args, &option);
+	if (option == SUCCESS)
 	{
-		exit_code |= print_args(data, args, newlne);
-		exit_code |= printf("\n");
+		exit_code |= print_args(data, args, option);
 		if (exit_code < SUCCESS)
 			return (FAILURE);
 	}
-	else
+	else if (option == FAILURE)
 	{
-		exit_code |= print_args(data, args, newlne);
+		exit_code |= print_args(data, args, option);
+		exit_code |= printf("\n");
 		if (exit_code < SUCCESS)
 			return (FAILURE);
 	}
