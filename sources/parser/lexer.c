@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 01:50:24 by alfokin           #+#    #+#             */
-/*   Updated: 2025/05/06 14:32:40 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:16:19 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void	*add_token(t_token *token_list, t_token_type type, char *content,
 	tmp->next->type = type;
 	tmp->next->value = content;
 	tmp->next->next = NULL;
+	return (token_list);
 }
 
 /*
@@ -103,6 +104,7 @@ void	*create_tokens_list(t_token *tokens_list, char *line)
 	}
 	if (add_token(tokens_list, NEWLINE, ft_strdup("newline"), table[3]) == NULL)
 		return (NULL);
+	return (tokens_list);
 }
 
 t_token	*ft_lexer(char *line)

@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 01:50:48 by alfokin           #+#    #+#             */
-/*   Updated: 2025/05/06 14:28:53 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:16:45 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ static void	*get_redir(t_token *tokens_list, char *line, int *j, int *index)
 			(*index)++;
 		}
 	}
+	return (tokens_list);
 }
 
 void	*get_space_pipe_semi_redir(t_token *tokens_list,
@@ -84,4 +85,5 @@ void	*get_space_pipe_semi_redir(t_token *tokens_list,
 	else
 		if (get_redir(tokens_list, line, j, index) == NULL)
 			return (NULL);
+	return (tokens_list);
 }

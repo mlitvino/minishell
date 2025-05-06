@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 01:51:02 by alfokin           #+#    #+#             */
-/*   Updated: 2025/05/06 14:36:59 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:16:34 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static void	*add_token_and_increament_index(t_token *tokens_list, char *word,
 		return (NULL);
 	table[1] = j;
 	table[3]++;
+	return (tokens_list);
 }
 
 void	*ft_get_word(t_token *tokens_list, char *line, int *table)
@@ -64,4 +65,5 @@ void	*ft_get_word(t_token *tokens_list, char *line, int *table)
 	}
 	if (add_token_and_increament_index(tokens_list, word, table, j) == NULL)
 		return (NULL);
+	return (tokens_list);
 }
