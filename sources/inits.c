@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/02 14:31:55 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:17:37 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ t_pipe	*init_pipes(t_data *data, int pipes_count)
 		if (pipe(data->pipes[i].pipe) != 0)
 		{
 			close_pipes(data, i);
-			clean_all(data, FAILURE, "minishell: pipes creation failed\n");
+			perror("minishell: pipe");
+			clean_all(data, FAILURE, NULL);
 			return (NULL);
 		}
 		i++;
