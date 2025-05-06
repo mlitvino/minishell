@@ -6,16 +6,45 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 12:29:45 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/04/30 13:32:07 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/06 17:52:04 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	exit_atoi(const char *str)
+static void	exit_err(t_data *data, char *str)
 {
-	int	res;
-	int	sign;
+	ft_putstr_fd("minishell: exit: numeric argument required\n", 2);
+	clean_all(data, MISUSE, NULL);
+}
+
+static unsigned long long	get_res(t_data *data, char **str_ptr, int sign)
+{
+	unsigned long long	threshold;
+	int					digit;
+	unsigned long long	res;
+	char				*str;
+
+	res = 0;
+	str = *str_ptr;
+	threshold = (sign == 1) ? LLONG_MAX : (unsigned long long)LLONG_MAX + 1;
+	while (*str >= '0' && *str <= '9')
+	{
+		digit = *str - '0';
+		if (res > threshold / 10 || (res == threshold / 10
+				&& (unsigned long long)digit > threshold % 10))
+			exit_err(data, str);
+		res = res * 10 + digit;
+		str++;
+	}
+	*str_ptr = str;
+	return (res);
+}
+
+char	exit_atoi(t_data *data, char *str)
+{
+	unsigned long long	res;
+	int					sign;
 
 	res = 0;
 	sign = 1;
@@ -24,17 +53,17 @@ char	exit_atoi(const char *str)
 	while (ft_isspace(*str))
 		str++;
 	if (*str == '+' || *str == '-')
-		if (*str++ == '-')
-			sign *= -1;
-	if (!(*str >= '0' && *str <= '9'))
-		return (-1);
-	while (*str >= '0' && *str <= '9')
-		res = res * 10 + (*str++ - '0');
+	{
+		if (*str == '-')
+			sign = -1;
+		str++;
+	}
+	res = get_res(data, &str, sign);
 	while (ft_isspace(*str))
 		str++;
 	if (*str)
-		return (-1);
-	return (res * sign);
+		exit_err(data, str);
+	return ((long long)res * sign);
 }
 
 int	cmd_exit(t_data *data, t_args *args)
@@ -46,20 +75,12 @@ int	cmd_exit(t_data *data, t_args *args)
 	if (!args)
 		clean_all(data, exit_code, NULL);
 	else if (args)
-	{
-		if (exit_atoi(args->value) == -1)
-		{
-			ft_putstr_fd("bash: exit: ", 2);
-			ft_putstr_fd(args->value, 2);
-			ft_putstr_fd(": numeric argument required\n", 2);
-			clean_all(data, MISUSE, NULL);
-		}
-		exit_code = (unsigned char)exit_atoi(args->value);
-	}
+		exit_code = (unsigned char)exit_atoi(data, args->value);
 	if (args->next)
 	{
 		exit_code = FAILURE;
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 	}
-	return (exit_code);
+	clean_all(data, exit_code, NULL);
+	return (SUCCESS);
 }

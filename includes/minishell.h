@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/06 13:12:46 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/06 17:37:30 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,7 +284,7 @@ int		cmd_echo(t_data *data, t_args *args);
 void	init_env(char *sys_env[], t_data *data);
 int		cmd_env(t_data *data, t_args *args);
 // cmd_exit.c
-char	exit_atoi(const char *str);
+char	exit_atoi(t_data *data, char *str);
 int		cmd_exit(t_data *data, t_args *args);
 // cmd_export.c
 t_list	*find_var(t_list *list, char *var, t_list **prev);

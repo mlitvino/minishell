@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 23:17:56 by alfokin           #+#    #+#             */
-/*   Updated: 2025/04/27 13:28:54 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:23:15 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	quote_return(int quote)
 		return (0);
 }
 
-int	ft_check_closing_quotes(char *word)
+int		ft_check_closing_quotes(char *word)
 {
 	int	i;
 	int	quote;

@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 16:43:02 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/05 17:57:20 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/06 17:03:51 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,11 @@ int	cmd_env(t_data *data, t_args *args)
 	t_list	*env;
 
 	env = data->env;
+	if (args)
+	{
+		ft_putstr_fd("minishell: env: too many arguments\n", 2);
+		return (FAILURE);
+	}
 	while (env)
 	{
 		if (ft_strchr((char *)env->content, '=') != NULL)

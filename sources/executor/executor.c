@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:03:21 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/02 14:03:21 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/06 17:53:17 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,14 +91,17 @@ void	exec_pipeline(t_data *data, t_pipe_line *pipeline, int cmd_count)
 int	executor(t_data *data, t_cmd_list *cmd_list)
 {
 	t_pipe_line	*pipeline;
+	int			exit_code;
 
 	pipeline = cmd_list->childs;
-	data->exit_var = map_heredoc(data, check_create_heredoc);
-	while (data->exit_var != TERM_SIGINT && pipeline)
+	exit_code = map_heredoc(data, check_create_heredoc);
+	while (exit_code != TERM_SIGINT && pipeline)
 	{
 		exec_pipeline(data, pipeline, pipeline->simple_cmd_count);
 		pipeline = pipeline->next;
 	}
+	if (exit_code == TERM_SIGINT)
+		data->exit_var = TERM_SIGINT;
 	map_heredoc(data, unlink_heredoc);
 	return (SUCCESS);
 }

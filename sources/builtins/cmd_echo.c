@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:35:42 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/06 13:12:40 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:47:23 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,12 @@ t_args	*is_option(t_args *args, int *option)
 	while (args)
 	{
 		i = 0;
+		if (!args->value[i])
+			return (args);
 		while (args->value[i])
 		{
-			if (args->value[i] == '-' && args->value[i + 1] == 'n')
+			if (args->value[i] == '-' && args->value[i + 1] == 'n'
+			&& args->value[i + 2] != '-')
 				while (args->value[++i] == 'n')
 					{ }
 			else
