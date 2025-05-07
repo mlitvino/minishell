@@ -6,35 +6,11 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 01:50:24 by alfokin           #+#    #+#             */
-/*   Updated: 2025/05/06 16:16:19 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/07 13:17:15 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	ft_destoy_token_list(t_token *tokens_list)
-{
-	t_token	*tmp;
-
-	tmp = NULL;
-	while (tokens_list->type != NEWLINE)
-	{
-		tmp = tokens_list;
-		tokens_list = tokens_list->next;
-		free(tmp->value);
-		tmp->value = NULL;
-		free(tmp);
-		tmp = NULL;
-	}
-	if (tokens_list->type == NEWLINE)
-	{
-		free(tokens_list->value);
-		tokens_list->value = NULL;
-		free(tokens_list);
-		tokens_list = NULL;
-		// write(1, CYAN, ft_strlen(CYAN));
-	}
-}
 
 t_token	*first_token(void)
 {
@@ -44,6 +20,11 @@ t_token	*first_token(void)
 	if (!new_token)
 		return (NULL);
 	new_token->value = ft_strdup("NONE");
+	if (!new_token->value)
+	{
+		free(new_token);
+		return (NULL);
+	}
 	new_token->next = NULL;
 	new_token->type = NONE;
 	new_token->index = 0;
@@ -73,6 +54,23 @@ void	*add_token(t_token *token_list, t_token_type type, char *content,
 	return (token_list);
 }
 
+static void	*get_token(t_token *tokens_list, int *table, char *line)
+{
+	if (ft_strrchr("|;><", line[table[1]]) != NULL)
+	{
+		if (get_space_pipe_semi_redir(tokens_list, line, &table[1],
+				&table[3]) == NULL)
+			return (NULL);
+	}
+	if (ft_strrchr("\t <>;|", line[table[1]]) == NULL || line[table[1]] == '\\')
+	{
+		table[2] = table[1];
+		if (ft_get_word(tokens_list, line, table) == NULL)
+			return (NULL);
+	}
+	return (tokens_list);
+}
+
 /*
  * table[5];
  * 0 = i  ; 1 = j ; k = 2; index = 3 ; quote = 4;
@@ -89,17 +87,8 @@ void	*create_tokens_list(t_token *tokens_list, char *line)
 		table[1] = table[0];
 		while (line[table[1]] == ' ' || line[table[1]] == '\t')
 			table[1]++;
-		if (ft_strrchr("|;><", line[table[1]]) != NULL)
-		{
-			if (get_space_pipe_semi_redir(tokens_list, line, &table[1], &table[3]) == NULL)
-				return (NULL);
-		}
-		if (ft_strrchr("\t <>;|", line[table[1]]) == NULL
-			|| line[table[1]] == '\\')
-		{
-			table[2] = table[1];
-			ft_get_word(tokens_list, line, table);
-		}
+		if (get_token(tokens_list, table, line) == NULL)
+			return (NULL);
 		table[0] = table[1];
 	}
 	if (add_token(tokens_list, NEWLINE, ft_strdup("newline"), table[3]) == NULL)
@@ -111,14 +100,13 @@ t_token	*ft_lexer(char *line)
 {
 	t_token	*tokens_list;
 
-	tokens_list = NULL;
 	tokens_list = first_token();
 	if (!tokens_list)
 		return (NULL);
 	if (create_tokens_list(tokens_list, line) == NULL)
 	{
-		// delete tokens_list
-		// tokens_list = NULL;
+		ft_destoy_token_list(tokens_list);
+		return (NULL);
 	}
 	return (tokens_list);
 }

@@ -6,15 +6,17 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:18:03 by codespace         #+#    #+#             */
-/*   Updated: 2025/04/27 13:52:43 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/07 13:47:21 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /* List of delimetres:
-		' - single quote, should be handled if one {not interpret unclosed quote}
-		" - double quote, should be habdled if one {not interpret unclosed quote}
+		' - single quote,
+			should be handled if one {not interpret unclosed quote}
+		" - double quote,
+			should be habdled if one {not interpret unclosed quote}
 		/ - idnk
 		- - attribute specificator for commands
 		| - fot PIPES
@@ -43,8 +45,6 @@ t_redir	*ft_create_redir(t_token **tokens, int index)
 	(*tokens) = (*tokens)->next;
 	redir->file_name = ft_strdup((*tokens)->value);
 	(*tokens) = (*tokens)->next;
-
-	// added by mlitvino
 	redir->fd = -1;
 	redir->existing = 0;
 	redir->inside_quotes = 0;
@@ -95,7 +95,6 @@ t_cmd_list	*ft_parser(t_token *tokens_list, int *status)
 	t_cmd_list	*command_list;
 
 	command_list = NULL;
-	//write(1, RED, ft_strlen(RED));
 	if (!ft_syntax_check(tokens_list, status))
 	{
 		command_list = ft_create_asteriks(tokens_list);

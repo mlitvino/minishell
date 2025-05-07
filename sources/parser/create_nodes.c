@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 23:49:54 by alfokin           #+#    #+#             */
-/*   Updated: 2025/04/27 13:30:01 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/07 13:46:49 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,7 @@ t_simple_cmd	*ft_init_simple_cmd(void)
 	cmd->next = NULL;
 	cmd->args = NULL;
 	cmd->redirections = NULL;
-
-	// added by mlitivno
 	cmd->inside_quotes = 0;
-
 	cmd->exit_code = SUCCESS;
 	cmd->pathname = NULL;
 	cmd->cmd_i = 0;
@@ -53,7 +50,7 @@ t_simple_cmd	*ft_init_simple_cmd(void)
 }
 
 t_simple_cmd	*ft_insert_command_and_arguments(t_simple_cmd **cmd,
-				t_token *token)
+		t_token *token)
 {
 	t_args	*tmp;
 
@@ -86,8 +83,7 @@ t_simple_cmd	*ft_create_simple_cmd(t_token **tokens)
 		if ((*tokens)->type == GREAT || (*tokens)->type == DOUBLE_GREAT
 			|| (*tokens)->type == LESS || (*tokens)->type == DOUBLE_LESS)
 		{
-			cmd->redirections = ft_insert_redir(cmd->redirections,
-					tokens, r);
+			cmd->redirections = ft_insert_redir(cmd->redirections, tokens, r);
 			r++;
 		}
 		else if ((*tokens)->type == WORD)

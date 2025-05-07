@@ -20,7 +20,7 @@ int	quote_return(int quote)
 		return (0);
 }
 
-int		ft_check_closing_quotes(char *word)
+int	ft_check_closing_quotes(char *word)
 {
 	int	i;
 	int	quote;

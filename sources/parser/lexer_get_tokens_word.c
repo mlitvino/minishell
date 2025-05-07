@@ -6,29 +6,16 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 01:50:58 by alfokin           #+#    #+#             */
-/*   Updated: 2025/05/06 14:35:10 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/07 13:38:44 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*get_no_quoting_word(char *line, int *i)
-{
-	char	*word;
-	int		j;
-
-	j = *i;
-	while (line[j] && !ft_strrchr("\t '\"\\<>;|", line[j]))
-		j++;
-	word = ft_substr(line, *i, j - *i);
-	*i = j;
-	return (word);
-}
-
 static int	ft_count_backslashes(char *line, int j)
 {
-	int		k;
-	int		back_slash_count;
+	int	k;
+	int	back_slash_count;
 
 	k = j - 1;
 	back_slash_count = 0;
@@ -96,6 +83,18 @@ static char	*get_quoting_word(char *line, int *i, int quoting)
 	return (word);
 }
 
+static void	*check_strjoin(char *tmp1, char **word, char *tmp)
+{
+	if (!tmp1)
+		return (NULL);
+	*word = ft_strjoin(*word, tmp1);
+	free(tmp1);
+	free(tmp);
+	if (!*word)
+		return (NULL);
+	return (word);
+}
+
 char	*ft_get_words(char *line, int *j, char *word, int *quoting)
 {
 	char	*tmp;
@@ -105,24 +104,14 @@ char	*ft_get_words(char *line, int *j, char *word, int *quoting)
 	{
 		tmp = word;
 		tmp1 = get_no_quoting_word(line, j);
-		if (!tmp1)
-			return (NULL);
-		word = ft_strjoin(word, tmp1);
-		free(tmp);
-		free(tmp1);
-		if (!word)
+		if (check_strjoin(tmp1, &word, tmp) == NULL)
 			return (NULL);
 	}
 	else if (*quoting > 0)
 	{
 		tmp = word;
 		tmp1 = get_quoting_word(line, j, *quoting);
-		if (!tmp1)
-			return (NULL);
-		word = ft_strjoin(word, tmp1);
-		free(tmp1);
-		free(tmp);
-		if (!word)
+		if (check_strjoin(tmp1, &word, tmp) == NULL)
 			return (NULL);
 		*quoting = -1;
 	}

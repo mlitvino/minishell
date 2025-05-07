@@ -61,7 +61,7 @@ int	ft_get_first_single_quotes(char *word, int *index, int *back_slash)
 }
 
 void	ft_get_close_double_quotes(char *word, int *index, int *back_slash,
-			int *quote)
+		int *quote)
 {
 	if (word[*index - 1] != 92)
 		*quote -= 2;
@@ -74,8 +74,7 @@ void	ft_get_close_double_quotes(char *word, int *index, int *back_slash,
 	(*index)++;
 }
 
-void	ft_get_close_single_quotes(int *index, int *back_slash,
-			int *quote)
+void	ft_get_close_single_quotes(int *index, int *back_slash, int *quote)
 {
 	(*index)++;
 	*quote -= 1;

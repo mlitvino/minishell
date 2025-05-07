@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 23:45:15 by alfokin           #+#    #+#             */
-/*   Updated: 2025/04/24 18:02:49 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/07 13:47:00 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_pipe_line	*ft_init_pipe_line(void)
 {
-	t_pipe_line		*pipe_line;
+	t_pipe_line	*pipe_line;
 
 	pipe_line = (t_pipe_line *)malloc(sizeof(t_pipe_line));
 	if (!pipe_line)
@@ -22,8 +22,6 @@ t_pipe_line	*ft_init_pipe_line(void)
 	pipe_line->next = NULL;
 	pipe_line->child = NULL;
 	pipe_line->simple_cmd_count = 0;
-
-	// added by mlitivno
 	pipe_line->exit_status = SUCCESS;
 	pipe_line->pid_last_cmd = 0;
 	return (pipe_line);
@@ -66,7 +64,7 @@ t_pipe_line	*ft_create_pieline(t_token **tokens)
 
 void	ft_create_next_pipeline(t_token *tokens_list, t_cmd_list **head)
 {
-	t_pipe_line		*current_pipeline;
+	t_pipe_line	*current_pipeline;
 
 	current_pipeline = NULL;
 	current_pipeline = (*head)->childs;

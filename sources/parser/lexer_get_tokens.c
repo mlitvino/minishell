@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 01:51:02 by alfokin           #+#    #+#             */
-/*   Updated: 2025/05/06 16:16:34 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/07 13:34:03 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	check_the_beginning_of_word(int c)
 }
 
 static void	*add_token_and_increament_index(t_token *tokens_list, char *word,
-			int *table, int j)
+		int *table, int j)
 {
 	if (add_token(tokens_list, WORD, word, table[3]) == NULL)
 		return (NULL);
@@ -34,34 +34,45 @@ static void	*add_token_and_increament_index(t_token *tokens_list, char *word,
 	return (tokens_list);
 }
 
+static int	substr_word(char *line, char **word, int *j)
+{
+	int	quoting;
+
+	quoting = check_the_beginning_of_word(line[*j]);
+	if (quoting == 0)
+	{
+		*word = ft_get_words(line, j, *word, &quoting);
+		if (!*word)
+			return (FAILURE);
+		if (ft_strchr("\t ><|;", line[*j]))
+			return (2);
+	}
+	else if (quoting > 0)
+	{
+		*word = ft_get_words(line, j, *word, &quoting);
+		if (!*word)
+			return (FAILURE);
+		if (line[*j] == ' ' || line[*j] == '\t')
+			return (2);
+	}
+	return (SUCCESS);
+}
+
 void	*ft_get_word(t_token *tokens_list, char *line, int *table)
 {
-	int		quoting;
 	char	*word;
 	int		j;
+	int		exit_code;
 
-	quoting = -1;
 	word = NULL;
 	j = table[1];
 	while (line[j])
 	{
-		quoting = check_the_beginning_of_word(line[j]);
-		if (quoting == 0)
-		{
-			word = ft_get_words(line, &j, word, &quoting);
-			if (!word)
-				return (NULL);
-			if (ft_strchr("\t ><|;", line[j]))
-				break ;
-		}
-		else if (quoting > 0)
-		{
-			word = ft_get_words(line, &j, word, &quoting);
-			if (!word)
-				return (NULL);
-			if (line[j] == ' ' || line[j] == '\t')
-				break ;
-		}
+		exit_code = substr_word(line, &word, &j);
+		if (exit_code == FAILURE)
+			return (NULL);
+		if (exit_code == 2)
+			break ;
 	}
 	if (add_token_and_increament_index(tokens_list, word, table, j) == NULL)
 		return (NULL);
