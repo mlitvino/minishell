@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:20:23 by mlitvino, t       #+#    #+#             */
-/*   Updated: 2025/05/05 15:15:32 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/07 14:06:22 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ int	main(int argc, char *argv[], char *env[])
 		tokens_list = ft_lexer(data.read_line);
 		//show_token(tokens_list); // print
 
-		int status = 0;
-		data.cmd_list = ft_parser(tokens_list, &status);
+		data.cmd_list = ft_parser(tokens_list, &data.exit_var);
 		//show_cmd_list(data.cmd_list); //print
 
 		//printf("\nEXECUTOR:\n"); // print
