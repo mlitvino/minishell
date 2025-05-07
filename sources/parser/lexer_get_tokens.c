@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 01:51:02 by alfokin           #+#    #+#             */
-/*   Updated: 2025/04/15 16:46:41 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:16:34 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,17 @@ static int	check_the_beginning_of_word(int c)
 		return (0);
 }
 
-static void	add_token_and_increament_index(t_token *tokens_list, char *word,
+static void	*add_token_and_increament_index(t_token *tokens_list, char *word,
 			int *table, int j)
 {
-	add_token(tokens_list, WORD, word, table[3]);
+	if (add_token(tokens_list, WORD, word, table[3]) == NULL)
+		return (NULL);
 	table[1] = j;
 	table[3]++;
+	return (tokens_list);
 }
 
-void	ft_get_word(t_token *tokens_list, char *line, int *table)
+void	*ft_get_word(t_token *tokens_list, char *line, int *table)
 {
 	int		quoting;
 	char	*word;
@@ -47,15 +49,21 @@ void	ft_get_word(t_token *tokens_list, char *line, int *table)
 		if (quoting == 0)
 		{
 			word = ft_get_words(line, &j, word, &quoting);
+			if (!word)
+				return (NULL);
 			if (ft_strchr("\t ><|;", line[j]))
 				break ;
 		}
 		else if (quoting > 0)
 		{
 			word = ft_get_words(line, &j, word, &quoting);
+			if (!word)
+				return (NULL);
 			if (line[j] == ' ' || line[j] == '\t')
 				break ;
 		}
 	}
-	add_token_and_increament_index(tokens_list, word, table, j);
+	if (add_token_and_increament_index(tokens_list, word, table, j) == NULL)
+		return (NULL);
+	return (tokens_list);
 }

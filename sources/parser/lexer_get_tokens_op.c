@@ -6,25 +6,27 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 01:50:48 by alfokin           #+#    #+#             */
-/*   Updated: 2025/04/27 13:25:15 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:16:45 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	get_redir(t_token *tokens_list, char *line, int *j, int *index)
+static void	*get_redir(t_token *tokens_list, char *line, int *j, int *index)
 {
 	if (line[*j] == '>')
 	{
 		if (line[*j + 1] == '>')
 		{
-			add_token(tokens_list, DOUBLE_GREAT, ft_strdup(">>"), *index);
+			if (add_token(tokens_list, DOUBLE_GREAT, ft_strdup(">>"), *index) == NULL)
+				return (NULL);
 			*j = *j + 2;
 			(*index)++;
 		}
 		else
 		{
-			add_token(tokens_list, GREAT, ft_strdup(">"), *index);
+			if (add_token(tokens_list, GREAT, ft_strdup(">"), *index) == NULL)
+				return (NULL);
 			(*j)++;
 			(*index)++;
 		}
@@ -33,20 +35,23 @@ static void	get_redir(t_token *tokens_list, char *line, int *j, int *index)
 	{
 		if (line[*j + 1] == '<')
 		{
-			add_token(tokens_list, DOUBLE_LESS, ft_strdup("<<"), *index);
+			if (add_token(tokens_list, DOUBLE_LESS, ft_strdup("<<"), *index) == NULL)
+				return (NULL);
 			*j = *j + 2;
 			(*index)++;
 		}
 		else
 		{
-			add_token(tokens_list, LESS, ft_strdup("<"), *index);
+			if (add_token(tokens_list, LESS, ft_strdup("<"), *index) == NULL)
+				return (NULL);
 			(*j)++;
 			(*index)++;
 		}
 	}
+	return (tokens_list);
 }
 
-void	get_space_pipe_semi_redir(t_token *tokens_list,
+void	*get_space_pipe_semi_redir(t_token *tokens_list,
 							   char *line, int *j, int *index)
 {
 	char	*token;
@@ -57,7 +62,10 @@ void	get_space_pipe_semi_redir(t_token *tokens_list,
 			token = ft_strdup("||");
 		else
 			token = ft_strdup("|");
-		add_token(tokens_list, PIPE, token, *index);
+		if (!token)
+			return (NULL);
+		if (add_token(tokens_list, PIPE, token, *index) == NULL)
+			return (NULL);
 		(*index)++;
 		(*j)++;
 	}
@@ -67,10 +75,15 @@ void	get_space_pipe_semi_redir(t_token *tokens_list,
 			token = ft_strdup(";;");
 		else
 			token = ft_strdup(";");
-		add_token(tokens_list, SEMI, token, *index);
+		if (!token)
+			return (NULL);
+		if (add_token(tokens_list, SEMI, token, *index) == NULL)
+			return (NULL);
 		(*index)++;
 		(*j)++;
 	}
 	else
-		get_redir(tokens_list, line, j, index);
+		if (get_redir(tokens_list, line, j, index) == NULL)
+			return (NULL);
+	return (tokens_list);
 }
