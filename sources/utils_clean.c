@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 12:45:53 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/02 14:22:47 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/07 16:14:56 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,28 @@ void	free_args(t_args *args)
 	}
 }
 
+void	free_cmds(t_simple_cmd *cmd)
+{
+	void	*prev_ptr;
+
+	while (cmd)
+	{
+		free_args(cmd->args);
+		free_redir(cmd->redirections);
+		if (cmd->std_fd[STDIN] != -1)
+			close(cmd->std_fd[STDIN]);
+		if (cmd->std_fd[STDOUT] != -1)
+			close(cmd->std_fd[STDOUT]);
+		free(cmd->command);
+		cmd->command = NULL;
+		free(cmd->pathname);
+		cmd->pathname = NULL;
+		prev_ptr = cmd;
+		cmd = cmd->next;
+		free(prev_ptr);
+	}
+}
+
 void	free_cmd_list(t_data *data, t_cmd_list *cmd_list)
 {
 	t_pipe_line		*pipeline;
@@ -76,23 +98,8 @@ void	free_cmd_list(t_data *data, t_cmd_list *cmd_list)
 	while (pipeline)
 	{
 		cmd = pipeline->child;
-		while (cmd)
-		{
-			close_pipes(data, cmd->cmd_count - 1); // cahgne place
-			free_args(cmd->args);
-			free_redir(cmd->redirections);
-			if (cmd->std_fd[STDIN] != -1)
-				close(cmd->std_fd[STDIN]);
-			if (cmd->std_fd[STDOUT] != -1)
-				close(cmd->std_fd[STDOUT]);
-			free(cmd->command);
-			cmd->command = NULL;
-			free(cmd->pathname);
-			cmd->pathname = NULL;
-			prev_ptr = cmd;
-			cmd = cmd->next;
-			free(prev_ptr);
-		}
+		close_pipes(data, cmd->cmd_count - 1);
+		free_cmds(cmd);
 		prev_ptr = pipeline;
 		pipeline = pipeline->next;
 		free(prev_ptr);
@@ -105,6 +112,7 @@ int	clean_all(t_data *data, int exit_code, char *err_message)
 	while (waitpid(0, 0, 0) != -1)
 	{
 	}
+
 	map_heredoc(data, unlink_heredoc);
 	free(data->read_line);
 	data->read_line = NULL;

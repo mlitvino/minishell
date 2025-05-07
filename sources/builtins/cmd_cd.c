@@ -100,7 +100,8 @@ int	cmd_cd(t_data *data, t_args *args)
 
 	path = NULL;
 	if (args && args->next)
-		return (ft_putstr_fd("minishell: cd: too many arguments\n", 2), FAILURE);
+		return (ft_putstr_fd("minishell: cd: too many arguments\n", 2),
+			FAILURE);
 	else if (args)
 		path = ft_strdup(args->value);
 	else if (!args)

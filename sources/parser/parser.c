@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:18:03 by codespace         #+#    #+#             */
-/*   Updated: 2025/05/07 13:47:21 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/07 17:03:02 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ t_redir	*ft_create_redir(t_token **tokens, int index)
 		redir->type = RE_DOUBLE_LESS;
 	(*tokens) = (*tokens)->next;
 	redir->file_name = ft_strdup((*tokens)->value);
+	if (!redir->file_name)
+		return (free(redir), NULL);
 	(*tokens) = (*tokens)->next;
 	redir->fd = -1;
 	redir->existing = 0;
@@ -58,13 +60,22 @@ t_redir	*ft_insert_redir(t_redir *redir, t_token **tokens, int index)
 
 	tmp = NULL;
 	if (redir == NULL)
+	{
 		redir = ft_create_redir(tokens, index);
+		if (!redir)
+			return (NULL);
+	}
 	else
 	{
 		tmp = redir;
 		while (tmp->next != NULL)
 			tmp = tmp->next;
 		tmp->next = ft_create_redir(tokens, index);
+		if (!tmp->next)
+		{
+			free_redir(redir);
+			return (NULL);
+		}
 	}
 	return (redir);
 }
@@ -84,7 +95,11 @@ t_args	*ft_create_arg(char *value)
 	t_args	*arg;
 
 	arg = (t_args *)malloc(sizeof(t_args));
+	if (!arg)
+		return (NULL);
 	arg->value = ft_strdup(value);
+	if (!arg->value)
+		return (free(arg), NULL);
 	arg->next = NULL;
 	arg->inside_quotes = 0;
 	return (arg);

@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 12:29:45 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/06 18:10:42 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/07 17:23:33 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ static unsigned long long	get_res(t_data *data, char **str_ptr, int sign)
 
 	res = 0;
 	str = *str_ptr;
-	threshold = (sign == 1) ? LLONG_MAX : (unsigned long long)LLONG_MAX + 1;
+	if (sign == 1)
+		threshold = LLONG_MAX;
+	else
+		threshold = (unsigned long long)LLONG_MAX + 1;
 	while (*str >= '0' && *str <= '9')
 	{
 		digit = *str - '0';
@@ -73,13 +76,13 @@ int	cmd_exit(t_data *data, t_args *args)
 	int	exit_code;
 
 	exit_code = SUCCESS;
-	//ft_putstr_fd("exit\n", 1); // change to STDERR later
+	// ft_putstr_fd("exit\n", 1); // change to STDERR later
 	if (!args)
 		clean_all(data, exit_code, NULL);
 	else if (args)
 	{
-		if (args->inside_quotes == 1 )
-		exit_code = (unsigned char)exit_atoi(data, args->value);
+		if (args->inside_quotes == 1)
+			exit_code = (unsigned char)exit_atoi(data, args->value);
 	}
 	if (args->next)
 	{

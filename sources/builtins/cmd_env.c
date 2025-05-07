@@ -14,10 +14,10 @@
 
 void	init_env(char *sys_env[], t_data *data)
 {
-	int			i;
-	t_list		*new_env;
-	t_list		*new_node;
-	char		*content;
+	int		i;
+	t_list	*new_env;
+	t_list	*new_node;
+	char	*content;
 
 	i = 0;
 	new_env = NULL;

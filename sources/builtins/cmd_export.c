@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:36:35 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/05 18:05:52 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/07 17:22:35 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,10 @@ t_list	*find_var(t_list *list, char *var, t_list **prev)
 	{
 		i = 0;
 		env_var = (char *)list_var->content;
-		while (env_var[i] && var[i]
-			&& env_var[i] == var[i]
+		while (env_var[i] && var[i] && env_var[i] == var[i]
 			&& env_var[i] != '=')
 			i++;
-		if (env_var[i] == var[i]
-			|| (!var[i] && env_var[i] == '=')
+		if (env_var[i] == var[i] || (!var[i] && env_var[i] == '=')
 			|| (!env_var[i] && var[i] == '='))
 			return (list_var);
 		if (prev)
@@ -68,15 +66,14 @@ int	check_export_arg(t_args *args, int *exit_code) // SPACE CHECK
 	char	*arg_value;
 
 	arg_value = args->value;
-	if (ft_isdigit(*arg_value) == 0
-		&& (ft_isalpha(*arg_value) == 1 || *arg_value == '_'))
+	if (ft_isdigit(*arg_value) == 0 && (ft_isalpha(*arg_value) == 1
+			|| *arg_value == '_'))
 	{
 		while (*arg_value)
 		{
 			if (*arg_value == '=')
 				return (SUCCESS);
-			if (ft_isdigit(*arg_value) == 0
-				&& ft_isalpha(*arg_value) == 0
+			if (ft_isdigit(*arg_value) == 0 && ft_isalpha(*arg_value) == 0
 				&& *arg_value != '_')
 				break ;
 			arg_value++;

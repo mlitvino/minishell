@@ -12,8 +12,8 @@
 
 #include "minishell.h"
 
-static void	*add_less_redir(t_token *tokens_list,
-		char *line, int *j, int *index)
+static void	*add_less_redir(t_token *tokens_list, char *line, int *j,
+		int *index)
 {
 	if (line[*j + 1] == '<')
 	{
@@ -61,8 +61,8 @@ static void	*get_redir(t_token *tokens_list, char *line, int *j, int *index)
 	return (tokens_list);
 }
 
-static void	*get_semi_token(t_token *tokens_list,
-		int *index, int *j, char *line)
+static void	*get_semi_token(t_token *tokens_list, int *index, int *j,
+		char *line)
 {
 	char	*token;
 
@@ -79,8 +79,8 @@ static void	*get_semi_token(t_token *tokens_list,
 	return (tokens_list);
 }
 
-static void	*get_pipe_token(t_token *tokens_list,
-		int *index, int *j, char *line)
+static void	*get_pipe_token(t_token *tokens_list, int *index, int *j,
+		char *line)
 {
 	char	*token;
 

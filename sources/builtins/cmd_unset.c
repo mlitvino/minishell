@@ -27,9 +27,9 @@ void	delete_var(t_list **list, char *var)
 		compare_sign = (char *)temp->content;
 		while (var[sign_i] && compare_sign[sign_i]
 			&& var[sign_i] == compare_sign[sign_i])
-		sign_i++;
+			sign_i++;
 		if (!var[sign_i] && (!compare_sign[sign_i]
-			|| compare_sign[sign_i] == '='))
+				|| compare_sign[sign_i] == '='))
 		{
 			prev->next = temp->next;
 			ft_lstdelone(temp, free);

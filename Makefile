@@ -6,7 +6,7 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/05/07 13:13:07 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/05/07 17:28:53 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,9 @@ SRC =	$(addprefix $(SRC_DIR)/, \
 		test.c)
 
 PARSER_SRC = $(addprefix $(PARSER_DIR)/, \
-		cont_token_checker.c parser.c create_asteriks.c create_nodes.c \
+		cont_token_checker.c parser.c \
+		create_asteriks.c create_asteriks_utils.c \
+		create_nodes.c create_nodes_utils.c \
 		destroy_nodes.c syntax_checker.c token_checker.c word_checker.c \
 		lexer.c lexer_get_tokens.c lexer_get_tokens_op.c lexer_utils.c\
 		lexer_get_tokens_word.c)
