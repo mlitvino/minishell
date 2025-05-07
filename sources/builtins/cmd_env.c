@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 16:43:02 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/06 17:03:51 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/07 18:10:27 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	init_env(char *sys_env[], t_data *data)
 		{
 			free(content);
 			free(new_node);
+			ft_lstclear(&new_env, free);
 			clean_all(data, FAILURE, "minishell: malloc failed\n");
 		}
 		ft_lstadd_back(&new_env, new_node);

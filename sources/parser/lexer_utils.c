@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 13:12:41 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/07 13:35:48 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/07 18:39:39 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,12 @@ void	ft_destoy_token_list(t_token *tokens_list)
 {
 	t_token	*tmp;
 
-	tmp = NULL;
-	while (tokens_list->type != NEWLINE)
-	{
-		tmp = tokens_list;
-		tokens_list = tokens_list->next;
-		free(tmp->value);
-		tmp->value = NULL;
-		free(tmp);
-		tmp = NULL;
-	}
-	if (tokens_list->type == NEWLINE)
+	while (tokens_list)
 	{
 		free(tokens_list->value);
 		tokens_list->value = NULL;
-		free(tokens_list);
-		tokens_list = NULL;
+		tmp = tokens_list;
+		tokens_list  = tokens_list->next;
+		free(tmp);
 	}
 }
