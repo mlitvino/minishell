@@ -6,7 +6,7 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/31 17:29:24 by mlitvino          #+#    #+#              #
-#    Updated: 2025/04/24 13:48:39 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/05/06 18:46:11 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,7 @@ SRC = \
 BSRC = \
 	ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c \
 	ft_lstlast_bonus.c ft_lstadd_back_bonus.c ft_lstdelone_bonus.c \
-	ft_lstclear_bonus.c ft_lstiter_bonus.c ft_lstmap_bonus.c 
+	ft_lstclear_bonus.c ft_lstiter_bonus.c ft_lstmap_bonus.c
 INCLD = $(INCLD_DIR)/libft.h
 
 OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)
@@ -58,7 +58,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INCLD) | $(OBJ_DIR)
 $(NAME): $(OBJ)
 	$(AR) -rcs $@ $^
 
-bonus: $(NAME) .BONUS_DEPEND
+bonus: $(NAME) .BONUS_DEPEND $(BOBJ)
 
 .BONUS_DEPEND : $(NAME) $(BOBJ) $(OBJ)
 	$(AR) -rcs $(NAME) $(BOBJ) $(OBJ) $?
