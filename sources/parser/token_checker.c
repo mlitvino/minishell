@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 23:33:33 by alfokin           #+#    #+#             */
-/*   Updated: 2025/05/07 14:16:12 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:23:25 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,13 @@ int	check_last_word_token(t_token *tokens_list, t_token *token, int *status)
 		*status = MISUSE;
 		result = 1;
 	}
-	// if (!result && ft_check_closing_quotes(token->value))
-	// {
-	// 	ft_putstr_fd("[SYNTAX ERROR] multiple line not allowed\n", 2);
-	// 	ft_destoy_token_list(tokens_list);
-	// 	*status = MISUSE;
-	// 	result = 1;
-	// }
+	if (!result && ft_check_closing_quotes(token->value))
+	{
+		ft_putstr_fd("[SYNTAX ERROR] multiple line not allowed\n", 2);
+		ft_destoy_token_list(tokens_list);
+		*status = MISUSE;
+		result = 1;
+	}
 	return (result);
 }
 
@@ -82,13 +82,13 @@ int	check_word_token(t_token *tokens_list, t_token *token, int *status)
 	int	result;
 
 	result = 0;
-	// if (ft_check_closing_quotes(token->value))
-	// {
-	// 	ft_putstr_fd("[SYNTAX ERROR] multiple line not allowed\n", 2);
-	// 	ft_destoy_token_list(tokens_list);
-	// 	*status = MISUSE;
-	// 	result = 1;
-	// }
+	if (ft_check_closing_quotes(token->value))
+	{
+		ft_putstr_fd("[SYNTAX ERROR] multiple line not allowed\n", 2);
+		ft_destoy_token_list(tokens_list);
+		*status = MISUSE;
+		result = 1;
+	}
 	return (result);
 }
 

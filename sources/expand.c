@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:14:10 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/08 12:47:05 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:22:01 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,18 @@ char	*find_var_value(t_data *data, char *env_var)
 
 int	get_i_end_token(char *str, char token)
 {
-	int	i;
+	int		i;
+	char	*temp;
 
 	i = 0;
 	if (token == '\'' || token == '\"')
-		i = ft_strchr(str + 1, token) - str + 1;
+	{
+		temp = ft_strchr(str + 1, token);
+		if (temp)
+			i = temp - str + 1;
+		else
+			i = -1;
+	}
 	else if (token == '$')
 	{
 		if (str[i] == '$')

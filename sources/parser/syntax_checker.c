@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 23:17:56 by alfokin           #+#    #+#             */
-/*   Updated: 2025/05/06 16:23:15 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:07:46 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,27 +23,21 @@ int	quote_return(int quote)
 int	ft_check_closing_quotes(char *word)
 {
 	int	i;
-	int	quote;
-	int	back_slash;
 
-	back_slash = 0;
-	quote = 0;
-	i = -1;
-	while (word[++i])
+	i = 0;
+	while (word[i])
 	{
-		back_slash = count_bachslashes(word, &i, back_slash);
-		if (quote == 0 && word[i] == 34)
-			quote = ft_get_first_double_quotes(word, &i, &back_slash);
-		else if (quote == 0 && word[i] == '\'')
-			quote = ft_get_first_single_quotes(word, &i, &back_slash);
-		else if (quote == 2 && word[i] == 34)
-			ft_get_close_double_quotes(word, &i, &back_slash, &quote);
-		else if (quote == 1 && word[i] == '\'')
-			ft_get_close_single_quotes(&i, &back_slash, &quote);
+		if (word[i] == '\'' || word[i] == '\"')
+		{
+			if (get_i_end_token(&word[i], word[i]) == -1)
+				return (FAILURE);
+			else
+				i += get_i_end_token(&word[i], word[i]);
+		}
 		else
-			back_slash = 0;
+			i++;
 	}
-	return (quote_return(quote));
+	return (SUCCESS);
 }
 
 int	ft_check_backslash(char *word)
