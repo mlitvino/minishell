@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 14:18:41 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/05 15:05:31 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:13:08 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	**create_path_tab(t_data *data)
 	char	**path_tab;
 	char	*path_value;
 
-	path_value = expand_var(data, "$PATH", 1);
+	path_value = expand_var(data, "$PATH");
 	if (!path_value)
 		clean_all(data, FAILURE, "minishell: command: malloc failed\n");
 	path_tab = ft_split(path_value, ':');
