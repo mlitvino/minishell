@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 19:06:58 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/02 14:33:09 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:02:23 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	create_heredoc(t_data *data, t_redir *heredoc)
 	close(heredoc->fd);
 }
 
-void	fork_heredoc(t_data *data, t_redir *heredoc, int *exit_status)
+void	fork_heredoc(t_data *data, t_redir *heredoc)
 {
 	pid_t	heredoc_pid;
 
@@ -92,12 +92,12 @@ int	check_create_heredoc(t_data *data, t_redir *heredoc)
 {
 	heredoc->delim = heredoc->file_name;
 	heredoc->file_name = NULL;
-	if (trim_delim(data, heredoc) == NULL)
+	if (trim_delim(heredoc) == NULL)
 		clean_all(data, FAILURE, "minishell: heredoc: malloc failed\n");
 	if (signal(SIGINT, SIG_IGN) == SIG_ERR)
 		clean_all(data, FAILURE, "minishell: func signal failed\n");
 	create_heredoc(data, heredoc);
-	fork_heredoc(data, heredoc, &data->exit_var);
+	fork_heredoc(data, heredoc);
 	if (data->exit_var == TERM_SIGINT)
 		return (TERM_SIGINT);
 	init_sigs(data);
@@ -106,6 +106,7 @@ int	check_create_heredoc(t_data *data, t_redir *heredoc)
 
 int	unlink_heredoc(t_data *data, t_redir *heredoc)
 {
+	(void)data;
 	if (heredoc->existing == 1)
 	{
 		unlink(heredoc->file_name);

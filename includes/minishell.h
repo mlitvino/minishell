@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/07 17:21:22 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:00:21 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,7 @@ char							*expand_str(t_data *data, char *orig_str,
 
 // heredoc_trim.c
 int								is_valid(char *char_ptr);
-char							*trim_delim(t_data *data, t_redir *heredoc);
+char							*trim_delim(t_redir *heredoc);
 
 // heredoc.c
 void							fill_heredoc(t_data *data, t_redir *heredoc);
@@ -252,7 +252,7 @@ int								is_builtin(t_builtin *arr, char *cmd_name);
 /*------------------------------EXECUTOR--------------------------------------*/
 
 // check_cmd.c
-void							check_empty(t_data *data, t_simple_cmd *cmd);
+void							check_empty(t_simple_cmd *cmd);
 t_simple_cmd					*init_null_cmd(t_simple_cmd **curr_cmd);
 void							check_cmd(t_data *data, t_simple_cmd *curr_cmd,
 									int cmd_count, int i);
@@ -262,7 +262,6 @@ int								wait_get_exitcode(t_data *data,
 									pid_t child_pid);
 void							wait_childs(t_data *data,
 									t_simple_cmd *lst_cmd);
-void							check_empty(t_data *data, t_simple_cmd *cmd);
 
 // executor.c
 void							execve_cmd(t_data *data, t_simple_cmd *cmd,
@@ -275,13 +274,12 @@ int								executor(t_data *data, t_cmd_list *cmd_list);
 // redirect.c
 void							close_pipes(t_data *data, int pipes_count);
 void							restart_fd(t_data *data, t_simple_cmd *cmd);
-int								redirect_files(t_data *data, t_simple_cmd *cmd,
-									t_redir *redir);
+int								redirect_files(t_redir *redir);
 int								redirect(t_data *data, t_simple_cmd *cmd,
 									t_redir *redirs);
 
 // search_exec.c
-int								check_access(t_data *data, t_simple_cmd *cmd);
+int								check_access(t_simple_cmd *cmd);
 int								check_path_dirs(t_data *data, t_simple_cmd *cmd,
 									char **path_tab);
 int								search_exec(t_data *data, t_simple_cmd *cmd);
@@ -301,8 +299,7 @@ char							*get_home_path(t_data *data);
 int								cmd_cd(t_data *data, t_args *args);
 // cmd_echo.c
 t_args							*is_option(t_args *args, int *option);
-int								print_args(t_data *data, t_args *args,
-									int newlne);
+int								print_args(t_args *args);
 int								cmd_echo(t_data *data, t_args *args);
 // cmd_env.c
 void							init_env(char *sys_env[], t_data *data);

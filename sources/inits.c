@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/07 18:11:38 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:51:07 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	init_sigs(t_data *data)
 {
 	struct sigaction	sa;
-	struct sigaction	ig;
 	int					return_code;
 
 	return_code = 0;
@@ -34,7 +33,6 @@ void	init_sigs(t_data *data)
 t_pipe	*init_pipes(t_data *data, int pipes_count)
 {
 	int	i;
-	int	p[2];
 
 	if (pipes_count < 1)
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:14:50 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/01 14:24:42 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:58:31 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	join_paste_var(t_data *data, char *key_var, char *var_value)
 {
 	char	*new_var;
-	t_list	*env_var;
 	char	*temp;
 
 	temp = ft_strjoin(key_var, "=");
@@ -37,7 +36,6 @@ int	join_paste_var(t_data *data, char *key_var, char *var_value)
 
 int	update_pwd(t_data *data)
 {
-	char	*new_pwd;
 	char	*cwd;
 
 	cwd = getcwd(NULL, 0);
@@ -54,7 +52,6 @@ int	update_pwd(t_data *data)
 int	update_oldpwd(t_data *data, t_list *env)
 {
 	char	*var_value;
-	char	*new_oldpwd;
 	t_list	*env_var;
 
 	env_var = find_var(env, "PWD", NULL);
@@ -99,6 +96,7 @@ int	cmd_cd(t_data *data, t_args *args)
 	char	*path;
 
 	path = NULL;
+	(void)data;
 	if (args && args->next)
 		return (ft_putstr_fd("minishell: cd: too many arguments\n", 2),
 			FAILURE);

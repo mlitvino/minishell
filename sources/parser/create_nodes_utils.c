@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:59:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/07 16:59:57 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:51:38 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ t_simple_cmd	*ft_init_simple_cmd(void)
 
 void	clean_cmds(t_simple_cmd *cmd)
 {
-	t_redir	*redir;
-	t_args	*args;
 	void	*prev_ptr;
 
 	while (cmd)

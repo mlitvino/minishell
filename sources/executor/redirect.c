@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:57:15 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/07 18:43:37 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:55:37 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	restart_fd(t_data *data, t_simple_cmd *cmd)
 	cmd->std_fd[STDOUT] = -1;
 }
 
-int	redirect_files(t_data *data, t_simple_cmd *cmd, t_redir *redir)
+int	redirect_files(t_redir *redir)
 {
 	int	exit_code;
 
@@ -114,7 +114,7 @@ int	redirect(t_data *data, t_simple_cmd *cmd, t_redir *redirs)
 	redirect_pipes(data, cmd);
 	while (redirs)
 	{
-		if (redirect_files(data, cmd, redirs) != SUCCESS)
+		if (redirect_files(redirs) != SUCCESS)
 			return (FAILURE);
 		redirs = redirs->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 12:03:21 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/06 17:53:17 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:38:56 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ void	execve_cmd(t_data *data, t_simple_cmd *cmd, int builtin_i)
 		ft_putstr_fd(cmd->command, 2);
 		clean_all(data, FAILURE, ": malloc failed\n");
 	}
-	execve(cmd->pathname, argv, env);
+	//execve(cmd->pathname, argv, env);
+	free_argv(env);
+	free_argv(argv);
 	perror("execve");
 	clean_all(data, FAILURE, NULL);
 }

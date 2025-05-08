@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 20:48:09 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/05 15:05:52 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:56:37 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ char	*check_hd_input(t_data *data, t_redir *heredoc, char *input)
 
 int	bzero_existing(t_data *data, t_redir *heredoc)
 {
+	(void)data;
 	heredoc->existing = 0;
 	return (SUCCESS);
 }
@@ -68,6 +69,8 @@ int	map_heredoc(t_data *data, int (*func)(t_data *data, t_redir *heredoc))
 	t_redir			*redir;
 
 	pipeline = NULL;
+	redir = NULL;
+	cmd = NULL;
 	if (data->cmd_list)
 		pipeline = data->cmd_list->childs;
 	while (pipeline)

@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:35:42 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/07 17:26:51 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:00:32 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_args	*is_option(t_args *args, int *option)
 	return (NULL);
 }
 
-int	print_args(t_data *data, t_args *args, int newlne)
+int	print_args(t_args *args)
 {
 	while (args)
 	{
@@ -60,18 +60,19 @@ int	cmd_echo(t_data *data, t_args *args)
 	int	exit_code;
 	int	option;
 
+	(void)data;
 	exit_code = 0;
 	option = FAILURE;
 	args = is_option(args, &option);
 	if (option == SUCCESS)
 	{
-		exit_code |= print_args(data, args, option);
+		exit_code |= print_args(args);
 		if (exit_code < SUCCESS)
 			return (FAILURE);
 	}
 	else if (option == FAILURE)
 	{
-		exit_code |= print_args(data, args, option);
+		exit_code |= print_args(args);
 		exit_code |= printf("\n");
 		if (exit_code < SUCCESS)
 			return (FAILURE);

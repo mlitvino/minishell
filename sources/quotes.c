@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:15:56 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/05 15:14:25 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:47:52 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ char	*get_next_piece(t_data *data, char *orig_str, int *orig_i)
 	char	*res;
 
 	curr_i = 0;
+	res = NULL;
 	while (orig_str[curr_i] && orig_str[curr_i] != '$'
 		&& orig_str[curr_i] != '\'' && orig_str[curr_i] != '\"')
 		curr_i++;

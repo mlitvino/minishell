@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 13:47:25 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/05 15:30:19 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:50:28 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	is_valid(char *char_ptr)
 	return (SUCCESS);
 }
 
-char	*trim_delim(t_data *data, t_redir *heredoc)
+char	*trim_delim(t_redir *heredoc)
 {
 	char	*new_delim;
 	int		len;

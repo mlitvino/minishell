@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor_search.c                                  :+:      :+:    :+:   */
+/*   search_exec.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 13:12:48 by alfokin           #+#    #+#             */
-/*   Updated: 2025/05/02 14:27:01 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:00:00 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_access(t_data *data, t_simple_cmd *cmd)
+int	check_access(t_simple_cmd *cmd)
 {
 	int	file_fd;
 
@@ -51,7 +51,7 @@ int	check_path_dirs(t_data *data, t_simple_cmd *cmd, char **path_tab)
 		join_pathname(data, cmd, *path_tab);
 		if (access(cmd->pathname, F_OK) == SUCCESS)
 		{
-			if (check_access(data, cmd) == SUCCESS)
+			if (check_access(cmd) == SUCCESS)
 				return (SUCCESS);
 			else
 			{
@@ -70,12 +70,13 @@ int	search_exec(t_data *data, t_simple_cmd *cmd)
 {
 	char	**path_tab;
 
+	(void)data;
 	if (ft_strchr(cmd->command, '/') != NULL)
 	{
 		cmd->pathname = ft_strdup(cmd->command);
 		if (!cmd->pathname)
 			perror("minishell: malloc");
-		if (check_access(data, cmd) != SUCCESS)
+		if (check_access(cmd) != SUCCESS)
 			clean_all(data, cmd->exit_code, NULL);
 	}
 	else

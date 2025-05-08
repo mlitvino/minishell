@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 16:38:12 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/02 14:32:48 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:45:44 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,21 @@ volatile sig_atomic_t	g_signal_received = 0;
 
 void	hd_sig_hanlder(int sig)
 {
-	printf("\n");
-	rl_replace_line("", 0);
-	rl_redisplay();
-	rl_on_new_line();
-	g_signal_received = TERM_SIGINT;
-	close(STDIN);
+	if (sig == SIGINT)
+	{
+		printf("\n");
+		rl_replace_line("", 0);
+		rl_redisplay();
+		rl_on_new_line();
+		g_signal_received = TERM_SIGINT;
+		close(STDIN);
+	}
 }
 
 void	sig_handler(int sig, siginfo_t *info, void *context)
 {
+	(void)info;
+	(void)context;
 	if (sig == SIGINT)
 	{
 		printf("\n");

@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:14:10 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/05 15:13:06 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:47:05 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ char	*substr_value(t_data *data, char *var, int trim_flg, int i)
 	char	*env_var;
 	char	*value;
 
+	(void)trim_flg;
 	env_var = ft_substr(var, 1, i - 1);
 	if (!env_var)
 		return (NULL);
