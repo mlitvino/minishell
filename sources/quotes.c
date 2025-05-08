@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:15:56 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/08 14:12:26 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 16:23:41 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*trim_quotes(t_data *data, char *str)
 	if (!temp)
 		return (NULL);
 	if (*str == '\"')
-		new_str = expand_str(data, temp, ft_strdup(""));
+		new_str = expand_str(data, temp, ft_strdup(""), 0);
 	else
 		new_str = ft_strdup(temp);
 	free(temp);

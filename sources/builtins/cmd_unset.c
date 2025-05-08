@@ -6,11 +6,20 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:49:00 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/01 16:15:38 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:03:52 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	join_delete_var(t_list **list, t_list *prev, t_list *temp)
+{
+	if (prev == NULL)
+		*list = temp->next;
+	else
+		prev->next = temp->next;
+	ft_lstdelone(temp, free);
+}
 
 void	delete_var(t_list **list, char *var)
 {
@@ -20,7 +29,7 @@ void	delete_var(t_list **list, char *var)
 	char	*compare_sign;
 
 	temp = *list;
-	prev = *list;
+	prev = NULL;
 	while (temp)
 	{
 		sign_i = 0;
@@ -31,8 +40,7 @@ void	delete_var(t_list **list, char *var)
 		if (!var[sign_i] && (!compare_sign[sign_i]
 				|| compare_sign[sign_i] == '='))
 		{
-			prev->next = temp->next;
-			ft_lstdelone(temp, free);
+			join_delete_var(list, prev, temp);
 			break ;
 		}
 		prev = temp;

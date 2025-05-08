@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/08 14:11:36 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:32:15 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,7 @@ char							*substr_value(t_data *data, char *var,
 									int i);
 char							*expand_var(t_data *data, char *var);
 char							*expand_str(t_data *data, char *orig_str,
-									char *new_str);
+									char *new_str, int skip_quot);
 
 // heredoc_trim.c
 int								is_valid(char *char_ptr);
@@ -319,7 +319,7 @@ void							delete_var(t_list **list, char *var);
 int								cmd_unset(t_data *data, t_args *args);
 
 /*----------------------------------PARSER------------------------------------*/
-t_cmd_list						*ft_parser(t_token *tokens_list, int *status);
+t_cmd_list						*ft_parser(t_data *data, t_token *tokens_list, int *status);
 t_redir							*ft_create_redir(t_token **tokens, int index);
 t_redir							*ft_insert_redir(t_redir *redir,
 									t_token **tokens, int index);

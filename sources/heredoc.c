@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 19:06:58 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/08 13:02:23 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 16:32:57 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,12 @@ void	fill_heredoc(t_data *data, t_redir *heredoc)
 		heredoc->fd = open(heredoc->file_name, O_WRONLY | O_APPEND);
 		if (heredoc->fd == -1)
 		{
+			free(input);
 			perror("minishell: heredoc file");
 			clean_all(data, FAILURE, NULL);
 		}
 		ft_putendl_fd(input, heredoc->fd);
+		free(input);
 		close(heredoc->fd);
 	}
 }

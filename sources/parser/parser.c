@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:18:03 by codespace         #+#    #+#             */
-/*   Updated: 2025/05/07 17:03:02 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:46:23 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,13 +105,168 @@ t_args	*ft_create_arg(char *value)
 	return (arg);
 }
 
-t_cmd_list	*ft_parser(t_token *tokens_list, int *status)
+// void	*get_subtoken()
+// {
+
+// }
+
+// void	*expand_tokens_list(t_data *data, t_token **tokens)
+// {
+// 	char	*expnd_str;
+// 	t_token	*temp_next;
+// 	t_token	*temp;
+// 	t_token	*new_token;
+// 	int		i;
+
+// 	while (*tokens)
+// 	{
+// 		temp_next = (*tokens)->next;
+// 		expnd_str = expand_str(data, (*tokens)->value, ft_strdup(""), 1);
+// 		if (!expnd_str)
+// 			return (NULL);
+// 		i = 0;
+// 		while(expnd_str[i])
+// 		{
+// 			new_token = get_subtoken();
+// 			if (*tokens == temp)
+// 			{
+// 				*tokens = temp
+// 			}
+// 		}
+// 		tokens = temp_next;
+// 	}
+// 	return (tokens);
+// }
+
+static char	*strjoin_and_free(char *s1, char *s2)
+{
+	char *joined = ft_strjoin(s1, s2);
+	free(s1);
+	free(s2);
+	return (joined);
+}
+
+static int	get_quote_block_len(const char *str)
+{
+	int		i = 1;
+	char	quote = str[0];
+
+	while (str[i] && str[i] != quote)
+		i++;
+	if (str[i] == quote)
+		i++;
+	return (i);
+}
+
+static int	get_word_len(const char *str)
+{
+	int i = 0;
+
+	while (str[i] && !isspace((unsigned char)str[i])
+		&& str[i] != '\'' && str[i] != '\"')
+		i++;
+	return (i);
+}
+
+static char	*collect_token(const char **str)
+{
+	char	*value = ft_strdup("");
+	char	*part;
+	int		len;
+
+	while (**str && !isspace((unsigned char)**str))
+	{
+		if (**str == '\'' || **str == '\"')
+			len = get_quote_block_len(*str);
+		else
+			len = get_word_len(*str);
+		part = ft_substr(*str, 0, len);
+		value = strjoin_and_free(value, part);
+		*str += len;
+	}
+	part = ft_strtrim(value, " \t\n");
+	free(value);
+	return (part);
+}
+
+t_token	*get_subtoken_list(const char *str)
+{
+	t_token	*head = NULL;
+	t_token	*last = NULL;
+	t_token	*new_tok;
+	char	*value;
+
+	while (*str)
+	{
+		while (*str && isspace((unsigned char)*str))
+			str++;
+		if (!*str)
+			break;
+		value = collect_token(&str);
+		new_tok = malloc(sizeof(t_token));
+		if (!new_tok)
+			return (free(value), NULL);
+		new_tok->value = value;
+		new_tok->next = NULL;
+		if (!head)
+			head = new_tok;
+		else
+			last->next = new_tok;
+		last = new_tok;
+	}
+	return (head);
+}
+void	replace_token_with_subtokens(t_token **current, char *expanded_str)
+{
+	t_token	*new_list = get_subtoken_list(expanded_str);
+	t_token	*last;
+
+	if (!new_list)
+		return ;
+
+	last = new_list;
+	while (last->next)
+		last = last->next;
+
+	t_token *old = *current;
+	last->next = old->next;
+	*current = new_list;
+	free(old->value);
+	free(old);
+}
+
+void	*expand_tokens_list(t_data *data, t_token **tokens)
+{
+	t_token	**current = tokens;
+	char	*expanded;
+
+	while (*current)
+	{
+		printf("BEFORE (%s)\n", (*current)->value); //dell
+		expanded = expand_str(data, (*current)->value, ft_strdup(""), 1);
+		printf("AFTER (%s)\n", expanded); //dell
+		if (!expanded)
+			return (NULL);
+		replace_token_with_subtokens(current, expanded);
+		free(expanded);
+		while (*current && (*current)->next)
+			current = &(*current)->next;
+		current = &(*current)->next;
+	}
+	return (tokens);
+}
+
+t_cmd_list	*ft_parser(t_data *data, t_token *tokens_list, int *status)
 {
 	t_cmd_list	*command_list;
 
 	command_list = NULL;
 	if (!ft_syntax_check(tokens_list, status))
 	{
+		expand_tokens_list(data, &tokens_list);
+		printf("NEEEEEEEEEEEEEEEEEEEEEW\n"); // dell
+		show_token(tokens_list); // print
+
 		command_list = ft_create_asteriks(tokens_list);
 		ft_destoy_token_list(tokens_list);
 	}

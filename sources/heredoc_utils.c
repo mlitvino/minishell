@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 20:48:09 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/08 14:12:46 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 16:54:00 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*check_hd_input(t_data *data, t_redir *heredoc, char *input)
 		clean_all(data, g_signal_received, NULL);
 	}
 	if (heredoc->inside_quotes == 0)
-		expnd_str = expand_str(data, input, ft_strdup(""));
+		expnd_str = expand_str(data, input, ft_strdup(""), 0);
 	else
 		expnd_str = ft_strdup(input);
 	free(input);

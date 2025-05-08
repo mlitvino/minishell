@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:36:35 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/08 12:54:10 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:09:06 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,10 @@ t_list	*add_replce_var(t_list **list, char *new_var)
 	t_list	*prev;
 	t_list	*temp;
 
+	prev = NULL;
 	temp = ft_lstnew(new_var);
 	if (!temp)
-		return (NULL);
+		return (free(new_var), NULL);
 	list_var = find_var(*list, new_var, &prev);
 	if (!list_var)
 		ft_lstadd_back(list, temp);

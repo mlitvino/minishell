@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:14:10 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/08 14:12:00 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:43:28 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,32 +51,6 @@ int	get_i_end_token(char *str, char token)
 	return (i);
 }
 
-// char	*trim_spaces(char *value)
-// {
-// 	char	*new_val;
-// 	int		len;
-// 	int		i;
-
-// 	len = 0;
-// 	i = 0;
-// 	while (value[i++])
-// 		if (value[i - 1] != ' ' || (value[i - 1] == ' ' && value[i] != ' '))
-// 			len++;
-// 	new_val = malloc(sizeof(char) * (len + 1));
-// 	if (!new_val)
-// 		return (NULL);
-// 	new_val[len] = '\0';
-// 	i = 0;
-// 	len = 0;
-// 	while (value[i])
-// 	{
-// 		if (value[i] != ' ' || (value[i] == ' ' && value[i + 1] != ' '))
-// 			new_val[len++] = value[i];
-// 		i++;
-// 	}
-// 	return (new_val);
-// }
-
 char	*substr_value(t_data *data, char *var, int i)
 {
 	char	*env_var;
@@ -112,30 +86,54 @@ char	*expand_var(t_data *data, char *var)
 	return (value);
 }
 
-char	*expand_str(t_data *data, char *orig_str, char *new_str)
+static char	*get_expnd_piece(t_data *data, char *orig_str, int *i, int skip_quot)
+{
+	char	*piece_str;
+
+	piece_str = NULL;
+	if (*i != 0)
+		piece_str = ft_substr(orig_str, 0, *i);
+	else if (orig_str[*i] == '$')
+	{
+		piece_str = expand_var(data, &orig_str[*i]);
+		*i += get_i_end_token(&orig_str[*i], orig_str[*i]);
+	}
+	else if (orig_str[*i] == '\'' || orig_str[*i] == '\"')
+	{
+		if (skip_quot == 1)
+		{
+			piece_str = ft_substr(&orig_str[*i], 0,
+				ft_strchr(&orig_str[*i + 1], orig_str[*i]) - &orig_str[*i] + 1);
+			*i += get_i_end_token(&orig_str[*i], orig_str[*i]);
+		}
+		else
+		{
+			piece_str = ft_substr(&orig_str[*i], 0, 1);
+			*i += 1;
+		}
+	}
+	return (piece_str);
+}
+
+char	*expand_str(t_data *data, char *orig_str, char *new_str, int skip_quot)
 {
 	int		i;
-	char	*piece_str;
 	char	*temp;
+	char	*piece_str;
 
 	i = 0;
 	if (!orig_str || !new_str)
 		return (free(new_str), NULL);
-	while (orig_str[i] && orig_str[i] != '$')
+	while (orig_str[i] && (orig_str[i] != '$'
+		&& (orig_str[i] != '\'' && orig_str[i] != '\"')))
 		i++;
 	if (!orig_str[i] && i == 0)
 		return (new_str);
-	if (i != 0)
-		piece_str = ft_substr(orig_str, 0, i);
-	else if (orig_str[i] == '$')
-	{
-		piece_str = expand_var(data, &orig_str[i]);
-		i += get_i_end_token(&orig_str[i], '$');
-	}
+	piece_str = get_expnd_piece(data, orig_str, &i, skip_quot);
 	temp = ft_strjoin(new_str, piece_str); // change logic
 	free(new_str);
 	if (!temp || !piece_str)
 		return (free(temp), free(piece_str), NULL);
 	free(piece_str);
-	return (expand_str(data, &orig_str[i], temp));
+	return (expand_str(data, &orig_str[i], temp, skip_quot));
 }
