@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:18:03 by codespace         #+#    #+#             */
-/*   Updated: 2025/05/08 17:46:23 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/09 19:34:41 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,153 +105,138 @@ t_args	*ft_create_arg(char *value)
 	return (arg);
 }
 
-// void	*get_subtoken()
-// {
-
-// }
-
-// void	*expand_tokens_list(t_data *data, t_token **tokens)
-// {
-// 	char	*expnd_str;
-// 	t_token	*temp_next;
-// 	t_token	*temp;
-// 	t_token	*new_token;
-// 	int		i;
-
-// 	while (*tokens)
-// 	{
-// 		temp_next = (*tokens)->next;
-// 		expnd_str = expand_str(data, (*tokens)->value, ft_strdup(""), 1);
-// 		if (!expnd_str)
-// 			return (NULL);
-// 		i = 0;
-// 		while(expnd_str[i])
-// 		{
-// 			new_token = get_subtoken();
-// 			if (*tokens == temp)
-// 			{
-// 				*tokens = temp
-// 			}
-// 		}
-// 		tokens = temp_next;
-// 	}
-// 	return (tokens);
-// }
-
-static char	*strjoin_and_free(char *s1, char *s2)
+void	*add_subtoken(t_token **orig_list, char *content)
 {
-	char *joined = ft_strjoin(s1, s2);
-	free(s1);
-	free(s2);
-	return (joined);
+	t_token	*token_list;
+
+	token_list = *orig_list;
+	if (!content)
+		return (NULL);
+	if (!token_list)
+	{
+		token_list = (t_token *)malloc(sizeof(t_token));
+		*orig_list = token_list;
+	}
+	else
+	{
+		while (token_list->next != NULL)
+			token_list = token_list->next;
+		token_list->next = (t_token *)malloc(sizeof(t_token));
+		token_list = token_list->next;
+	}
+	if (!token_list)
+		return (free(content), NULL);
+	token_list->index = 0;
+	token_list->type = WORD;
+	token_list->value = content;
+	token_list->next = NULL;
+	return (token_list);
 }
 
-static int	get_quote_block_len(const char *str)
+char	*subvalue(char *str, int *curr_i)
 {
-	int		i = 1;
-	char	quote = str[0];
-
-	while (str[i] && str[i] != quote)
-		i++;
-	if (str[i] == quote)
-		i++;
-	return (i);
-}
-
-static int	get_word_len(const char *str)
-{
-	int i = 0;
-
-	while (str[i] && !isspace((unsigned char)str[i])
-		&& str[i] != '\'' && str[i] != '\"')
-		i++;
-	return (i);
-}
-
-static char	*collect_token(const char **str)
-{
-	char	*value = ft_strdup("");
+	int		start;
+	char	*result;
 	char	*part;
-	int		len;
+	char	quote;
+	char	*tmp;
 
-	while (**str && !isspace((unsigned char)**str))
+	result = ft_strdup("");
+	printf("str (%s)\n", str); // dell
+	while (result && str[*curr_i] && str[*curr_i] != ' ')
 	{
-		if (**str == '\'' || **str == '\"')
-			len = get_quote_block_len(*str);
+		printf("result (%s)\n", result); // dell
+		part = NULL;
+		if (str[*curr_i] == '\'' || str[*curr_i] == '\"')
+		{
+			start = *curr_i;
+			*curr_i += get_i_end_token(&str[*curr_i], str[*curr_i]);
+			part = ft_substr(str, start, *curr_i - start);
+		}
 		else
-			len = get_word_len(*str);
-		part = ft_substr(*str, 0, len);
-		value = strjoin_and_free(value, part);
-		*str += len;
+		{
+			start = *curr_i;
+			while (str[*curr_i] && str[*curr_i] != ' ' &&
+				str[*curr_i] != '\'' && str[*curr_i] != '\"')
+				(*curr_i)++;
+			part = ft_substr(str, start, *curr_i - start);
+		}
+		if (!part)
+		{
+			free(result);
+			return (NULL);
+		}
+		tmp = result;
+		result = ft_strjoin(tmp, part);
+		free(tmp);
+		free(part);
 	}
-	part = ft_strtrim(value, " \t\n");
-	free(value);
-	return (part);
+	printf("result (%s)\n", result); // dell
+	return (result);
 }
 
-t_token	*get_subtoken_list(const char *str)
-{
-	t_token	*head = NULL;
-	t_token	*last = NULL;
-	t_token	*new_tok;
-	char	*value;
 
-	while (*str)
+
+t_token	*split_token(t_data *data, t_token *token)
+{
+	int		curr_i;
+	t_token	*new_token_list;
+	char	*new_value;
+	char	*expnd_str;
+
+	curr_i = 0;
+	new_token_list = NULL;
+	expnd_str = expand_str(data, token->value, ft_strdup(""), 1);
+	if (!expnd_str)
+		return (NULL);
+	while (expnd_str[curr_i] && expnd_str[curr_i] == ' ')
+		curr_i++;
+	while (expnd_str[curr_i])
 	{
-		while (*str && isspace((unsigned char)*str))
-			str++;
-		if (!*str)
-			break;
-		value = collect_token(&str);
-		new_tok = malloc(sizeof(t_token));
-		if (!new_tok)
-			return (free(value), NULL);
-		new_tok->value = value;
-		new_tok->next = NULL;
-		if (!head)
-			head = new_tok;
-		else
-			last->next = new_tok;
-		last = new_tok;
+		new_value = subvalue(&expnd_str[curr_i], &curr_i);
+		while (expnd_str[curr_i] && expnd_str[curr_i] == ' ')
+			curr_i++;
+		if (!*new_value)
+		{
+			free(new_value);
+			continue ;
+		}
+		if (add_subtoken(&new_token_list, new_value) == NULL)
+		{
+			ft_destoy_token_list(new_token_list);
+			return (NULL);
+		}
 	}
-	return (head);
-}
-void	replace_token_with_subtokens(t_token **current, char *expanded_str)
-{
-	t_token	*new_list = get_subtoken_list(expanded_str);
-	t_token	*last;
-
-	if (!new_list)
-		return ;
-
-	last = new_list;
-	while (last->next)
-		last = last->next;
-
-	t_token *old = *current;
-	last->next = old->next;
-	*current = new_list;
-	free(old->value);
-	free(old);
+	return (new_token_list);
 }
 
 void	*expand_tokens_list(t_data *data, t_token **tokens)
 {
-	t_token	**current = tokens;
-	char	*expanded;
+	t_token	*current;
+	t_token *temp_prev;
+	t_token	*new_tokens;
 
-	while (*current)
+	current = (*tokens)->next;
+	temp_prev = *tokens;
+	while (current->type != NEWLINE)
 	{
-		printf("BEFORE (%s)\n", (*current)->value); //dell
-		expanded = expand_str(data, (*current)->value, ft_strdup(""), 1);
-		printf("AFTER (%s)\n", expanded); //dell
-		if (!expanded)
+		if (current->type != WORD)
+		{
+			temp_prev = current;
+			current = current->next;
+			continue ;
+		}
+		new_tokens = split_token(data, current);
+		if (!new_tokens)
 			return (NULL);
-		replace_token_with_subtokens(current, expanded);
-		free(expanded);
-		while (*current && (*current)->next)
-			current = &(*current)->next;
-		current = &(*current)->next;
+		temp_prev->next = new_tokens;
+		while (new_tokens->next)
+			new_tokens = new_tokens->next;
+		temp_prev = new_tokens;
+		new_tokens->next = current->next;
+		free(current->value);
+		free(current);
+		current = new_tokens->next;
 	}
 	return (tokens);
 }
@@ -263,11 +248,10 @@ t_cmd_list	*ft_parser(t_data *data, t_token *tokens_list, int *status)
 	command_list = NULL;
 	if (!ft_syntax_check(tokens_list, status))
 	{
-		expand_tokens_list(data, &tokens_list);
-		printf("NEEEEEEEEEEEEEEEEEEEEEW\n"); // dell
-		show_token(tokens_list); // print
-
-		command_list = ft_create_asteriks(tokens_list);
+		//show_token(tokens_list); // print
+		if (expand_tokens_list(data, &tokens_list) != NULL)
+			command_list = ft_create_asteriks(tokens_list);
+		//show_token(tokens_list); // print
 		ft_destoy_token_list(tokens_list);
 	}
 	return (command_list);
