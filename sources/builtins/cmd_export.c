@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:36:35 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/08 17:09:06 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/11 16:59:25 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ t_list	*add_replce_var(t_list **list, char *new_var)
 	return (temp);
 }
 
-int	check_export_arg(t_args *args, int *exit_code) // SPACE CHECK
+int	check_export_arg(t_args *args, int *exit_code)
 {
 	char	*arg_value;
 

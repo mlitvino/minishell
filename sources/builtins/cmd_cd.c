@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:14:50 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/08 12:58:31 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/11 17:02:56 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,28 +93,12 @@ char	*get_home_path(t_data *data)
 
 int	cmd_cd(t_data *data, t_args *args)
 {
-	char	*path;
-
-	path = NULL;
 	(void)data;
 	if (args && args->next)
 		return (ft_putstr_fd("minishell: cd: too many arguments\n", 2),
 			FAILURE);
-	else if (args)
-		path = ft_strdup(args->value);
-	else if (!args)
-		path = get_home_path(data);
-	if (!path)
-		return (FAILURE);
-	if (*path == '\0')
-		return (free(path), SUCCESS);
-	if (chdir(path) != SUCCESS)
-	{
-		ft_putstr_fd("minishell: cd: ", 2);
-		perror(path);
-		free(path);
-		return (FAILURE);
-	}
+	else
+		set_path(data, args);
 	if (update_oldpwd(data, data->env) != SUCCESS)
 		return (FAILURE);
 	if (update_pwd(data) != SUCCESS)

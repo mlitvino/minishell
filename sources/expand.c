@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:14:10 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/08 17:43:28 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/11 16:57:41 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,11 @@ int	get_i_end_token(char *str, char token)
 	{
 		if (str[i] == '$')
 			i++;
+		if (str[i] == '?')
+			return (++i);
 		if (ft_isdigit(str[i]))
 			return (++i);
 		while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-			i++;
-		if (str[i] == '?')
 			i++;
 	}
 	return (i);
@@ -130,7 +130,7 @@ char	*expand_str(t_data *data, char *orig_str, char *new_str, int skip_quot)
 	if (!orig_str[i] && i == 0)
 		return (new_str);
 	piece_str = get_expnd_piece(data, orig_str, &i, skip_quot);
-	temp = ft_strjoin(new_str, piece_str); // change logic
+	temp = ft_strjoin(new_str, piece_str);
 	free(new_str);
 	if (!temp || !piece_str)
 		return (free(temp), free(piece_str), NULL);

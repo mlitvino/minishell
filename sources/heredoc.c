@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 19:06:58 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/08 16:32:57 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/11 16:56:28 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	create_heredoc(t_data *data, t_redir *heredoc)
 	i = 1;
 	while (1)
 	{
-		file_id = ft_itoa(i);
+		file_id = ft_itoa(i++);
 		if (!file_id)
 			clean_all(data, FAILURE, "minishell: malloc failed\n");
 		heredoc->file_name = ft_strjoin("/tmp/temp-hd-", file_id);
@@ -58,7 +58,7 @@ void	create_heredoc(t_data *data, t_redir *heredoc)
 			perror("minishell: heredoc: open");
 			clean_all(data, FAILURE, NULL);
 		}
-		i++;
+		free(heredoc->file_name);
 	}
 	heredoc->existing = 1;
 	close(heredoc->fd);

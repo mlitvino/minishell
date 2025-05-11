@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/08 17:32:15 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/11 17:26:37 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,6 +289,8 @@ void							join_pathname(t_data *data, t_simple_cmd *cmd,
 char							**create_path_tab(t_data *data);
 
 /*------------------------------BUILTINS--------------------------------------*/
+// cmd_cd_utils.c
+int								set_path(t_data *data, t_args *args);
 // cmd_cd.c
 int								join_paste_var(t_data *data, char *key_var,
 									char *var_value);
@@ -319,13 +321,22 @@ void							delete_var(t_list **list, char *var);
 int								cmd_unset(t_data *data, t_args *args);
 
 /*----------------------------------PARSER------------------------------------*/
-t_cmd_list						*ft_parser(t_data *data, t_token *tokens_list, int *status);
+t_cmd_list						*ft_parser(t_data *data,
+									t_token *tokens_list, int *status);
 t_redir							*ft_create_redir(t_token **tokens, int index);
 t_redir							*ft_insert_redir(t_redir *redir,
 									t_token **tokens, int index);
 void							ft_insert_arg(t_args *head,
 									t_args *current_args);
 t_args							*ft_create_arg(char *value);
+char							*extract_substr(char *str, int *curr_i);
+void							*expand_tokens_list(t_data *data,
+									t_token **tokens);
+void							*expnd_token_value(t_data *data, t_token *token,
+									int *empty_flag, int *curr_i);
+void							join_tokens(t_token **current,
+									t_token **temp_prev,
+									t_token *new_tokens, int empty_flag);
 
 /*------------------------------SYNTAX CHECKER--------------------------------*/
 int								ft_syntax_check(t_token *tokens_list,

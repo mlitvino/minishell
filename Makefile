@@ -6,11 +6,11 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/05/07 17:28:53 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/05/11 17:06:05 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC 			= cc
+CC 			= cc -Wall -Wextra -Werror
 CFLAGS 		= -I$(LIBFT_DIR)/$(INCLD_DIR) -I$(INCLD_DIR)
 # -Wall -Wextra -Werror
 
@@ -35,14 +35,14 @@ SRC =	$(addprefix $(SRC_DIR)/, \
 		test.c)
 
 PARSER_SRC = $(addprefix $(PARSER_DIR)/, \
-		cont_token_checker.c parser.c \
+		cont_token_checker.c parser.c parser_split_tok.c parser_split_tok_utils.c \
 		create_asteriks.c create_asteriks_utils.c \
 		create_nodes.c create_nodes_utils.c \
 		destroy_nodes.c syntax_checker.c token_checker.c word_checker.c \
 		lexer.c lexer_get_tokens.c lexer_get_tokens_op.c lexer_utils.c\
 		lexer_get_tokens_word.c)
 BUILT_SRC = $(addprefix $(BUILT_DIR)/, \
-		cmd_cd.c cmd_echo.c cmd_env.c cmd_exit.c cmd_export.c cmd_pwd.c \
+		cmd_cd_utils.c cmd_cd.c cmd_echo.c cmd_env.c cmd_exit.c cmd_export.c cmd_pwd.c \
 		cmd_unset.c)
 EXEC_SRC = $(addprefix $(EXEC_DIR)/, \
 		executor.c executor_utils.c search_exec.c redirect.c \

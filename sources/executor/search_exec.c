@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 13:12:48 by alfokin           #+#    #+#             */
-/*   Updated: 2025/05/08 13:00:00 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/11 17:24:38 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ int	search_exec(t_data *data, t_simple_cmd *cmd)
 	char	**path_tab;
 
 	(void)data;
-	if (ft_strchr(cmd->command, '/') != NULL)
+	if (find_var(data->env, "PATH", NULL) == NULL
+		|| ft_strchr(cmd->command, '/') != NULL)
 	{
 		cmd->pathname = ft_strdup(cmd->command);
 		if (!cmd->pathname)
