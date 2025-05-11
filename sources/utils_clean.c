@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 12:45:53 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/07 16:14:56 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/11 18:04:22 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,7 @@ void	free_cmd_list(t_data *data, t_cmd_list *cmd_list)
 int	clean_all(t_data *data, int exit_code, char *err_message)
 {
 	while (waitpid(0, 0, 0) != -1)
-	{
-	}
+		;
 
 	map_heredoc(data, unlink_heredoc);
 	free(data->read_line);
@@ -126,7 +125,5 @@ int	clean_all(t_data *data, int exit_code, char *err_message)
 	}
 	if (err_message)
 		ft_putstr_fd(err_message, 2);
-	// else if (!err_message)
-	//	ft_putstr_fd("minishell: malloc failed\n", 2);
 	exit(exit_code);
 }

@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 16:58:05 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/11 17:22:42 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/11 17:34:52 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ t_token	*split_token(t_data *data, t_token *token, int *empty_flag)
 	curr_i = 0;
 	new_token_list = NULL;
 	expnd_str = expnd_token_value(data, token, empty_flag, &curr_i);
+	if (!expnd_str)
+		return (NULL);
 	while (expnd_str[curr_i])
 	{
 		new_value = subvalue(expnd_str, &curr_i);
