@@ -16,14 +16,27 @@
 # std_libs
 
 {
-	ignore_std_libs
+	grep
 	Memcheck:Leak
 	...
-	obj:*/lib*/lib*.so
+	obj:/usr/bin/grep
+}
+
+{
+	ls
+	Memcheck:Leak
+	...
+	obj:/usr/bin/ls
 }
 {
-	ignore_std_libs
+	cat
 	Memcheck:Leak
 	...
-	obj:*/lib*/lib*.so.*
+	obj:/usr/bin/cat
+}
+{
+	sort
+	Memcheck:Leak
+	...
+	obj:/usr/bin/sort
 }

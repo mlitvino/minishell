@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:18:03 by codespace         #+#    #+#             */
-/*   Updated: 2025/05/09 19:34:41 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/11 14:06:05 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ t_args	*ft_create_arg(char *value)
 	return (arg);
 }
 
-void	*add_subtoken(t_token **orig_list, char *content)
+void	*add_subtoken(t_token **orig_list, char *content, int type)
 {
 	t_token	*token_list;
 
@@ -127,7 +127,7 @@ void	*add_subtoken(t_token **orig_list, char *content)
 	if (!token_list)
 		return (free(content), NULL);
 	token_list->index = 0;
-	token_list->type = WORD;
+	token_list->type = type;
 	token_list->value = content;
 	token_list->next = NULL;
 	return (token_list);
@@ -138,14 +138,11 @@ char	*subvalue(char *str, int *curr_i)
 	int		start;
 	char	*result;
 	char	*part;
-	char	quote;
 	char	*tmp;
 
 	result = ft_strdup("");
-	printf("str (%s)\n", str); // dell
 	while (result && str[*curr_i] && str[*curr_i] != ' ')
 	{
-		printf("result (%s)\n", result); // dell
 		part = NULL;
 		if (str[*curr_i] == '\'' || str[*curr_i] == '\"')
 		{
@@ -158,8 +155,9 @@ char	*subvalue(char *str, int *curr_i)
 			start = *curr_i;
 			while (str[*curr_i] && str[*curr_i] != ' ' &&
 				str[*curr_i] != '\'' && str[*curr_i] != '\"')
-				(*curr_i)++;
+				*curr_i += 1;
 			part = ft_substr(str, start, *curr_i - start);
+
 		}
 		if (!part)
 		{
@@ -171,13 +169,10 @@ char	*subvalue(char *str, int *curr_i)
 		free(tmp);
 		free(part);
 	}
-	printf("result (%s)\n", result); // dell
 	return (result);
 }
 
-
-
-t_token	*split_token(t_data *data, t_token *token)
+t_token	*split_token(t_data *data, t_token *token, int *empty_flag)
 {
 	int		curr_i;
 	t_token	*new_token_list;
@@ -189,11 +184,13 @@ t_token	*split_token(t_data *data, t_token *token)
 	expnd_str = expand_str(data, token->value, ft_strdup(""), 1);
 	if (!expnd_str)
 		return (NULL);
+	if (!*expnd_str)
+		*empty_flag = 1;
 	while (expnd_str[curr_i] && expnd_str[curr_i] == ' ')
 		curr_i++;
 	while (expnd_str[curr_i])
 	{
-		new_value = subvalue(&expnd_str[curr_i], &curr_i);
+		new_value = subvalue(expnd_str, &curr_i);
 		while (expnd_str[curr_i] && expnd_str[curr_i] == ' ')
 			curr_i++;
 		if (!*new_value)
@@ -201,7 +198,7 @@ t_token	*split_token(t_data *data, t_token *token)
 			free(new_value);
 			continue ;
 		}
-		if (add_subtoken(&new_token_list, new_value) == NULL)
+		if (add_subtoken(&new_token_list, new_value, token->type) == NULL)
 		{
 			ft_destoy_token_list(new_token_list);
 			return (NULL);
@@ -215,28 +212,41 @@ void	*expand_tokens_list(t_data *data, t_token **tokens)
 	t_token	*current;
 	t_token *temp_prev;
 	t_token	*new_tokens;
+	int		empty_flag;
 
 	current = (*tokens)->next;
 	temp_prev = *tokens;
 	while (current->type != NEWLINE)
 	{
-		if (current->type != WORD)
+		empty_flag = 0;
+		if (current->type == DOUBLE_LESS)
 		{
-			temp_prev = current;
-			current = current->next;
+			temp_prev = current->next;
+			current = current->next->next;
 			continue ;
 		}
-		new_tokens = split_token(data, current);
-		if (!new_tokens)
+		new_tokens = split_token(data, current, &empty_flag);
+		if (!new_tokens && empty_flag == 0)
 			return (NULL);
-		temp_prev->next = new_tokens;
-		while (new_tokens->next)
-			new_tokens = new_tokens->next;
-		temp_prev = new_tokens;
-		new_tokens->next = current->next;
-		free(current->value);
-		free(current);
-		current = new_tokens->next;
+		if (empty_flag == 1)
+		{
+			new_tokens = current->next;
+			free(current->value);
+			free(current);
+			temp_prev->next = new_tokens;
+			current = new_tokens;
+		}
+		else
+		{
+			temp_prev->next = new_tokens;
+			while (new_tokens->next)
+				new_tokens = new_tokens->next;
+			temp_prev = new_tokens;
+			new_tokens->next = current->next;
+			free(current->value);
+			free(current);
+			current = new_tokens->next;
+		}
 	}
 	return (tokens);
 }
