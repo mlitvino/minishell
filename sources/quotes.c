@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:15:56 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/08 16:23:41 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/11 18:21:14 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ char	*trim_expand(t_data *data, char *orig_str)
 	int		orig_i;
 	char	*new_str;
 	char	*piece_str;
+	char	*temp;
 
 	orig_i = 0;
 	new_str = NULL;
@@ -79,16 +80,18 @@ char	*trim_expand(t_data *data, char *orig_str)
 	while (orig_str && orig_str[orig_i])
 	{
 		piece_str = get_next_piece(data, &orig_str[orig_i], &orig_i);
-		new_str = ft_strjoin(new_str, piece_str);
-		if (!new_str || !piece_str)
+		temp = ft_strjoin(new_str, piece_str);
+		free(new_str);
+		if (!temp || !piece_str)
 		{
+			free(temp);
 			free(piece_str);
 			clean_all(data, FAILURE, NULL);
 		}
+		new_str = temp;
 		free(piece_str);
 	}
-	free(orig_str);
-	return (new_str);
+	return (free(orig_str), new_str);
 }
 
 int	check_quots_expand(t_data *data, t_simple_cmd *cmd)

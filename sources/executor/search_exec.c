@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 13:12:48 by alfokin           #+#    #+#             */
-/*   Updated: 2025/05/11 17:24:38 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/11 19:01:30 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ int	check_path_dirs(t_data *data, t_simple_cmd *cmd, char **path_tab)
 	char	**orig_tab;
 
 	orig_tab = path_tab;
-	while (*path_tab)
+	while (cmd->command[0] && cmd->command[0] != '.'
+		&& *path_tab && ft_strcmp("..", cmd->command) != 0)
 	{
 		join_pathname(data, cmd, *path_tab);
 		if (access(cmd->pathname, F_OK) == SUCCESS)
@@ -71,6 +72,7 @@ int	search_exec(t_data *data, t_simple_cmd *cmd)
 	char	**path_tab;
 
 	(void)data;
+
 	if (find_var(data->env, "PATH", NULL) == NULL
 		|| ft_strchr(cmd->command, '/') != NULL)
 	{

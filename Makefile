@@ -6,14 +6,12 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/05/11 17:06:05 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/05/11 19:04:50 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC 			= cc -Wall -Wextra -Werror
 CFLAGS 		= -I$(LIBFT_DIR)/$(INCLD_DIR) -I$(INCLD_DIR)
-# -Wall -Wextra -Werror
-
 NAME 		= minishell
 LIBFT 		= $(LIBFT_DIR)/libft.a
 

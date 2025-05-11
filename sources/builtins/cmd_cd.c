@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:14:50 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/11 17:02:56 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/11 18:52:41 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,8 @@ int	cmd_cd(t_data *data, t_args *args)
 		return (ft_putstr_fd("minishell: cd: too many arguments\n", 2),
 			FAILURE);
 	else
-		set_path(data, args);
+		if (set_path(data, args) == FAILURE)
+			return (FAILURE);
 	if (update_oldpwd(data, data->env) != SUCCESS)
 		return (FAILURE);
 	if (update_pwd(data) != SUCCESS)

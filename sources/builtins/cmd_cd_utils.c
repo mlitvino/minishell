@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 17:00:41 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/11 17:25:00 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/11 18:26:31 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,6 @@ int	set_path(t_data *data, t_args *args)
 		free(path);
 		return (FAILURE);
 	}
+	free(path);
 	return (SUCCESS);
 }
