@@ -6,11 +6,22 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:49:00 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/08 17:03:52 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:28:01 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*find_var_value(t_data *data, char *env_var)
+{
+	t_list	*temp;
+
+	temp = find_var(data->env, env_var, NULL);
+	if (!temp || ft_strchr(temp->content, '=') == NULL)
+		return (NULL);
+	else
+		return (ft_strchr(temp->content, '=') + 1);
+}
 
 static void	join_delete_var(t_list **list, t_list *prev, t_list *temp)
 {

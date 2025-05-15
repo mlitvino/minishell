@@ -6,7 +6,7 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/05/11 19:04:50 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/05/15 14:25:48 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,8 +29,8 @@ INCLD		= $(INCLD_DIR)/minishell.h
 SRC =	$(addprefix $(SRC_DIR)/, \
 		main.c utils.c signals.c check_cmd.c expand.c quotes.c \
 		heredoc.c heredoc_utils.c heredoc_trim.c utils_clean.c inits.c \
-		$(PARSER_SRC) $(BUILT_SRC) $(EXEC_SRC) \
-		test.c)
+		utils_clean_cmd.c \
+		$(PARSER_SRC) $(BUILT_SRC) $(EXEC_SRC))
 
 PARSER_SRC = $(addprefix $(PARSER_DIR)/, \
 		cont_token_checker.c parser.c parser_split_tok.c parser_split_tok_utils.c \

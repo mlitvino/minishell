@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 12:45:53 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/11 18:04:22 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:25:29 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,58 +34,6 @@ void	free_argv(char **argv)
 	argv = NULL;
 }
 
-void	free_redir(t_redir *redir)
-{
-	void	*prev_ptr;
-
-	while (redir)
-	{
-		free(redir->file_name);
-		redir->file_name = NULL;
-		free(redir->delim);
-		redir->delim = NULL;
-		prev_ptr = redir;
-		redir = redir->next;
-		free(prev_ptr);
-	}
-}
-
-void	free_args(t_args *args)
-{
-	void	*prev_ptr;
-
-	while (args)
-	{
-		free(args->value);
-		args->value = NULL;
-		prev_ptr = args;
-		args = args->next;
-		free(prev_ptr);
-	}
-}
-
-void	free_cmds(t_simple_cmd *cmd)
-{
-	void	*prev_ptr;
-
-	while (cmd)
-	{
-		free_args(cmd->args);
-		free_redir(cmd->redirections);
-		if (cmd->std_fd[STDIN] != -1)
-			close(cmd->std_fd[STDIN]);
-		if (cmd->std_fd[STDOUT] != -1)
-			close(cmd->std_fd[STDOUT]);
-		free(cmd->command);
-		cmd->command = NULL;
-		free(cmd->pathname);
-		cmd->pathname = NULL;
-		prev_ptr = cmd;
-		cmd = cmd->next;
-		free(prev_ptr);
-	}
-}
-
 void	free_cmd_list(t_data *data, t_cmd_list *cmd_list)
 {
 	t_pipe_line		*pipeline;
@@ -111,7 +59,6 @@ int	clean_all(t_data *data, int exit_code, char *err_message)
 {
 	while (waitpid(0, 0, 0) != -1)
 		;
-
 	map_heredoc(data, unlink_heredoc);
 	free(data->read_line);
 	data->read_line = NULL;

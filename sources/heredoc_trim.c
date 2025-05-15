@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 13:47:25 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/08 12:50:28 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:26:54 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	is_valid(char *char_ptr)
 	if (*char_ptr == '\'' || *char_ptr == '\"')
 		return (FAILURE);
 	if (*char_ptr == '$' && (*(char_ptr + 1) == '\''
-		|| *(char_ptr + 1) == '\"'))
+			|| *(char_ptr + 1) == '\"'))
 		return (FAILURE);
 	return (SUCCESS);
 }
@@ -28,8 +28,8 @@ char	*trim_delim(t_redir *heredoc)
 	int		len;
 	int		i;
 
-	if (ft_strchr(heredoc->delim, '\'') != NULL
-		|| ft_strchr(heredoc->delim, '\"') != NULL)
+	if (ft_strchr(heredoc->delim, '\'') != NULL || ft_strchr(heredoc->delim,
+			'\"') != NULL)
 		heredoc->inside_quotes = 1;
 	len = 0;
 	i = 0;

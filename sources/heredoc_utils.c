@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 20:48:09 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/08 16:54:00 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:26:31 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ int	bzero_existing(t_data *data, t_redir *heredoc)
 	return (SUCCESS);
 }
 
-static int	find_hd(t_data *data, t_simple_cmd *cmd,
-		t_redir *redir, int (*func)(t_data *, t_redir *))
+static int	find_hd(t_data *data, t_simple_cmd *cmd, t_redir *redir,
+		int (*func)(t_data *, t_redir *))
 {
 	while (cmd)
 	{

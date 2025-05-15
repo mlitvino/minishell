@@ -6,22 +6,11 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:14:10 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/11 16:57:41 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:27:40 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*find_var_value(t_data *data, char *env_var)
-{
-	t_list	*temp;
-
-	temp = find_var(data->env, env_var, NULL);
-	if (!temp || ft_strchr(temp->content, '=') == NULL)
-		return (NULL);
-	else
-		return (ft_strchr(temp->content, '=') + 1);
-}
 
 int	get_i_end_token(char *str, char token)
 {
@@ -86,7 +75,8 @@ char	*expand_var(t_data *data, char *var)
 	return (value);
 }
 
-static char	*get_expnd_piece(t_data *data, char *orig_str, int *i, int skip_quot)
+static char	*get_expnd_piece(t_data *data, char *orig_str, int *i,
+		int skip_quot)
 {
 	char	*piece_str;
 
@@ -102,8 +92,8 @@ static char	*get_expnd_piece(t_data *data, char *orig_str, int *i, int skip_quot
 	{
 		if (skip_quot == 1)
 		{
-			piece_str = ft_substr(&orig_str[*i], 0,
-				ft_strchr(&orig_str[*i + 1], orig_str[*i]) - &orig_str[*i] + 1);
+			piece_str = ft_substr(&orig_str[*i], 0, ft_strchr(&orig_str[*i + 1],
+						orig_str[*i]) - &orig_str[*i] + 1);
 			*i += get_i_end_token(&orig_str[*i], orig_str[*i]);
 		}
 		else
@@ -124,8 +114,8 @@ char	*expand_str(t_data *data, char *orig_str, char *new_str, int skip_quot)
 	i = 0;
 	if (!orig_str || !new_str)
 		return (free(new_str), NULL);
-	while (orig_str[i] && (orig_str[i] != '$'
-		&& (orig_str[i] != '\'' && orig_str[i] != '\"')))
+	while (orig_str[i] && (orig_str[i] != '$' && (orig_str[i] != '\''
+				&& orig_str[i] != '\"')))
 		i++;
 	if (!orig_str[i] && i == 0)
 		return (new_str);

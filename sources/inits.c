@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/11 16:55:30 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:17:12 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	init_sigs(t_data *data)
 	int					return_code;
 
 	return_code = 0;
-	sa.sa_flags = SA_SIGINFO;
+	sa.sa_flags = 0;
 	sa.sa_sigaction = sig_handler;
 	return_code |= sigemptyset(&sa.sa_mask);
 	return_code |= sigaddset(&sa.sa_mask, SIGINT);

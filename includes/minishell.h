@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/11 17:26:37 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:31:40 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,12 @@
 /*----------------------------LIST OF INCLUDES--------------------------------*/
 # define _POSIX_C_SOURCE 200000L
 # include "libft.h"
-# include <curses.h>
-# include <dirent.h>
 # include <errno.h>
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
-# include <stdio.h>
-# include <string.h>
-# include <sys/ioctl.h>
-# include <sys/types.h>
 # include <sys/wait.h>
-# include <term.h>
-# include <termcap.h>
-# include <termios.h>
 
 /*----------------------------BUILTIN STRING KEY------------------------------*/
 # define CD_STR "cd"
@@ -41,30 +32,18 @@
 # define PWD_STR "pwd"
 # define UNSET_STR "unset"
 
-/*----------------------------MEGA BEUTIFIER MOD------------------------------*/
-# define GREEN "\e[1;32m"
-# define RESET "\e[0m"
-# define RED "\e[1;91m"
-# define CYAN "\e[1;36m"
-# define YELLOW "\e[1;33m"
-# define PURPLE "\e[1;35m"
-# define BLUE "\e[1;34m"
-
 /*------------------------DEFAULT STREAMS DEFFINIITON-------------------------*/
 # define STDIN 0
 # define STDOUT 1
-# define STDERR 2
 
 /*-------------------------------EXIT_CODES-----------------------------------*/
 
 # define SUCCESS 0
 # define FAILURE 1
 # define MISUSE 2
-# define CRIT_ERR 3
 # define CMD_NOT_EXEC 126
 # define CMD_NOT_FOUND 127
 # define TERM_SIGINT 130
-# define OUT_RANGE 255
 
 /*---------------------------------TOKENS-------------------------------------*/
 typedef enum e_token_type
@@ -317,6 +296,7 @@ int								cmd_export(t_data *data, t_args *args);
 // cmd_pwd.c
 int								cmd_pwd(t_data *data, t_args *args);
 // cmd_unset.c
+char							*find_var_value(t_data *data, char *env_var);
 void							delete_var(t_list **list, char *var);
 int								cmd_unset(t_data *data, t_args *args);
 
@@ -415,13 +395,5 @@ void							*add_token(t_token *token_list,
 char							*ft_get_words(char *line, int *j, char *word,
 									int *quoting);
 char							*get_no_quoting_word(char *line, int *i);
-
-// test.c
-# define TEST "Delete"
-void							show_token(t_token *token);
-void							show_arg(t_args *args);
-void							show_redir(t_redir *redir);
-void							show_cmd(t_simple_cmd *cmd);
-void							show_cmd_list(t_cmd_list *list);
 
 #endif
