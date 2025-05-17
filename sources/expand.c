@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:14:10 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/15 14:27:40 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/17 13:02:17 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	get_i_end_token(char *str, char token)
 	{
 		if (str[i] == '$')
 			i++;
-		if (str[i] == '?')
+		if (str[i] == '?' || str[i] == '$')
 			return (++i);
 		if (ft_isdigit(str[i]))
 			return (++i);
@@ -63,14 +63,18 @@ char	*expand_var(t_data *data, char *var)
 	char	*value;
 
 	i = 1;
+	value = NULL;
 	if (ft_strncmp(var, "$?", 2) == 0)
 		return (ft_itoa(data->exit_var));
 	if (ft_isdigit(var[i]) == 1 || var[i] == '\'' || var[i] == '\"')
 		return (ft_strdup(""));
 	while (var[i] && (ft_isalnum(var[i]) == 1 || var[i] == '_'))
 		i++;
-	if (i == 1)
+	if (i == 1 && var[i] != '$')
 		return (ft_strdup("$"));
+	if (ft_strncmp("$$", var, 2) == 0)
+		if (find_var_value(data, "SYSTEMD_EXEC_PID") != NULL)
+			return (ft_strdup(find_var_value(data, "SYSTEMD_EXEC_PID")));
 	value = substr_value(data, var, i);
 	return (value);
 }
