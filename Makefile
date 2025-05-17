@@ -3,14 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
+#    By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/05/15 14:25:48 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/05/17 13:34:44 by alfokin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC 			= cc -Wall -Wextra -Werror
+CC 			= cc -Wall -Wextra -Werror -g
 CFLAGS 		= -I$(LIBFT_DIR)/$(INCLD_DIR) -I$(INCLD_DIR)
 NAME 		= minishell
 LIBFT 		= $(LIBFT_DIR)/libft.a

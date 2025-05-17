@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 01:50:24 by alfokin           #+#    #+#             */
-/*   Updated: 2025/05/07 13:17:15 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/17 13:50:38 by alfokin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	*create_tokens_list(t_token *tokens_list, char *line)
 	table[3] = 1;
 	table[4] = 0;
 	table[0] = 0;
-	while (line[table[0]])
+	while ((size_t)table[0] < ft_strlen(line) && line[table[0]])
 	{
 		table[1] = table[0];
 		while (line[table[1]] == ' ' || line[table[1]] == '\t')
