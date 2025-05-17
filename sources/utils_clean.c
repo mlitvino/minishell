@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 12:45:53 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/15 14:25:29 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/17 14:37:25 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int	clean_all(t_data *data, int exit_code, char *err_message)
 {
 	while (waitpid(0, 0, 0) != -1)
 		;
+	free(data->pwd);
 	map_heredoc(data, unlink_heredoc);
 	free(data->read_line);
 	data->read_line = NULL;

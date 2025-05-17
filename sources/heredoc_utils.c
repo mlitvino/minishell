@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 20:48:09 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/15 14:26:31 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/17 14:25:49 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ int	map_heredoc(t_data *data, int (*func)(t_data *data, t_redir *heredoc))
 	while (pipeline)
 	{
 		cmd = pipeline->child;
-		find_hd(data, cmd, redir, func);
+		if (find_hd(data, cmd, redir, func) == TERM_SIGINT)
+			return (TERM_SIGINT);
 		pipeline = pipeline->next;
 	}
 	return (SUCCESS);

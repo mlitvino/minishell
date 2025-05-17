@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:14:50 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/11 18:52:41 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/17 14:36:06 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int	join_paste_var(t_data *data, char *key_var, char *var_value)
 int	update_pwd(t_data *data)
 {
 	char	*cwd;
+	char	*data_pwd;
 
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
@@ -44,6 +45,15 @@ int	update_pwd(t_data *data)
 		perror("minishell: cd");
 		return (FAILURE);
 	}
+	free(data->pwd);
+	data_pwd = ft_strdup(cwd);
+	if (!data_pwd)
+	{
+		free(cwd);
+		perror("minishell: malloc");
+		return (FAILURE);
+	}
+	data->pwd = data_pwd;
 	if (join_paste_var(data, "PWD", cwd) == FAILURE)
 		return (FAILURE);
 	return (SUCCESS);
@@ -86,7 +96,7 @@ char	*get_home_path(t_data *data)
 	}
 	else
 	{
-		ft_putstr_fd("minishell: cd: HOME not set", 2);
+		ft_putstr_fd("minishell: cd: HOME not set\n", 2);
 	}
 	return (NULL);
 }

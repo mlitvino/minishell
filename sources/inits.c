@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 21:55:14 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/15 14:17:12 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/17 14:40:18 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,10 @@ void	init_data(t_data *data, char **sys_env)
 	data->exit_var = SUCCESS;
 	data->pipes = NULL;
 	data->read_line = NULL;
+	data->pwd = getcwd(0, 0);
 	init_sigs(data);
 	init_builtins(data);
 	init_env(sys_env, data);
+	if (!data->pwd)
+		clean_all(data, FAILURE, "minishell: malloc failed\n");
 }
