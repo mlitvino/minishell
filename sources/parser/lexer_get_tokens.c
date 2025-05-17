@@ -6,7 +6,7 @@
 /*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 01:51:02 by alfokin           #+#    #+#             */
-/*   Updated: 2025/05/17 13:57:32 by alfokin          ###   ########.fr       */
+/*   Updated: 2025/05/17 14:51:16 by alfokin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,7 @@ static int	substr_word(char *line, char **word, int *j)
 		*word = ft_get_words(line, j, *word, &quoting);
 		if (!*word)
 			return (FAILURE);
-		if ((size_t)(*j) < ft_strlen(line)
-			&& (line[*j] == ' ' || line[*j] == '\t'))
+		if ((line[*j] == ' ' || line[*j] == '\t'))
 			return (2);
 	}
 	return (SUCCESS);
@@ -67,7 +66,7 @@ void	*ft_get_word(t_token *tokens_list, char *line, int *table)
 
 	word = NULL;
 	j = table[1];
-	while ((size_t)j < ft_strlen(line) && line[j])
+	while (line[j])
 	{
 		exit_code = substr_word(line, &word, &j);
 		if (exit_code == FAILURE)

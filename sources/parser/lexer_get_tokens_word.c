@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_get_tokens_word.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 01:50:58 by alfokin           #+#    #+#             */
-/*   Updated: 2025/05/07 13:38:44 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/17 14:49:16 by alfokin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static char	*get_double_quotes_word(char *line, int *i, int j)
 		j++;
 	}
 	word = ft_substr(line, *i, j - *i + 1);
-	*i = j + 1;
+	*i = j;
 	return (word);
 }
 
@@ -75,7 +75,7 @@ static char	*get_quoting_word(char *line, int *i, int quoting)
 		while (line[j] && line[j] != '\'')
 			j++;
 		word = ft_substr(line, *i, j - *i + 1);
-		*i = j + 1;
+		*i = j;
 		return (word);
 	}
 	else if (quoting == 3)
@@ -100,16 +100,15 @@ char	*ft_get_words(char *line, int *j, char *word, int *quoting)
 	char	*tmp;
 	char	*tmp1;
 
+	tmp = word;
 	if (*quoting == 0)
 	{
-		tmp = word;
 		tmp1 = get_no_quoting_word(line, j);
 		if (check_strjoin(tmp1, &word, tmp) == NULL)
 			return (NULL);
 	}
 	else if (*quoting > 0)
 	{
-		tmp = word;
 		tmp1 = get_quoting_word(line, j, *quoting);
 		if (check_strjoin(tmp1, &word, tmp) == NULL)
 			return (NULL);
