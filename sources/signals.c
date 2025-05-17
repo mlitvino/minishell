@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 16:38:12 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/08 12:45:44 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/17 13:05:15 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	hd_sig_hanlder(int sig)
 {
 	if (sig == SIGINT)
 	{
-		printf("\n");
 		rl_replace_line("", 0);
 		rl_redisplay();
 		rl_on_new_line();
