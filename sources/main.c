@@ -6,11 +6,25 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:20:23 by mlitvino, t       #+#    #+#             */
-/*   Updated: 2025/05/15 12:46:16 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/17 12:25:04 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	get_input(t_data *data)
+{
+	data->read_line = readline("minishell$ ");
+	if (g_signal_received == 1)
+	{
+		data->exit_var = 128 + SIGINT;
+		g_signal_received = 0;
+	}
+	if (!data->read_line)
+		cmd_exit(data, NULL);
+	else if (*data->read_line)
+		add_history(data->read_line);
+}
 
 int	main(int argc, char *argv[], char *env[])
 {
@@ -22,11 +36,7 @@ int	main(int argc, char *argv[], char *env[])
 	init_data(&data, env);
 	while (1)
 	{
-		data.read_line = readline("minishell$ ");
-		if (!data.read_line)
-			cmd_exit(&data, NULL);
-		else if (*data.read_line)
-			add_history(data.read_line);
+		get_input(&data);
 		tokens_list = ft_lexer(data.read_line);
 		if (!tokens_list)
 			clean_all(&data, FAILURE, "minishell: malloc failed\n");

@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 14:34:26 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/15 13:31:18 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/17 12:26:21 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,20 @@ int	wait_get_exitcode(t_data *data, pid_t child_pid)
 		data->exit_var = 128 + WTERMSIG(status);
 	else
 		data->exit_var = FAILURE;
+	if (data->exit_var - 128 == SIGQUIT)
+	{
+		ft_putstr_fd("Quit (core dumped)\n", 2);
+	}
+	else if (data->exit_var - 128 == SIGINT)
+	{
+		printf("\n");
+	}
 	return (data->exit_var);
 }
 
 void	wait_childs(t_data *data, t_simple_cmd *lst_cmd)
 {
+	signal(SIGINT, SIG_IGN);
 	if (lst_cmd->cmd_pid != -1)
 	{
 		wait_get_exitcode(data, lst_cmd->cmd_pid);
@@ -43,4 +52,5 @@ void	wait_childs(t_data *data, t_simple_cmd *lst_cmd)
 		data->exit_var = lst_cmd->exit_code;
 	while (waitpid(0, 0, 0) != -1 && errno != ECHILD)
 		;
+	init_sigs(data);
 }
