@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_get_tokens_word.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 01:50:58 by alfokin           #+#    #+#             */
-/*   Updated: 2025/05/17 14:49:16 by alfokin          ###   ########.fr       */
+/*   Updated: 2025/05/19 16:14:08 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static char	*get_double_quotes_word(char *line, int *i, int j)
 		j++;
 	}
 	word = ft_substr(line, *i, j - *i + 1);
-	*i = j;
+	*i = j + 1;
 	return (word);
 }
 
@@ -75,7 +75,7 @@ static char	*get_quoting_word(char *line, int *i, int quoting)
 		while (line[j] && line[j] != '\'')
 			j++;
 		word = ft_substr(line, *i, j - *i + 1);
-		*i = j;
+		*i = j + 1;
 		return (word);
 	}
 	else if (quoting == 3)
