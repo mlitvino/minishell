@@ -3,14 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+         #
+#    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/05/17 13:34:44 by alfokin          ###   ########.fr        #
+#    Updated: 2025/05/19 13:24:14 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC 			= cc -Wall -Wextra -Werror -g
+CC 			= cc -Wall -Wextra -Werror
 CFLAGS 		= -I$(LIBFT_DIR)/$(INCLD_DIR) -I$(INCLD_DIR)
 NAME 		= minishell
 LIBFT 		= $(LIBFT_DIR)/libft.a
@@ -33,14 +33,16 @@ SRC =	$(addprefix $(SRC_DIR)/, \
 		$(PARSER_SRC) $(BUILT_SRC) $(EXEC_SRC))
 
 PARSER_SRC = $(addprefix $(PARSER_DIR)/, \
-		cont_token_checker.c parser.c parser_split_tok.c parser_split_tok_utils.c \
+		cont_token_checker.c parser.c parser_split_tok.c \
+		parser_split_tok_utils.c \
 		create_asteriks.c create_asteriks_utils.c \
 		create_nodes.c create_nodes_utils.c \
 		destroy_nodes.c syntax_checker.c token_checker.c word_checker.c \
 		lexer.c lexer_get_tokens.c lexer_get_tokens_op.c lexer_utils.c\
 		lexer_get_tokens_word.c)
 BUILT_SRC = $(addprefix $(BUILT_DIR)/, \
-		cmd_cd_utils.c cmd_cd.c cmd_echo.c cmd_env.c cmd_exit.c cmd_export.c cmd_pwd.c \
+		cmd_cd_utils.c cmd_cd.c cmd_echo.c cmd_env.c \
+		cmd_exit.c cmd_export.c cmd_pwd.c \
 		cmd_unset.c)
 EXEC_SRC = $(addprefix $(EXEC_DIR)/, \
 		executor.c executor_utils.c search_exec.c redirect.c \
