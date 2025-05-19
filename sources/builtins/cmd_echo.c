@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:35:42 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/08 13:00:32 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/19 13:39:42 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ int	print_args(t_args *args)
 {
 	while (args)
 	{
-		if (printf("%s", args->value) < SUCCESS)
+		if (ft_printf("%s", args->value) < SUCCESS)
 			return (FAILURE);
 		if (args->next)
-			if (printf(" ") < SUCCESS)
+			if (ft_printf(" ") < SUCCESS)
 				return (FAILURE);
 		args = args->next;
 	}
@@ -73,7 +73,7 @@ int	cmd_echo(t_data *data, t_args *args)
 	else if (option == FAILURE)
 	{
 		exit_code |= print_args(args);
-		exit_code |= printf("\n");
+		exit_code |= ft_printf("\n");
 		if (exit_code < SUCCESS)
 			return (FAILURE);
 	}
