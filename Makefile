@@ -6,7 +6,7 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/05/19 13:24:14 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/05/22 17:55:36 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,7 +55,7 @@ OBJ = $(addprefix $(OBJ_DIR)/,$(notdir $(SRC:.c=.o)))
 all: $(LIBFT) $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $^ $(LIBFT) -lreadline -lncurses -o $@
+	$(CC) $(CFLAGS) $^ $(LIBFT) -lreadline -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INCLD)
 	@[ -d $(OBJ_DIR) ] || mkdir -p $(OBJ_DIR)
