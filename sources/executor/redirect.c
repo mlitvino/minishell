@@ -6,30 +6,11 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:57:15 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/08 12:55:37 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/22 13:41:19 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	close_pipes(t_data *data, int pipes_count)
-{
-	int	i;
-
-	i = 0;
-	while (data->pipes && i < pipes_count)
-	{
-		if (data->pipes[i].pipe[STDIN] != -1)
-			close(data->pipes[i].pipe[STDIN]);
-		data->pipes[i].pipe[STDIN] = -1;
-		if (data->pipes[i].pipe[STDOUT] != -1)
-			close(data->pipes[i].pipe[STDOUT]);
-		data->pipes[i].pipe[STDOUT] = -1;
-		i++;
-	}
-	free(data->pipes);
-	data->pipes = NULL;
-}
 
 void	restart_fd(t_data *data, t_simple_cmd *cmd)
 {
@@ -49,13 +30,8 @@ void	restart_fd(t_data *data, t_simple_cmd *cmd)
 	cmd->std_fd[STDOUT] = -1;
 }
 
-int	redirect_files(t_redir *redir)
+int	open_redir(t_redir *redir)
 {
-	int	exit_code;
-
-	exit_code = SUCCESS;
-	if (redir->file_name[0] == '\0' && redir->inside_quotes == 0)
-		return (ft_putstr_fd("minishell: amgiguous redirect\n", 2), FAILURE);
 	if (redir->type == RE_DOUBLE_LESS || redir->type == RE_LESS)
 		redir->fd = open(redir->file_name, O_RDONLY);
 	else if (redir->type == RE_GREAT)
@@ -68,6 +44,19 @@ int	redirect_files(t_redir *redir)
 		perror(redir->file_name);
 		return (FAILURE);
 	}
+	return (SUCCESS);
+}
+
+int	redirect_files(t_redir *redir)
+{
+	int	exit_code;
+
+	exit_code = SUCCESS;
+	if ((redir->file_name[0] == '\0' && redir->inside_quotes == 0)
+		|| ft_strchr(redir->file_name, ' '))
+		return (ft_putstr_fd("minishell: amgiguous redirect\n", 2), FAILURE);
+	if (open_redir(redir) == FAILURE)
+		return (FAILURE);
 	if (redir->type == RE_LESS || redir->type == RE_DOUBLE_LESS)
 		exit_code |= dup2(redir->fd, STDIN);
 	else if (redir->type == RE_GREAT || redir->type == RE_DOUBLE_GREAT)

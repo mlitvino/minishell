@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/17 14:33:04 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/22 13:51:40 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,6 +211,7 @@ void							sig_handler(int sig, siginfo_t *info,
 									void *context);
 
 // utils_clean.c
+void							close_pipes(t_data *data, int pipes_count);
 void							print_strs_fd(char *s1, char *s2, char *s3,
 									int fd);
 void							free_argv(char **argv);
@@ -252,7 +253,7 @@ void							exec_pipeline(t_data *data,
 int								executor(t_data *data, t_cmd_list *cmd_list);
 
 // redirect.c
-void							close_pipes(t_data *data, int pipes_count);
+int								open_redir(t_redir *redir);
 void							restart_fd(t_data *data, t_simple_cmd *cmd);
 int								redirect_files(t_redir *redir);
 int								redirect(t_data *data, t_simple_cmd *cmd,
@@ -384,7 +385,8 @@ void							ft_destroy_pipe_line(t_pipe_line *pipe_line);
 void							ft_destroy_ast(t_cmd_list *cmd_list);
 
 /*-----------------------------------LEXER------------------------------------*/
-t_token							*ft_lexer(char *line);
+t_token							*ft_lexer(t_data *data, char *line,
+									int *check_code);
 void							*ft_get_word(t_token *tokens_list, char *line,
 									int *table);
 void							*get_space_pipe_semi_redir(t_token *tokens_list,

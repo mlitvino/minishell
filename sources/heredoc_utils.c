@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 20:48:09 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/17 14:25:49 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/22 13:25:08 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ char	*check_hd_input(t_data *data, t_redir *heredoc, char *input)
 	{
 		if (!input && g_signal_received == 0)
 		{
-			ft_putstr_fd("minishell: warning: here-document delimited \
-				by end-of-file, wanted: ", 2);
-			ft_putstr_fd(heredoc->delim, 2);
+			print_strs_fd("minishell: warning: here-document ",
+				"delimited by end-of-file, wanted: ", heredoc->delim, 2);
+			ft_putstr_fd("\n", 2);
 		}
 		free(input);
 		clean_all(data, g_signal_received, NULL);

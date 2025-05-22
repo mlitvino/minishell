@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 16:58:05 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/11 17:34:52 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/22 13:48:29 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,8 @@ void	*expand_tokens_list(t_data *data, t_token **tokens)
 	while (current->type != NEWLINE)
 	{
 		empty_flag = 0;
-		if (current->type == DOUBLE_LESS)
+		if (current->type == DOUBLE_LESS || current->type == LESS
+			|| current->type == GREAT || current->type == DOUBLE_GREAT)
 		{
 			temp_prev = current->next;
 			current = current->next->next;

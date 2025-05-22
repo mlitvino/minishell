@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 12:29:45 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/15 14:23:33 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/22 13:26:23 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int	cmd_exit(t_data *data, t_args *args)
 	{
 		exit_code = FAILURE;
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+		return (FAILURE);
 	}
 	clean_all(data, exit_code, NULL);
 	return (SUCCESS);

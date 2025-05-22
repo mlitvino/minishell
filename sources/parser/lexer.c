@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 01:50:24 by alfokin           #+#    #+#             */
-/*   Updated: 2025/05/17 14:49:31 by alfokin          ###   ########.fr       */
+/*   Updated: 2025/05/22 13:21:46 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,19 @@ void	*create_tokens_list(t_token *tokens_list, char *line)
 	return (tokens_list);
 }
 
-t_token	*ft_lexer(char *line)
+t_token	*ft_lexer(t_data *data, char *line, int *check_code)
 {
 	t_token	*tokens_list;
 
+	if (ft_check_closing_quotes(line) == FAILURE)
+	{
+		ft_putstr_fd("[SYNTAX ERROR] multiple line not allowed\n", 2);
+		data->exit_var = MISUSE;
+		*check_code = FAILURE;
+		return (NULL);
+	}
+	else
+		*check_code = SUCCESS;
 	tokens_list = first_token();
 	if (!tokens_list)
 		return (NULL);
