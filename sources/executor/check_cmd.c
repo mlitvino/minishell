@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 13:13:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/15 13:19:49 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/26 17:23:31 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,6 @@ void	check_empty(t_simple_cmd *cmd)
 
 t_simple_cmd	*init_null_cmd(t_simple_cmd **curr_cmd)
 {
-	if (!*curr_cmd)
-	{
-		*curr_cmd = malloc(sizeof(t_simple_cmd));
-		if (*curr_cmd)
-			return (NULL);
-	}
 	if (!(*curr_cmd)->command)
 	{
 		(*curr_cmd)->command = ft_strdup("");
@@ -56,7 +50,8 @@ t_simple_cmd	*init_null_cmd(t_simple_cmd **curr_cmd)
 
 void	check_cmd(t_data *data, t_simple_cmd *curr_cmd, int cmd_count, int i)
 {
-	init_null_cmd(&curr_cmd);
+	if (init_null_cmd(&curr_cmd) == NULL)
+		clean_all(data, FAILURE, "minishell: malloc failed\n");
 	curr_cmd->builtin_arr = data->builtin_arr;
 	curr_cmd->cmd_count = cmd_count;
 	curr_cmd->cmd_i = i;
