@@ -6,25 +6,44 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 17:14:10 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/17 13:02:17 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/26 18:18:48 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	get_i_end_token(char *str, char token)
+int	get_i_end_quot(char *str, char token)
 {
 	int		i;
 	char	*temp;
 
 	i = 0;
+	temp = ft_strchr(str + 1, token);
+	if (temp)
+		i = temp - str + 1;
+	else
+	{
+		while (str[i] && ft_isspace(str[i]) != 1)
+			i++;
+		//ft_printf("i got_qote (%d)\n", i); // del
+	}
+	return (i);
+}
+
+int	get_i_end_token(char *str, char token)
+{
+	int		i;
+	//char	*temp;
+
+	i = 0;
 	if (token == '\'' || token == '\"')
 	{
-		temp = ft_strchr(str + 1, token);
-		if (temp)
-			i = temp - str + 1;
-		else
-			i = -1;
+		// temp = ft_strchr(str + 1, token);
+		// if (temp)
+		// 	i = temp - str + 1;
+		// else
+		// 	i = -1;
+		i = get_i_end_quot(str, token);
 	}
 	else if (token == '$')
 	{

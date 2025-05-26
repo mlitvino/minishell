@@ -6,7 +6,7 @@
 #    By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/25 15:22:29 by mlitvino          #+#    #+#              #
-#    Updated: 2025/05/22 17:55:36 by mlitvino         ###   ########.fr        #
+#    Updated: 2025/05/26 17:51:50 by mlitvino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,9 +27,9 @@ EXEC_DIR	= executor
 INCLD		= $(INCLD_DIR)/minishell.h
 
 SRC =	$(addprefix $(SRC_DIR)/, \
-		main.c utils.c signals.c check_cmd.c expand.c quotes.c \
-		heredoc.c heredoc_utils.c heredoc_trim.c utils_clean.c inits.c \
-		utils_clean_cmd.c \
+		main.c utils.c signals.c check_cmd.c expand.c expand_utils.c \
+		quotes.c heredoc.c heredoc_utils.c heredoc_trim.c \
+		utils_clean.c inits.c utils_clean_cmd.c \
 		$(PARSER_SRC) $(BUILT_SRC) $(EXEC_SRC))
 
 PARSER_SRC = $(addprefix $(PARSER_DIR)/, \

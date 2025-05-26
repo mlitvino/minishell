@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 23:17:56 by alfokin           #+#    #+#             */
-/*   Updated: 2025/05/08 14:07:46 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/26 18:05:20 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,19 @@ int	quote_return(int quote)
 
 int	ft_check_closing_quotes(char *word)
 {
-	int	i;
+	int		i;
+	char	*temp;
 
 	i = 0;
 	while (word[i])
 	{
 		if (word[i] == '\'' || word[i] == '\"')
 		{
-			if (get_i_end_token(&word[i], word[i]) == -1)
-				return (FAILURE);
+			temp = ft_strchr(&word[i] + 1, word[i]);
+			if (temp)
+				i += temp - &word[i] + 1;
 			else
-				i += get_i_end_token(&word[i], word[i]);
+				return (FAILURE);
 		}
 		else
 			i++;
