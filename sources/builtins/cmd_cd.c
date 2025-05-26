@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:14:50 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/17 14:36:06 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/26 17:13:53 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,10 @@ int	join_paste_var(t_data *data, char *key_var, char *var_value)
 		perror("minishell: cd: malloc");
 		return (FAILURE);
 	}
-	if (find_var(data->env, key_var, NULL) != NULL)
-		if (add_replce_var(&data->env, new_var) == NULL)
-			return (free(new_var), perror("minishell: cd: malloc"), FAILURE);
+	if (find_var(data->env, key_var, NULL) == NULL)
+		free(new_var);
+	else if (add_replce_var(&data->env, new_var) == NULL)
+		return (perror("minishell: cd: malloc"), FAILURE);
 	return (SUCCESS);
 }
 
