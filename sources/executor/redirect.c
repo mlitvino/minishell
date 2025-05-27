@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:57:15 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/22 13:41:19 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/27 21:50:29 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,8 @@ int	redirect_files(t_redir *redir)
 	int	exit_code;
 
 	exit_code = SUCCESS;
-	if ((redir->file_name[0] == '\0' && redir->inside_quotes == 0)
-		|| ft_strchr(redir->file_name, ' '))
-		return (ft_putstr_fd("minishell: amgiguous redirect\n", 2), FAILURE);
+	if ((redir->file_name[0] == '\0' && redir->inside_quotes == 0))
+		return (ft_putstr_fd("minishell: ambiguous redirect\n", 2), FAILURE);
 	if (open_redir(redir) == FAILURE)
 		return (FAILURE);
 	if (redir->type == RE_LESS || redir->type == RE_DOUBLE_LESS)
