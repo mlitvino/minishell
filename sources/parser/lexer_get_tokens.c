@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_get_tokens.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfokin <alfokin@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 01:51:02 by alfokin           #+#    #+#             */
-/*   Updated: 2025/05/17 14:51:16 by alfokin          ###   ########.fr       */
+/*   Updated: 2025/05/27 21:54:13 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 
 static int	check_the_beginning_of_word(int c)
 {
-	if (c == '\\')
-		return (1);
-	else if (c == '\'')
+	if (c == '\'')
 		return (2);
 	else if (c == '\"')
 		return (3);

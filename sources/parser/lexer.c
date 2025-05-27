@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 01:50:24 by alfokin           #+#    #+#             */
-/*   Updated: 2025/05/22 13:21:46 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/27 21:36:46 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static void	*get_token(t_token *tokens_list, int *table, char *line)
 				&table[3]) == NULL)
 			return (NULL);
 	}
-	if (ft_strrchr("\t <>;|", line[table[1]]) == NULL || line[table[1]] == '\\')
+	if (ft_strrchr("\t <>;|", line[table[1]]) == NULL)
 	{
 		table[2] = table[1];
 		if (ft_get_word(tokens_list, line, table) == NULL)

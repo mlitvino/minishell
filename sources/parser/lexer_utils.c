@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 13:12:41 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/07 18:39:39 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/27 21:45:40 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*get_no_quoting_word(char *line, int *i)
 	int		j;
 
 	j = *i;
-	while (line[j] && !ft_strrchr("\t '\"\\<>;|", line[j]))
+	while (line[j] && !ft_strrchr("\t '\"<>;|", line[j]))
 		j++;
 	word = ft_substr(line, *i, j - *i);
 	*i = j;

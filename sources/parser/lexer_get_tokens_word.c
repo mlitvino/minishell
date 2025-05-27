@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 01:50:58 by alfokin           #+#    #+#             */
-/*   Updated: 2025/05/19 16:14:08 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/27 21:45:11 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ static char	*get_double_quotes_word(char *line, int *i, int j)
 	word = NULL;
 	while (line[j])
 	{
-		if (line[j] == '"' && line[j - 1] != '\\')
+		if (line[j] == '"') //  && line[j - 1] != '\\'
 			break ;
-		else if (line[j] == '"' && line[j - 1] == '\\')
+		else if (line[j] == '"') //  && line[j - 1] == '\\'
 		{
 			back_slash_count = ft_count_backslashes(line, j);
 			if (back_slash_count % 2 == 0)
