@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/22 13:51:40 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/27 21:33:37 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -312,14 +312,6 @@ t_redir							*ft_insert_redir(t_redir *redir,
 void							ft_insert_arg(t_args *head,
 									t_args *current_args);
 t_args							*ft_create_arg(char *value);
-char							*extract_substr(char *str, int *curr_i);
-void							*expand_tokens_list(t_data *data,
-									t_token **tokens);
-void							*expnd_token_value(t_data *data, t_token *token,
-									int *empty_flag, int *curr_i);
-void							join_tokens(t_token **current,
-									t_token **temp_prev,
-									t_token *new_tokens, int empty_flag);
 
 /*------------------------------SYNTAX CHECKER--------------------------------*/
 int								ft_syntax_check(t_token *tokens_list,

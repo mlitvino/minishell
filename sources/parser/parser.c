@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:18:03 by codespace         #+#    #+#             */
-/*   Updated: 2025/05/11 16:58:16 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/27 21:52:48 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,9 +112,10 @@ t_cmd_list	*ft_parser(t_data *data, t_token *tokens_list, int *status)
 	command_list = NULL;
 	if (!ft_syntax_check(tokens_list, status))
 	{
-		if (expand_tokens_list(data, &tokens_list) != NULL)
-			command_list = ft_create_asteriks(tokens_list);
+		command_list = ft_create_asteriks(tokens_list);
 		ft_destoy_token_list(tokens_list);
+		if (!command_list)
+			clean_all(data, FAILURE, "minishell: malloc failed\n");
 	}
 	return (command_list);
 }
