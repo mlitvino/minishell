@@ -6,7 +6,7 @@
 /*   By: mlitvino <mlitvino@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 15:29:19 by mlitvino          #+#    #+#             */
-/*   Updated: 2025/05/27 21:33:37 by mlitvino         ###   ########.fr       */
+/*   Updated: 2025/05/27 21:58:15 by mlitvino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,7 @@ void							init_builtins(t_data *data);
 void							init_data(t_data *data, char **sys_env);
 
 // expand.c
+int								get_i_end_quot(char *str, char token);
 char							*find_var_value(t_data *data, char *env_var);
 int								get_i_end_token(char *str, char token);
 char							*substr_value(t_data *data, char *var,
