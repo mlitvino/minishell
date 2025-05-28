@@ -21,7 +21,6 @@
 	...
 	obj:/usr/bin/grep
 }
-
 {
 	ls
 	Memcheck:Leak
@@ -39,4 +38,10 @@
 	Memcheck:Leak
 	...
 	obj:/usr/bin/sort
+}
+{
+	expr
+	Memcheck:Leak
+	...
+	obj:/usr/bin/expr
 }
